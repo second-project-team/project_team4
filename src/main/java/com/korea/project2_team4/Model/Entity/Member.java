@@ -42,5 +42,10 @@ public class Member {
     // 연동 프로필
     @OneToOne
     private Profile profile;
+    // sns 연동 로그인에 사용되는 provider 종류(GOOGLE, NAVER, KAKAO)
+    private String provider;
+
+    // sns 연동 로그인에 사용되는 provider ID
+    private String providerId;
 
 }

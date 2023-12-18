@@ -53,6 +53,15 @@ public class MemberController {
 
         return "redirect:/";
     }
+    @GetMapping("/login")
+    public String login() {
+
+        return "Member/login_form";
+    }
+    @PostMapping("/login")
+    public String login(String username, String password){
+        return "redirect:/";
+    }
 
 
 

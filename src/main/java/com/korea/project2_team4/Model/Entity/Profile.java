@@ -19,11 +19,16 @@ public class Profile {
     @OneToOne(mappedBy = "profile")
     private Member member;
 
+    @OneToOne
     private Image profileImage;
 
     private String profileName;
     private String content;
+
+    @ManyToMany(mappedBy = "followers")
     private List<Profile> following;
+
+    @ManyToMany
     private List<Profile> followers;
 
     @OneToMany(mappedBy = "owner")

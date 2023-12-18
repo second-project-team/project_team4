@@ -18,6 +18,7 @@ public class Pet {
     private String species;
     private Long age;
 
+    @OneToOne
     private Image petImage;
 
 }

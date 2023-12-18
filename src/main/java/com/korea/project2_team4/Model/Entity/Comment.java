@@ -16,7 +16,7 @@ public class Comment {
 
     @ManyToOne
     private Post post;
-
+    @ManyToOne
     private Profile author;
 
     private String content;

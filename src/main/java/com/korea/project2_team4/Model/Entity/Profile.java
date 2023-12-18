@@ -24,8 +24,9 @@ public class Profile {
 
     private String profileName;
     private String content;
-    private List<Profile> following;
-    private List<Profile> followers;
+
+//    private List<Profile> following;
+//    private List<Profile> followers;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE )
     private List<Pet> pets;

@@ -14,6 +14,10 @@
  - 소셜로그인 제일 오래걸릴 것 같아서 먼저 시작
  - 이전 프로젝트 기반으로 구현하면, db설계 완료후 이번프로젝트에 이어붙일 에정입니다.
 ```
+❓ 12/18 layout, navbar적용 안됐던 이유 : 
+build.gradle 에 implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect' 추가했더니 해결됨
+
+
 ⭐ 12/19 할일 ⭐
 + 팔로우 기능 db설계 연구
 + 참고 : https://gist.github.com/ffbit/3343910

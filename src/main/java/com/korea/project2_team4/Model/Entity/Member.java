@@ -23,7 +23,7 @@ public class Member {
     @Column(unique = true)
     private String email;
 
-    // 사용자 실명F
+    // 사용자 실명
     @Column(length = 50)
     private String realName;
 

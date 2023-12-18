@@ -1,4 +1,4 @@
-package com.korea.project2_team4;
+package com.korea.project2_team4.Member;
 
 import jakarta.persistence.*;
 import lombok.Getter;

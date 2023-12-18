@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -33,5 +35,12 @@ public class Member {
 
     // 사용자 핸드폰 번호
     private String phoneNum;
+
+    // 회원가입 일시
+    private LocalDateTime createDate;
+
+    // 연동 프로필
+    @OneToOne
+    private Profile profile;
 
 }

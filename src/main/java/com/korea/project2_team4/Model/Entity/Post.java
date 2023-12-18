@@ -1,11 +1,11 @@
 package com.korea.project2_team4.Model.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,9 +15,19 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    private Profile author;
+
     private String title;
     private String content;
 
+    @OneToMany(mappedBy = "postImages")
+    private List<Image> postImages;
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments;
+
+    private LocalDateTime modifyDate;
 
 
 

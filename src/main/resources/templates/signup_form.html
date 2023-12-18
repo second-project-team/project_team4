@@ -5,6 +5,7 @@
     <title>Title</title>
 </head>
 <body>
+
 <form th:action="@{/member/signup}" th:object="${memberCreateForm}" method="post">
     <div>
         <div class="mb-3">
@@ -57,5 +58,6 @@
     <input type="submit" class="btn btn-primary form-control" style="margin-top: 15px" th:value="@{회원가입}">
 
 </form>
+
 </body>
 </html>

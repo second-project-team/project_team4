@@ -4,12 +4,14 @@ import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Form.MemberCreateForm;
 import com.korea.project2_team4.Repository.MemberRepository;
 import lombok.Builder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @Builder
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     // 멤버 생성
@@ -17,7 +19,7 @@ public class MemberService {
         Member member = new Member();
 
         member.setUserName(memberCreateForm.getUserName());
-        member.setPassword(memberCreateForm.getPassword());
+        member.setPassword(passwordEncoder.encode(memberCreateForm.getPassword()));
 
         member.setEmail(memberCreateForm.getEmail());
 

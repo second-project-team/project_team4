@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -23,5 +24,8 @@ public class Comment {
     private String content;
 
     private LocalDateTime modifyDate;
+
+    @ManyToMany
+    private Set<Member> likeMembers;
 
 }

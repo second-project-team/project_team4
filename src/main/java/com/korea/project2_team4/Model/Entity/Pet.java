@@ -18,7 +18,8 @@ public class Pet {
     private String species;
     private Long age;
 
-    @OneToOne
+
+    @OneToOne(mappedBy = "petImage", cascade = CascadeType.REMOVE)
     private Image petImage;
 
 }

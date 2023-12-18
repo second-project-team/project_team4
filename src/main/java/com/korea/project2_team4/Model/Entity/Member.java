@@ -14,6 +14,10 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 연동 프로필
+    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private Profile profile;
+
     // 아이디
     @Column(unique = true, columnDefinition = "TEXT")
     private String userName;
@@ -39,8 +43,6 @@ public class Member {
     // 회원가입 일시
     private LocalDateTime createDate;
 
-    // 연동 프로필
-    @OneToOne
-    private Profile profile;
+
 
 }

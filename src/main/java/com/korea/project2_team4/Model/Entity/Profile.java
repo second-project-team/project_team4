@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,28 +17,29 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "profile")
+    @OneToOne
     private Member member;
 
-    @OneToOne
+
+    @OneToOne(mappedBy = "profileImage")
     private Image profileImage;
 
     private String profileName;
     private String content;
 
-    @ManyToMany(mappedBy = "followers")
-    private List<Profile> following;
+//    @ManyToMany(mappedBy = "followers")
+//    private List<Profile> following = new ArrayList<>();
+//
+//    @ManyToMany
+//    private List<Profile> followers = new ArrayList<>();
 
-    @ManyToMany
-    private List<Profile> followers;
-
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE )
     private List<Pet> pets;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE )
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE )
     private List<Comment> comments;
 
     private LocalDateTime modifyDate;

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,8 +26,11 @@ public class Profile {
     private String profileName;
     private String content;
 
-//    private List<Profile> following;
-//    private List<Profile> followers;
+    @ManyToMany(mappedBy = "followers")
+    private List<Profile> following = new ArrayList<>();
+
+    @ManyToMany
+    private List<Profile> followers = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE )
     private List<Pet> pets;

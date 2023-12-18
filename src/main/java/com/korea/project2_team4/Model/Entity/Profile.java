@@ -16,9 +16,10 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "profile")
+    @OneToOne
     private Member member;
 
+    @OneToOne(mappedBy = "profileImage")
     private Image profileImage;
 
     private String profileName;
@@ -26,13 +27,13 @@ public class Profile {
     private List<Profile> following;
     private List<Profile> followers;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE )
     private List<Pet> pets;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE )
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE )
     private List<Comment> comments;
 
     private LocalDateTime modifyDate;

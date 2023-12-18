@@ -21,10 +21,10 @@ public class Post {
     private String title;
     private String content;
 
-    @OneToMany(mappedBy = "postImages")
+    @OneToMany(mappedBy = "postImages", cascade = CascadeType.REMOVE )
     private List<Image> postImages;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE )
     private List<Comment> comments;
 
     private LocalDateTime modifyDate;

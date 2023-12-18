@@ -1,2 +1,0 @@
-12/18 layout, navbar적용 안됐던 이유 : 
-build.gradle 에 implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect' 추가했더니 해결됨

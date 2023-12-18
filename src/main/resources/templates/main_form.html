@@ -1,14 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-hello
+<html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<div layout:fragment="content" class="content-area d-flex justify-content-center align-items-center">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        hello
+
+    </body>
+</div>
+  
 <a class="nav-link" th:href="@{/member/signup}">회원가입</a>
 <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
 <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/logout}">로그아웃</a>
 
-</body>
 </html>

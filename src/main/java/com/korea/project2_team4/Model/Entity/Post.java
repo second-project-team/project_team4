@@ -22,6 +22,7 @@ public class Post {
     private String title;
     private String content;
 
+
     @OneToMany(mappedBy = "postImages", cascade = CascadeType.REMOVE )
     private List<Image> postImages;
 

@@ -16,8 +16,8 @@ import javax.swing.*;
 @RequestMapping("/member")
 public class MemberController {
 
-    @GetMapping("/signup")
-    public String signup(MemberCreateForm memberCreateForm, BindingResult bindingResult) {
+
+    public String signup(MemberCreateForm memberCreateForm) {
 
         return "signup_form";
     }

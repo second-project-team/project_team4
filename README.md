@@ -22,7 +22,8 @@
 ### 7주차: 마무리 및 자잘한 버그 수정
 
 ## ERD /1차설계
-![image](https://github.com/second-project-team/project_team4/assets/143607484/e43b4778-af3e-4940-a301-3433f8cb9ee2)
+![image](https://github.com/second-project-team/project_team4/assets/143607484/5bb506dd-83ab-45c2-8134-a2bf5ce610ad)
+
 
 
 ```

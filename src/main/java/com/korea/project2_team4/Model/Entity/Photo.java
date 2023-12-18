@@ -1,4 +1,4 @@
-package com.korea.project2_team4.Model.Entitiy;
+package com.korea.project2_team4.Model.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

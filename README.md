@@ -22,7 +22,8 @@
 ### 7주차: 마무리 및 자잘한 버그 수정
 
 ## ERD
-![캡처](https://github.com/second-project-team/project_team4/assets/143607484/59e92773-efe2-4199-bad0-f3c55dce5f0c)
+![image](https://github.com/second-project-team/project_team4/assets/143607484/e43b4778-af3e-4940-a301-3433f8cb9ee2)
+
 
 ```
 사이트의 회원 계정 및 프로필을 인스타그램 처럼 진행할까 생각중. 

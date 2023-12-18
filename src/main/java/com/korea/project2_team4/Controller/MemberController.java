@@ -1,4 +1,4 @@
-package com.korea.project2_team4;
+package com.korea.project2_team4.Controller;
 
 import lombok.Builder;
 import org.springframework.stereotype.Controller;

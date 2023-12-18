@@ -25,5 +25,7 @@
 ![캡처](https://github.com/second-project-team/project_team4/assets/143607484/59e92773-efe2-4199-bad0-f3c55dce5f0c)
 
 ```
-인스타 
+사이트의 회원 계정 및 프로필을 인스타그램 처럼 진행할까 생각중. 
+현재 인스타그램 erd 보고 엔티티 구상 중
+
 ```

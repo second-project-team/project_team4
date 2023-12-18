@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -20,6 +21,7 @@ public class Post {
 
     private String title;
     private String content;
+
 
     @OneToMany(mappedBy = "postImages", cascade = CascadeType.REMOVE )
     private List<Image> postImages;

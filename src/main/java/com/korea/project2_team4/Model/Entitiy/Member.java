@@ -1,4 +1,4 @@
-package com.korea.project2_team4.Member;
+package com.korea.project2_team4.Model.Entitiy;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,28 +12,26 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //아이디
+    // 아이디
     @Column(unique = true, columnDefinition = "TEXT")
     private String userId;
 
-    //패스워드
+    // 패스워드
     private String password;
 
-    //이메일
+    // 이메일(중복 불가)
     @Column(unique = true)
     private String email;
 
-    //사용자 이름
-    @Column(length = 30)
+    // 사용자 실명F
+    @Column(length = 50)
     private String userName;
 
-    //사용자 닉네임
+    // 사용자 닉네임
     @Column(length = 50)
     private String nickName;
 
-    //사용자 핸드폰 번호
+    // 사용자 핸드폰 번호
     private String phoneNum;
-
-
 
 }

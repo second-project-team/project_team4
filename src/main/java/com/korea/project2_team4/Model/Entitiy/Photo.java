@@ -1,10 +1,12 @@
-package com.korea.project2_team4.Photo;
+package com.korea.project2_team4.Model.Entitiy;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@Entity
 public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

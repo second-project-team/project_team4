@@ -1,6 +1,5 @@
-package com.korea.project2_team4.Comment;
+package com.korea.project2_team4.Model.Entitiy;
 
-import com.korea.project2_team4.User.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,19 +7,19 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @Setter
-public class Comment {
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private User author;
+    private String title;
+    private String content;
 
-    private LocalDateTime createDate;
-    private LocalDateTime modifyDate;
+
+
+
 
 }

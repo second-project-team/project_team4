@@ -21,7 +21,7 @@
 ### 6주차: 기능구현 진행  + 템플릿 다듬기 + 자잘한 버그 수정
 ### 7주차: 마무리 및 자잘한 버그 수정
 
-## ERD /1차설계
+## ERD 설계_1차수정
 ![image](https://github.com/second-project-team/project_team4/assets/143607484/5bb506dd-83ab-45c2-8134-a2bf5ce610ad)
 
 

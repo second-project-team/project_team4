@@ -1,0 +1,35 @@
+<nav th:fragment="navbarFragment" class="d-flex navbar navbar-expand-lg navbar-light bg-light border-bottom sticky-top">
+    <div class="flex-grow-1 d-flex justify-content-between container">
+
+        <div class="flex-fill p-2">
+            <a class="navbar-brand font-700" style="font-size: 30px"  href="/" onclick="clickLogo()">PetPlanet</a>
+        </div>
+
+        <div id="navbarSupportedContent" class="flex-fill">
+
+            <div class="d-flex justify-content-end">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link rounded" sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
+                        <a class="nav-link rounded" sec:authorize="isAuthenticated()"
+                           th:href="@{/member/logout}">로그아웃</a>
+                    </li>
+
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link rounded" th:href="@{/member/signup}">회원가입</a>
+                    </li>
+
+                    <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
+                        <a class="nav-link rounded" th:href="@{/member/adminPage}">관리자</a>
+                    </li>
+
+                    <li sec:authorize="isAuthenticated()">
+                        <a class="nav-link rounded" th:href="@{/member/myPage}">마이페이지</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</nav>

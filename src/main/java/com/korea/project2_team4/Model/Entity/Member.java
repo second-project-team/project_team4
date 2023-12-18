@@ -14,7 +14,7 @@ public class Member {
 
     // 아이디
     @Column(unique = true, columnDefinition = "TEXT")
-    private String userId;
+    private String userName;
 
     // 패스워드
     private String password;

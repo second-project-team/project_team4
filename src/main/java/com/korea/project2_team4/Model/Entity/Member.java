@@ -1,4 +1,4 @@
-package com.korea.project2_team4.Model.Entitiy;
+package com.korea.project2_team4.Model.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class Member {
 
     // 사용자 실명F
     @Column(length = 50)
-    private String userName;
+    private String realName;
 
     // 사용자 닉네임
     @Column(length = 50)

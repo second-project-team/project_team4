@@ -29,13 +29,37 @@ public class MemberController {
 
     @PostMapping("/signup")
     public String signup(@Valid MemberCreateForm memberCreateForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "signup_form";
+        }
 
+        if (!memberCreateForm.getPassword().equals(memberCreateForm.getRe_password())) {
+            bindingResult.rejectValue("password2", "passwordInCorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "/Member/signup_form";
+        }
 
+        try {
+            memberService.create(memberCreateForm);
+        } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", "이미 등록된 사용자 입니다.");
+            return "/Member/signup_form";
+        } catch (Exception e) {
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", e.getMessage());
+            return "/Member/signup_form";
+        }
 
-        memberService.create(memberCreateForm);
+        return "redirect:/";
+    }
+    @GetMapping("/login")
+    public String login() {
 
-
-
+        return "Member/login_form";
+    }
+    @PostMapping("/login")
+    public String login(String username, String password){
         return "redirect:/";
     }
 

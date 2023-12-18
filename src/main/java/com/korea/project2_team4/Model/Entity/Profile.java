@@ -20,17 +20,18 @@ public class Profile {
     @OneToOne
     private Member member;
 
+
     @OneToOne(mappedBy = "profileImage")
     private Image profileImage;
 
     private String profileName;
     private String content;
 
-    @ManyToMany(mappedBy = "followers")
-    private List<Profile> following = new ArrayList<>();
-
-    @ManyToMany
-    private List<Profile> followers = new ArrayList<>();
+//    @ManyToMany(mappedBy = "followers")
+//    private List<Profile> following = new ArrayList<>();
+//
+//    @ManyToMany
+//    private List<Profile> followers = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE )
     private List<Pet> pets;

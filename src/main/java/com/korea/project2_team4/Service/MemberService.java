@@ -7,6 +7,8 @@ import lombok.Builder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Builder
 public class MemberService {
@@ -30,6 +32,9 @@ public class MemberService {
         memberRepository.save(member);
 
         return member;
+    }
+    public Optional<Member> getMember(String username) {
+        return memberRepository.findByUserName(username);
     }
 
 }

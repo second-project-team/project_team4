@@ -30,7 +30,7 @@ public class MemberController {
     @PostMapping("/signup")
     public String signup(@Valid MemberCreateForm memberCreateForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "signup_form";
+            return "Member/signup_form";
         }
 
         if (!memberCreateForm.getPassword().equals(memberCreateForm.getRe_password())) {

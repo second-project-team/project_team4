@@ -31,6 +31,9 @@ public class Post {
 
     private LocalDateTime modifyDate;
 
+    @ManyToMany
+    private Set<Member> likeMembers;
+
 
 
 

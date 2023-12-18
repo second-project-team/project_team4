@@ -4,23 +4,20 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @Setter
-public class Comment {
+public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    private Post post;
+    private Profile owner;
 
-    private Profile author;
+    private String species;
+    private Long age;
 
-    private String content;
-
-    private LocalDateTime modifyDate;
+    private Image petImage;
 
 }

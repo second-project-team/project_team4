@@ -26,7 +26,20 @@ build.gradle 에 implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialec
 + 샘플데이터 만들기 -> 회원, 포스트
 + 태그기능 구상 및 만들기 시작
 + 소셜로그인 이어서 진행
-+ 기능으로 나누지말고 컨트롤러를 나눠맡아서 분담하기 -> 엔티티별 
++ 기능으로 나누지말고 컨트롤러를 나눠맡아서 분담하기 -> 엔티티별
+memberController
+ -> signup, login, delete, 소셜?, 아이디,비번찾기, 휴대폰인증 등등
+profileController(멤버생성과동시, 디폴트값 생성하도록)
+ -> update, petupdate, 사진등록및수정 , delete..(member삭제해야..?) 
+petController
+ -> create/update/delete, 
+postController
+ -> create, update, delete
+commentController
+imageService ? Controller?
+
+followingMapController (나중)
+
 
 
 

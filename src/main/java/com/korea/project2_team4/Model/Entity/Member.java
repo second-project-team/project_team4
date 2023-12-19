@@ -1,10 +1,12 @@
 package com.korea.project2_team4.Model.Entity;
 
+import com.korea.project2_team4.Config.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -49,5 +51,13 @@ public class Member {
 
     // sns 연동 로그인에 사용되는 provider ID
     private String providerId;
+
+    @OneToMany(mappedBy = "follower")
+    private List<Follow> followers;
+
+    @OneToMany(mappedBy = "following")
+    private List<Follow> followings;
+
+    private String Role;
 
 }

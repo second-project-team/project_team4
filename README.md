@@ -12,18 +12,22 @@
 ## 일정 : 
 ### 1주차: db설계 및 소셜로그인 기능 구현, 기능명세 작성 진행 
  - 소셜로그인 제일 오래걸릴 것 같아서 먼저 시작
- - 이전 프로젝트 기반으로 구현하면, db설계 완료후 이번프로젝트에 이어붙일 에정입니다.
 ```
-❓ 12/18 layout, navbar적용 안됐던 이유 : 
+✍ 12/18 layout, navbar적용 안됐던 이유 : 
 build.gradle 에 implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect' 추가했더니 해결됨
-
-
-⭐ 12/19 할일 ⭐
+✍ 12/19
 + 팔로우 기능 db설계 연구 
 + 참고 : https://gist.github.com/ffbit/3343910
 + 참고 : https://medium.com/@oluwatolaodunlami19/designing-an-optimal-database-schema-for-a-followers-following-system-in-a-social-media-app-best-2f2cb5ce86ac
 + Follow라는걸 엔티티로 볼 것이냐, 관계로 볼 것이냐에 따라 설계가 달라짐?
 + 소셜로그인 이어서 진행
+
+⭐ 12/20 할일 ⭐
++ 샘플데이터 만들기 -> 회원, 포스트
++ 태그기능 구상 및 만들기 시작
+
+
+
 
 ```
     

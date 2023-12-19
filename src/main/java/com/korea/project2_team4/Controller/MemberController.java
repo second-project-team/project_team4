@@ -39,7 +39,7 @@ public class MemberController {
         if (!memberCreateForm.getPassword().equals(memberCreateForm.getRe_password())) {
             bindingResult.rejectValue("password2", "passwordInCorrect",
                     "2개의 패스워드가 일치하지 않습니다.");
-            return "/Member/signup_form";
+            return "Member/signup_form";
         }
 
         try {
@@ -51,7 +51,7 @@ public class MemberController {
         } catch (Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
-            return "/Member/signup_form";
+            return "Member/signup_form";
         }
 
         return "redirect:/";
@@ -84,12 +84,12 @@ public class MemberController {
 //            memberCreateForm.setSnsImage(socialLogin.getImage());
         }
         model.addAttribute("socialLogin", socialLogin);
-        return "/Member/social_signup_form";
+        return "Member/social_signup_form";
     }
 
     @PostMapping("/signup/social")
     public String signup(@Valid MemberCreateForm memberCreateForm, BindingResult bindingResult,
-                         @RequestParam(value = "profile-picture", defaultValue = "") String profile,
+//                         @RequestParam(value = "profile-picture", defaultValue = "") String profile,
                          HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
@@ -109,13 +109,13 @@ public class MemberController {
         model.addAttribute("socialLogin", socialLogin);
 
         if (bindingResult.hasErrors()) {
-            return "/Member/social_signup_form";
+            return "Member/social_signup_form";
         }
 
         if (!memberCreateForm.getPassword().equals(memberCreateForm.getRe_password())) {
             bindingResult.rejectValue("password2", "passwordInCorrect",
                     "2개의 패스워드가 일치하지 않습니다.");
-            return "/Member/social_signup_form";
+            return "Member/social_signup_form";
         }
 
         try {
@@ -136,7 +136,7 @@ public class MemberController {
         } catch (Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
-            return "/Member/social_signup_form";
+            return "Member/social_signup_form";
         }
 
         return "redirect:/";

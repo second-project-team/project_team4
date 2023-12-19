@@ -21,7 +21,7 @@ public class SecurityConfig {
 
     private static final String SOCIAL_LOGIN = "social_login";
 
-//    private PrincipalOauth2UserService principalOauth2UserService;
+    private PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -38,7 +38,7 @@ public class SecurityConfig {
                         .loginPage("/member/login")
                         .defaultSuccessUrl("/")
                         .failureUrl("/member/signup/social")
-//                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig.userService(principalOauth2UserService))
+                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig.userService(principalOauth2UserService))
                 )
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
@@ -50,10 +50,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
 
 

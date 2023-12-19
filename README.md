@@ -23,6 +23,8 @@ build.gradle 에 implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialec
 + 참고 : https://gist.github.com/ffbit/3343910
 + 참고 : https://medium.com/@oluwatolaodunlami19/designing-an-optimal-database-schema-for-a-followers-following-system-in-a-social-media-app-best-2f2cb5ce86ac
 + Follow라는걸 엔티티로 볼 것이냐, 관계로 볼 것이냐에 따라 설계가 달라짐?
+![image](https://github.com/second-project-team/project_team4/assets/143607484/91309310-d121-4ac7-ab5e-63b1cc0c4919)
+
 + 소셜로그인 이어서 진행
 
 ```

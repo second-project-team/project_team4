@@ -63,7 +63,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String providerId = oAuth2UserInfo.getProviderId();
         String username = provider + "_" + providerId;
 
-        Member member = memberService.getMember(username).get();
+        Member member = memberService.getMember(username);
         //처음 서비스를 이용한 회원일 경우
         if (member == null) {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();

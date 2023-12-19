@@ -21,6 +21,7 @@ build.gradle 에 implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialec
 ⭐ 12/19 할일 ⭐
 + 팔로우 기능 db설계 연구 
 + 참고 : https://gist.github.com/ffbit/3343910
++ 참고 : https://medium.com/@oluwatolaodunlami19/designing-an-optimal-database-schema-for-a-followers-following-system-in-a-social-media-app-best-2f2cb5ce86ac
 + Follow라는걸 엔티티로 볼 것이냐, 관계로 볼 것이냐에 따라 설계가 달라짐?
 + 소셜로그인 이어서 진행
 

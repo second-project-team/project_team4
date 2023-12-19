@@ -1,5 +1,6 @@
 package com.korea.project2_team4.Config;
 
+import com.korea.project2_team4.Service.PrincipalOauth2UserService;
 import lombok.Builder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Builder
 public class SecurityConfig {
 
+    private static final String SOCIAL_LOGIN = "social_login";
+
+//    private PrincipalOauth2UserService principalOauth2UserService;
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -29,10 +34,17 @@ public class SecurityConfig {
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/member/login")
                         .defaultSuccessUrl("/"))
+                .oauth2Login((oauth2Login) -> oauth2Login
+                        .loginPage("/member/login")
+                        .defaultSuccessUrl("/")
+                        .failureUrl("/member/signup/social")
+//                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig.userService(principalOauth2UserService))
+                )
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true))
+
 
         ;
         return http.build();
@@ -42,5 +54,7 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 
 }

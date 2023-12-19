@@ -22,9 +22,7 @@ build.gradle 에 implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialec
 + 팔로우 기능 db설계 연구 
 + 참고 : https://gist.github.com/ffbit/3343910
 + Follow라는걸 엔티티로 볼 것이냐, 관계로 볼 것이냐에 따라 설계가 달라짐?
-+ 기능명세서 작성 ㅠㅠ -> 전에 쓰던컴에서 가져오기
 + 소셜로그인 이어서 진행
-+ 프로필 페이지 완성해보기.
 
 ```
     

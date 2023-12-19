@@ -11,6 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/community")
 public class CommunityController {
 
+
+    @GetMapping("/main")
+    public String main() {
+
+        return "community_main";
+    }
+
     @GetMapping("/createPost")
     public String createPost() {
 

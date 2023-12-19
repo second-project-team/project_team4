@@ -1,17 +1,15 @@
 package com.korea.project2_team4.Controller;
 
+import com.korea.project2_team4.Model.Form.ProfileForm;
 import org.springframework.ui.Model;
 import com.korea.project2_team4.Model.Entity.Profile;
-import com.korea.project2_team4.ProfileService;
+import com.korea.project2_team4.Service.ProfileService;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.awt.*;
-import java.util.List;
-
 
 
 @Controller
@@ -28,5 +26,23 @@ public class ProfileController {
         model.addAttribute("profile",testProfile);
         return "profile_detail";
     }
+
+    @GetMapping("/update")
+    public String profileupdate(Model model, ProfileForm profileForm) {
+        Profile testProfile = profileService.getProfilelist().get(0);
+
+        profileForm.setProfileName(testProfile.getProfileName());
+        profileForm.setContent(testProfile.getContent());
+        return "profile_form";
+    }
+
+    @PostMapping("/update")
+    public String profileupdate(ProfileForm profileForm, BindingResult bindingResult) {
+        Profile testProfile = profileService.getProfilelist().get(0);
+        profileService.updateprofile(testProfile,profileForm.getProfileName(),profileForm.getContent());
+        return "redirect:/profile/detail";
+    }
+
+
 
 }

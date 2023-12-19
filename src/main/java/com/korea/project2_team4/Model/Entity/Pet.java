@@ -16,6 +16,7 @@ public class Pet {
     private Profile owner;
 
     private String species;
+    private String name;
     private Long age;
 
 

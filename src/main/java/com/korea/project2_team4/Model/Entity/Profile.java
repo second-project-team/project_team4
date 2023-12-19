@@ -34,13 +34,13 @@ public class Profile {
 //    private List<Profile> followers = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE )
-    private List<Pet> pets;
+    private List<Pet> petList;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE )
-    private List<Post> posts;
+    private List<Post> postList;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE )
-    private List<Comment> comments;
+    private List<Comment> commentList;
 
     private LocalDateTime modifyDate;
 }

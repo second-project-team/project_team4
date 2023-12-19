@@ -34,23 +34,22 @@ build.gradle 에 implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialec
 ### 6주차: 기능구현 진행  + 템플릿 다듬기 + 자잘한 버그 수정
 ### 7주차: 마무리 및 자잘한 버그 수정
 
-## ERD 설계_1차수정
-![image](https://github.com/second-project-team/project_team4/assets/143607484/5bb506dd-83ab-45c2-8134-a2bf5ce610ad)
+## ERD 설계_2차수정
+![image](https://github.com/second-project-team/project_team4/assets/143607484/39430ae4-52a0-45e0-b981-7826379beb39)
+
 
 
 
 ```
 사이트의 회원 계정 및 프로필을 인스타그램 처럼 진행 예정
-현재 인스타그램 erd 보고 엔티티 구상
 - 회원 : 회원가입시 입력된 개인정보 엔터티
 - 프로필 : 사용자가 직접 관리하는 프로필 엔터티
 - 반려동물 : 계정 하나당 여러개 연결가능한 반려동물 프로필 엔터티
 - 관계 : 계정들간의 팔로우.. (이부분 추후 설명 수정하겠습니다)
 - 사진파일 : 전체 프로그램에서 이미지파일들 담기위한객체. 자세한 동작은 imageservice의 메서드 들로 이루어집니다.
-- 게시물 
-- 게시물좋아요  
+- 게시물 : 댓글과 좋아요를 List로 속성추가함.
 - 댓글  
-- 댓글 좋아요  
+ 
 
 
 

@@ -34,5 +34,8 @@ public class MemberCreateForm {
     @NotEmpty(message = "닉네임은 필수항목입니다.")
     private String nickName;
 
+    private String provider;
+
+    private String providerID;
 
 }

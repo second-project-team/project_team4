@@ -33,6 +33,7 @@ public class MemberService {
 
         return member;
     }
+
     public Optional<Member> getMember(String username) {
         return memberRepository.findByUserName(username);
     }

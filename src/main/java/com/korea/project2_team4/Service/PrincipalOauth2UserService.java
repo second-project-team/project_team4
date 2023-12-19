@@ -1,6 +1,7 @@
 package com.korea.project2_team4.Service;
 
 import com.korea.project2_team4.Config.OAuth2.GoogleUserInfo;
+import com.korea.project2_team4.Config.OAuth2.NaverUserInfo;
 import com.korea.project2_team4.Config.OAuth2.OAuth2UserInfo;
 import com.korea.project2_team4.Config.PrincipalDetails;
 import com.korea.project2_team4.Model.Entity.Member;
@@ -16,6 +17,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.Map;
 
 
 @Service
@@ -47,13 +50,12 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         if (userRequest.getClientRegistration().getRegistrationId().equals("google")) {
             oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
+            oAuth2UserInfo = new NaverUserInfo((Map) oAuth2User.getAttributes().get("response"));
         }
 //            else if(userRequest.getClientRegistration().getRegistrationId().equals("kakao")) {
 //                oAuth2UserInfo = new KakaoUserInfo((Map)oAuth2User.getAttributes().get("kakao_account"),
 //                        String.valueOf(oAuth2User.getAttributes().get("id")));
-//            }
-//            else if(userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
-//                oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
 //            }
         else {
             System.out.println("지원하지 않은 로그인 서비스 입니다.");

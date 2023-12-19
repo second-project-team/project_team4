@@ -3,18 +3,22 @@ package com.korea.project2_team4.Controller;
 import com.korea.project2_team4.Config.OAuth2.OAuth2UserInfo;
 import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Form.MemberCreateForm;
+import com.korea.project2_team4.Service.FollowService;
 import com.korea.project2_team4.Service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.Builder;
+import org.springframework.boot.Banner;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.*;
+import java.util.List;
 
 @Controller
 @RequestMapping("/member")
@@ -22,6 +26,7 @@ import javax.swing.*;
 public class MemberController {
 
     private final MemberService memberService;
+    private final FollowService followService;
 
 
     @GetMapping("/signup")
@@ -140,6 +145,22 @@ public class MemberController {
         }
 
         return "redirect:/";
+    }
+
+    @GetMapping("/member")
+    public String saveDefaultAdmin() {
+        memberService.saveDefaultAdmin();
+
+        return "redirect:/restaurant/main";
+
+    }
+
+    @GetMapping("/member1")
+    public String saveDefaultUser() {
+        memberService.saveDefaultUser();
+
+        return "redirect:/restaurant/main";
+
     }
 
 

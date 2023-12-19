@@ -26,6 +26,7 @@ build.gradle 에 implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialec
 + 샘플데이터 만들기 -> 회원, 포스트
 + 태그기능 구상 및 만들기 시작
 + 소셜로그인 이어서 진행
++ 기능으로 나누지말고 컨트롤러를 나눠맡아서 분담하기 -> 엔티티별 
 
 
 

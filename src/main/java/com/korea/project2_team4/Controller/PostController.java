@@ -1,14 +1,10 @@
 package com.korea.project2_team4.Controller;
 
-import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Entity.Post;
-import com.korea.project2_team4.Model.Entity.Profile;
 import com.korea.project2_team4.Model.Form.PostForm;
 import com.korea.project2_team4.Service.ImageService;
-import com.korea.project2_team4.Service.MemberService;
 import com.korea.project2_team4.Service.PostService;
 import lombok.Builder;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,8 +27,6 @@ public class PostController {
     private final PostService postService;
 
     private final ImageService imageService;
-
-    private final MemberService memberService;
 
 
     @GetMapping("/main")
@@ -47,17 +40,15 @@ public class PostController {
         return "createPost_form";
     }
 
-    @PreAuthorize("isAuthenticated()")
+
     @PostMapping("/createPost")
-    public String createPost(PostForm postForm, BindingResult bindingResult, @RequestParam(value = "imageFiles") List<MultipartFile> imageFiles, Principal principal) throws IOException, NoSuchAlgorithmException {//      Profile testProfile = profileService.getProfilelist().get(0);
+    public String createPost(PostForm postForm, BindingResult bindingResult, @RequestParam(value = "imageFiles") List<MultipartFile> imageFiles) throws IOException, NoSuchAlgorithmException {//      Profile testProfile = profileService.getProfilelist().get(0);
 //      profileService.updateprofile(testProfile,profileForm.getProfileName(),profileForm.getContent());
-        Member member = memberService.getMember(principal.getName());
         Post post = new Post();
-//
+//        System.out.println(imageFiles.size());
         post.setTitle(postForm.getTitle());
         post.setContent(postForm.getContent());
         post.setCreateDate(LocalDateTime.now());
-        post.setAuthor(member.getProfile());
         if (imageFiles != null && !imageFiles.isEmpty()) {
             imageService.uploadPostImage(imageFiles, post);
         }
@@ -72,8 +63,6 @@ public class PostController {
         model.addAttribute("allPosts", allPosts);
         return "community_main";
     }
-
-
 
 
 

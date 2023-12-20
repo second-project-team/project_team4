@@ -30,6 +30,8 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE )
     private List<Comment> comments;
 
+    private LocalDateTime createDate;
+
     private LocalDateTime modifyDate;
 
     @ManyToMany

@@ -71,13 +71,6 @@ public class PostController {
     }
 
 
-    @GetMapping("/TestPost")
-    public String saveTestPost() {
-        postService.saveTestPost();
-
-        return "redirect:/";
-
-    }
 
     @GetMapping("/search")
     public String searchPosts(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(name = "sort",required = false) String sort, Model model) {

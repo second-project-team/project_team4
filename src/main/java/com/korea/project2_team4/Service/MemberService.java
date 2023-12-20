@@ -21,6 +21,7 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ProfileService profileService;
 
 
     // 멤버 생성
@@ -36,7 +37,7 @@ public class MemberService {
         member.setRealName(memberCreateForm.getRealName());
         member.setNickName(memberCreateForm.getNickName());
         member.setPhoneNum(memberCreateForm.getPhoneNum());
-
+        member.setProfile(profileService.setDefaultProfile(member));
         memberRepository.save(member);
 
         return member;

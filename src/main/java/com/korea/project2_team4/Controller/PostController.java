@@ -11,10 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -43,6 +40,15 @@ public class PostController {
     @GetMapping("/createPost")
     public String createPost(Model model, PostForm postForm) {
         return "createPost_form";
+    }
+
+    //테스트 데이터
+    @GetMapping("/TestPost")
+    public String saveTestPost() {
+        postService.saveTestPost();
+
+        return "redirect:/";
+
     }
 
 
@@ -85,6 +91,15 @@ public class PostController {
         model.addAttribute("sort", sort);
 
         return "search_form";
+    }
+
+    @GetMapping("/detail/{id}")
+    public String postDetail(Model model, @PathVariable Long id) {
+        Post post = postService.getPost(id);
+
+        model.addAttribute("post",post);
+
+        return "postDetail_form";
     }
 
 

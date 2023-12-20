@@ -13,6 +13,9 @@ public class Image {
     private Long id;
 
     private String fileName; //파일 원본명
+
+    private String saveName;// 파일명을 랜덤화 한 저장할 때 쓰는 이름
+
     private String filePath; //파일 저장 경로
 
     @ManyToOne

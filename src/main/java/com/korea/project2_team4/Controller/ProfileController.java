@@ -33,18 +33,19 @@ public class ProfileController {
     }
 
     @GetMapping("/update")
-    public String profileupdate(Model model, ProfileForm profileForm) {
-        Profile testProfile = profileService.getProfilelist().get(0);
+    public String profileupdate(Model model, ProfileForm profileForm,Principal principal) {
+        Member sitemember = this.memberService.getMember(principal.getName());
 
-        profileForm.setProfileName(testProfile.getProfileName());
-        profileForm.setContent(testProfile.getContent());
+        profileForm.setProfileName(sitemember.getProfile().getProfileName());
+        profileForm.setContent(sitemember.getProfile().getContent());
         return "profile_form";
     }
 
     @PostMapping("/update")
-    public String profileupdate(ProfileForm profileForm, BindingResult bindingResult) {
-        Profile testProfile = profileService.getProfilelist().get(0);
-        profileService.updateprofile(testProfile,profileForm.getProfileName(),profileForm.getContent());
+    public String profileupdate(ProfileForm profileForm, BindingResult bindingResult, Principal principal) {
+        Member sitemember = this.memberService.getMember(principal.getName());
+
+        profileService.updateprofile(sitemember.getProfile(),profileForm.getProfileName(),profileForm.getContent());
         return "redirect:/profile/detail";
     }
 

@@ -1,13 +1,13 @@
 <html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
 <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
 <div layout:fragment="content" class="row py-5 px-4">
-    <div class="col-xl-4 col-md-6 col-sm-10 mx-auto">
+    <div class="col-xl-6 col-md-8 col-sm-10 mx-auto">
 
         <!-- Profile widget -->
         <div class="bg-white shadow rounded overflow-hidden">
             <div class="px-4 pt-0 pb-4 bg-dark">
                 <div class="media align-items-end profile-header">
-                    <div class="profile mr-3"><img src="https://bootstrapious.com/i/snippets/sn-profile/teacher.jpg" alt="..." width="130" class="rounded mb-2 img-thumbnail"><a th:href="@{|/profile/update|}" class="btn btn-dark btn-sm btn-block">Edit profile</a></div>
+                    <div class="profile mr-3"><img src="https://bootstrapious.com/i/snippets/sn-profile/teacher.jpg" alt="..." width="130" class="rounded mb-2 img-thumbnail"><a th:href="@{|/profile/update|}" class="btn btn-dark btn-sm btn-block">프로필 수정</a></div>
                     <div class="media-body mb-5 text-white">
                         <h4 class="mt-0 mb-0" th:text="${profile.profileName}"></h4>
                         <p class="small mb-4" th:text="${profile.content}"> <i class="fa fa-map-marker mr-2"></i></p>

@@ -35,8 +35,8 @@ public class ImageService {
             String fileName = multipartFile.getOriginalFilename();
             assert fileName != null;
 
-            if(fileName.isEmpty()) {
-                return; 
+            if(multipartFile.isEmpty()) {
+                continue; 
             }
 
             String saveName = generateRandomFileName(fileName);

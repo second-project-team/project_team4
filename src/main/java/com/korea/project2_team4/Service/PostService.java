@@ -23,25 +23,6 @@ public class PostService {
         return postRepository.findAll();
     }
 
-    @PostConstruct
-    public void init() {
-        saveTestPost();
-    }
-
-    @Transactional
-    public void saveTestPost() {
-        if (postRepository.findAll().isEmpty()) {
-            for (int i = 1; i <= 10; i++) {
-
-                Post post = new Post();
-
-                post.setTitle(String.format("테스트 데이터 제목 입니다:[%03d].", i));
-                post.setContent("테스트 데이터 제목 입니다.");
-                postRepository.save(post);
-            }
-
-        }
-    }
 
     // 게시물 검색기능
     public List<Post> searchPosts(String kw) {

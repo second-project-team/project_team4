@@ -15,14 +15,14 @@
             </tr>
             </thead>
             <tbody >
-
+            <tr th:each="post : ${searchResults}">
+                <td th:text="${post.title}"></td>
+                <td th:text="${post.content}"></td>
+            </tr>
             </tbody>
         </table>
 
-        <div th:each="post : ${searchResults}">
-            <div th:text="${post.title}"></div>
-            <div th:text="${post.content}"></div>
-        </div>
+
     </div>
 
 </div>

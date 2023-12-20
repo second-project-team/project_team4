@@ -26,24 +26,26 @@
         <div class="row row-cols-1 align-items-center">
             <div class="col">
 <!--============================이부분 each문으로 포스트 적용하면 됩니다.=====================================-->
-                <div class="card" style="width: 100%;">
-                    <div class="d-flex">
-                        <img src="..." class="card-img-top" alt="게시물첫번째이미지" style="width:25%;">
-                        <div class="card-body">
-                            <a href="#" style="text-decoration: none; color:inherit; ">
-                                <div th:each="post : ${allPosts}">
-                                    <div th:text="${post.title}"></div>
-                                    <div th:text="${post.content}" ></div>
-                                </div>
-                            </a>
-                            <a href="#" style="text-decoration: none; color:inherit; ">
-                                <p class="text-muted">프로필이미지+ 닉넴 ( 프로필로 이동)</p>
-                            </a>
-
+                <div class="col" th:each="post : ${allPosts}">
+                    <div class="card" style="width: 100%;">
+                        <div class="d-flex">
+                            <!-- 이미지를 표시하려면 post에 이미지 경로 등이 들어있는 속성을 사용해야 합니다. -->
+<!--                            <img th:src="${post.imagePath}" class="card-img-top" alt="게시물 이미지" style="width:25%;">-->
+                            <div class="card-body">
+<!--                                <a th:href="'/post/' + ${post.id}" style="text-decoration: none; color:inherit;">-->
+                                    <h5 class="card-title" th:text="${post.title}">게시물제목</h5>
+<!--                                    <p th:text="${post.someProperty}"></p>-->
+                                    <p class="card-text" th:text="${post.content}">게시물내용</p>
+<!--                                </a>-->
+<!--                                <a th:href="'/profile/' + ${post.userId}" style="text-decoration: none; color:inherit;">-->
+<!--                                    <p class="text-muted">프로필이미지+ 닉넴 ( 프로필로 이동)</p>-->
+<!--                                </a>-->
+                            </div>
                         </div>
                     </div>
                 </div>
-<!--============================여기까지 each문으로 포스트 적용하면 됩니다.=====================================-->
+
+                <!--============================여기까지 each문으로 포스트 적용하면 됩니다.=====================================-->
  <!--============================아래부분 예시. 추후 삭제 예정 =====================================-->
             </div>
             <div class="col">

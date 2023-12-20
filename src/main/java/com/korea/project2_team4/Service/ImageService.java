@@ -35,7 +35,6 @@ public class ImageService {
             String fileName = multipartFile.getOriginalFilename();
             assert fileName != null;
 
-
             String saveName = generateRandomFileName(fileName);
 
             String savePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";

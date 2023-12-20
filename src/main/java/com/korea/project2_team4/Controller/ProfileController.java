@@ -29,7 +29,7 @@ public class ProfileController {
 
 
         model.addAttribute("profile",sitemember.getProfile());
-        return "profile_detail";
+        return "Profile/profile_detail";
     }
 
     @GetMapping("/update")
@@ -38,7 +38,7 @@ public class ProfileController {
 
         profileForm.setProfileName(sitemember.getProfile().getProfileName());
         profileForm.setContent(sitemember.getProfile().getContent());
-        return "profile_form";
+        return "Profile/profile_form";
     }
 
     @PostMapping("/update")
@@ -47,6 +47,11 @@ public class ProfileController {
 
         profileService.updateprofile(sitemember.getProfile(),profileForm.getProfileName(),profileForm.getContent());
         return "redirect:/profile/detail";
+    }
+
+    @GetMapping("/pet")
+    public String pet() {
+        return "Profile/pet_list";
     }
 
 

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @Builder
-@RequestMapping("/community")
-public class CommunityController {
+@RequestMapping("/post")
+public class PostController {
 
 
     @GetMapping("/main")

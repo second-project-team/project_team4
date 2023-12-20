@@ -1,5 +1,6 @@
 package com.korea.project2_team4.Service;
 
+import com.korea.project2_team4.Config.UserRole;
 import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Form.MemberCreateForm;
 import com.korea.project2_team4.Repository.MemberRepository;
@@ -33,6 +34,7 @@ public class MemberService {
 
         member.setEmail(memberCreateForm.getEmail());
         member.setCreateDate(LocalDateTime.now());
+        member.setRole(UserRole.USER.getValue());
 
         member.setRealName(memberCreateForm.getRealName());
         member.setNickName(memberCreateForm.getNickName());

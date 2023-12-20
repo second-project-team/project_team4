@@ -11,5 +11,9 @@ public class AppConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    @Bean
+    static String getImageFileDirPath()
+    {
+        return System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files\\";
+    }
 }

@@ -29,6 +29,8 @@ public class ProfileService {
         profile.setProfileName(member.getUserName());
         profile.setContent(" ");
         return this.profileRepository.save(profile);
+
     }
+
 
 }

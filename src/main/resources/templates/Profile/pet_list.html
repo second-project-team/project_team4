@@ -1,0 +1,30 @@
+<html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+<div layout:fragment="content" class="row py-5 px-4">
+    <div class="col-xl-6 col-md-8 col-sm-10 mx-auto" >
+        <div class="avatar-group avatar-group-sm avatar-group-overlapped mt-10" style="display:flex; height:10%;">
+            <div th:if="${profile != null and profile.petList != null and not #lists.isEmpty(profile.petList)}">
+                <ul th:each="pet : ${profile.petList}">
+
+                    <li th:text="${pet.name}">
+                        <div class="avatar">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="user" class="avatar-img rounded-circle" style="width:10px, height:10px;"/>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="avatar">
+                <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="user" class="avatar-img rounded-circle" />
+            </div>
+            <div class="avatar">
+                <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="user" class="avatar-img rounded-circle" />
+            </div>
+            <div class="avatar">
+                <img src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="user" class="avatar-img rounded-circle" />
+            </div>
+        </div>
+        <div style="height:90%;"></div>
+    </div>
+</div>
+</html>

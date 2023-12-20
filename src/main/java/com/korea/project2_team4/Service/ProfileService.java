@@ -1,5 +1,6 @@
 package com.korea.project2_team4.Service;
 
+import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Entity.Profile;
 import com.korea.project2_team4.Repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +23,12 @@ public class ProfileService {
         this.profileRepository.save(profile);
     }
 
+    public Profile setDefaultProfile(Member member) {
+        Profile profile = new Profile();
+        profile.setMember(member);
+        profile.setProfileName(member.getUserName());
+        profile.setContent(" ");
+        return this.profileRepository.save(profile);
+    }
 
 }

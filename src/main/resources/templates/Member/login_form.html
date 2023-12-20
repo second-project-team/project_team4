@@ -1,23 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form th:action="@{/member/login}" method="post">
-<div class="mb-2">
-    <label for="username" class="form-label font-400">아이디</label>
-    <input type="text" name="username" id="username" class="form-control">
+<html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+<div layout:fragment="content" class="row py-5 px-4">
+    <div class="col-xl-4 col-md-6 col-sm-10 mx-auto">
+        <form th:action="@{/member/login}" method="post">
+        <div class="mb-2">
+            <label for="username" class="form-label font-400">아이디</label>
+            <input type="text" name="username" id="username" class="form-control">
+        </div>
+        <div class="mb-4">
+            <label for="password" class="form-label font-400">비밀번호</label>
+            <input type="password" name="password" id="password" class="form-control">
+        </div>
+            <input type="submit" value="로그인">
+        </form>
+        <a href="/oauth2/authorization/google" class="btn bg-google shadow logo-center sns-logo">구글</a>
+        <a href="/oauth2/authorization/naver" class="btn bg-naver shadow logo-center sns-logo">네이버</a>
+        <a href="/oauth2/authorization/kakao" class="btn bg-kakao shadow logo-center sns-logo">카카오</a>
+    </div>
 </div>
-<div class="mb-4">
-    <label for="password" class="form-label font-400">비밀번호</label>
-    <input type="password" name="password" id="password" class="form-control">
-</div>
-    <input type="submit" value="로그인">
-</form>
-<a href="/oauth2/authorization/google" class="btn bg-google shadow logo-center sns-logo">구글</a>
-<a href="/oauth2/authorization/naver" class="btn bg-naver shadow logo-center sns-logo">네이버</a>
-<a href="/oauth2/authorization/kakao" class="btn bg-kakao shadow logo-center sns-logo">카카오</a>
-</body>
 </html>

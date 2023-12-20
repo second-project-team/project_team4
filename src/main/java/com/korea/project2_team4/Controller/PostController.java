@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -41,23 +42,28 @@ public class PostController {
 
 
     @PostMapping("/createPost")
-    public String createPost(PostForm postForm, BindingResult bindingResult,List<MultipartFile> imageFiles) throws IOException, NoSuchAlgorithmException {
+    public String createPost(PostForm postForm, BindingResult bindingResult, @RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles) throws IOException, NoSuchAlgorithmException {
 //      Profile testProfile = profileService.getProfilelist().get(0);
 //      profileService.updateprofile(testProfile,profileForm.getProfileName(),profileForm.getContent());
         Post post = new Post();
+//        System.out.println(imageFiles.size());
         post.setTitle(postForm.getTitle());
         post.setContent(postForm.getContent());
         post.setCreateDate(LocalDateTime.now());
-        imageService.uploadPostImage(imageFiles,post);
+        if (imageFiles != null && !imageFiles.isEmpty()) {
+            imageService.uploadPostImage(imageFiles, post);
+        }
         postService.save(post);
 
-        return "redirect:/community/main";
+        return "redirect:/post/community/main";
     }
+
     @GetMapping("/community/main")
-    public String communityMain(Model model){
+    public String communityMain(Model model) {
         List<Post> allPosts = postService.postList();
-        model.addAttribute("allPosts",allPosts);
+        model.addAttribute("allPosts", allPosts);
         return "community_main";
     }
+
 
 }

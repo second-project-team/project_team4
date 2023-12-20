@@ -1,19 +1,23 @@
 package com.korea.project2_team4.Controller;
 
 import com.korea.project2_team4.Model.Entity.Member;
+import com.korea.project2_team4.Model.Entity.Pet;
 import com.korea.project2_team4.Model.Form.ProfileForm;
 import com.korea.project2_team4.Service.MemberService;
+import com.korea.project2_team4.Service.PetService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
-import com.korea.project2_team4.Model.Entity.Profile;
 import com.korea.project2_team4.Service.ProfileService;
 import lombok.Builder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
+import java.util.List;
 
 
 @Controller
@@ -23,6 +27,7 @@ import java.security.Principal;
 public class ProfileController {
     private final ProfileService profileService;
     private final MemberService memberService;
+    private final PetService petService;
     @GetMapping("/detail")
     public String profileDetail(Model model, Principal principal) {
         Member sitemember = this.memberService.getMember(principal.getName());
@@ -44,7 +49,6 @@ public class ProfileController {
     @PostMapping("/update")
     public String profileupdate(ProfileForm profileForm, BindingResult bindingResult, Principal principal) {
         Member sitemember = this.memberService.getMember(principal.getName());
-
         profileService.updateprofile(sitemember.getProfile(),profileForm.getProfileName(),profileForm.getContent());
         return "redirect:/profile/detail";
     }
@@ -52,6 +56,22 @@ public class ProfileController {
     @GetMapping("/pet")
     public String pet() {
         return "Profile/pet_list";
+    }
+
+
+    @PostMapping("/addpet")
+    public String addpet(@PathVariable("name")String name ,@PathVariable("content")String content , Principal principal ,
+                         @RequestParam(value = "imageFile") MultipartFile imageFile) throws IOException, NoSuchAlgorithmException {
+        Member sitemember = this.memberService.getMember(principal.getName());
+        Pet pet = new Pet();
+        pet.setName(name);
+        pet.setContent(content);
+        pet.setOwner(sitemember.getProfile());
+        if (imageFile != null && !imageFile.isEmpty())
+        petService.savePet(pet);
+        profileService.setPetforprofile(sitemember.getProfile(),pet);
+
+        return "redirect:/profile/pet";
     }
 
 

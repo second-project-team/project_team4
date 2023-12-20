@@ -1,6 +1,8 @@
 package com.korea.project2_team4.Controller;
 
+import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Form.ProfileForm;
+import com.korea.project2_team4.Service.MemberService;
 import org.springframework.ui.Model;
 import com.korea.project2_team4.Model.Entity.Profile;
 import com.korea.project2_team4.Service.ProfileService;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
+
 
 @Controller
 //@RequiredArgsConstructor
@@ -18,12 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/profile")
 public class ProfileController {
     private final ProfileService profileService;
+    private final MemberService memberService;
     @GetMapping("/detail")
-    public String profileDetail(Model model) {
-        Profile testProfile = profileService.getProfilelist().get(0);
-//        System.out.println(testProfile.getProfileName());
+    public String profileDetail(Model model, Principal principal) {
+        Member sitemember = this.memberService.getMember(principal.getName());
 
-        model.addAttribute("profile",testProfile);
+
+        model.addAttribute("profile",sitemember.getProfile());
         return "profile_detail";
     }
 

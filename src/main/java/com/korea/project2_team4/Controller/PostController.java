@@ -66,4 +66,25 @@ public class PostController {
     }
 
 
+    @GetMapping("/TestPost")
+    public String saveTestPost() {
+        postService.saveTestPost();
+
+        return "redirect:/";
+
+    }
+
+    @GetMapping("/search")
+    public String searchPosts(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(name = "sort",required = false) String sort, Model model) {
+        List<Post> searchResults;
+        searchResults = postService.searchPosts(kw);
+
+        model.addAttribute("searchResults",searchResults);
+        model.addAttribute("kw", kw);
+        model.addAttribute("sort", sort);
+
+        return "search_form";
+    }
+
+
 }

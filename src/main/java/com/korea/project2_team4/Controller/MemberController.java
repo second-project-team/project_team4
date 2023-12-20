@@ -5,7 +5,6 @@ import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Form.MemberCreateForm;
 import com.korea.project2_team4.Service.FollowService;
 import com.korea.project2_team4.Service.MemberService;
-import com.korea.project2_team4.Service.ProfileService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -27,7 +26,6 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
-    private final ProfileService profileService;
     private final FollowService followService;
 
 
@@ -40,7 +38,6 @@ public class MemberController {
     @PostMapping("/signup")
     public String signup(@Valid MemberCreateForm memberCreateForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-
             return "Member/signup_form";
         }
 
@@ -51,8 +48,7 @@ public class MemberController {
         }
 
         try {
-            Member newmember = memberService.create(memberCreateForm);
-            newmember.setProfile(profileService.setDefaultProfile(newmember));
+            memberService.create(memberCreateForm);
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자 입니다.");
@@ -155,7 +151,7 @@ public class MemberController {
     public String saveDefaultAdmin() {
         memberService.saveDefaultAdmin();
 
-        return "redirect:/restaurant/main";
+        return "redirect:/";
 
     }
 
@@ -163,7 +159,7 @@ public class MemberController {
     public String saveDefaultUser() {
         memberService.saveDefaultUser();
 
-        return "redirect:/restaurant/main";
+        return "redirect:/";
 
     }
 

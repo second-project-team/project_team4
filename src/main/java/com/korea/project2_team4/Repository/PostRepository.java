@@ -10,6 +10,6 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p WHERE LOWER(p.title) LIKE LOWER(CONCAT('%',:kw,'%'))" +
             "OR LOWER(p.content) LIKE LOWER(CONCAT('%',:kw,'%'))")
-    List<Post> searchPostByKw(@Param("kw") String kw);
+    List<Post> findAllByKw(@Param("kw") String kw);
 
 }

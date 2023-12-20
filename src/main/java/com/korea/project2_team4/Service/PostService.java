@@ -45,6 +45,6 @@ public class PostService {
 
     // 게시물 검색기능
     public List<Post> searchPosts(String kw) {
-        return postRepository.searchPostByKw(kw);
+        return postRepository.findAllByKw(kw);
     }
 }

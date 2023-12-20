@@ -42,8 +42,7 @@ public class PostController {
 
 
     @PostMapping("/createPost")
-    public String createPost(PostForm postForm, BindingResult bindingResult, @RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles) throws IOException, NoSuchAlgorithmException {
-//      Profile testProfile = profileService.getProfilelist().get(0);
+    public String createPost(PostForm postForm, BindingResult bindingResult, @RequestParam(value = "imageFiles") List<MultipartFile> imageFiles) throws IOException, NoSuchAlgorithmException {//      Profile testProfile = profileService.getProfilelist().get(0);
 //      profileService.updateprofile(testProfile,profileForm.getProfileName(),profileForm.getContent());
         Post post = new Post();
 //        System.out.println(imageFiles.size());
@@ -76,8 +75,9 @@ public class PostController {
 
     @GetMapping("/search")
     public String searchPosts(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(name = "sort",required = false) String sort, Model model) {
-        List<Post> searchResults;
-        searchResults = postService.searchPosts(kw);
+        List<Post> searchResults  = postService.searchPosts(kw);
+
+        System.out.println(searchResults.size());
 
         model.addAttribute("searchResults",searchResults);
         model.addAttribute("kw", kw);

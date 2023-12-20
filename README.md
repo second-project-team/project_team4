@@ -36,9 +36,6 @@ memberController
 profileController(멤버생성과동시, 디폴트값 생성하도록)
  -> update, petupdate, 사진등록및수정 , delete..(member삭제해야..?)
 
-petController
- -> create/update/delete,
-
 (noticeController) 관리자권한
  -> create/update/delete
 

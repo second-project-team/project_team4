@@ -20,8 +20,8 @@ import java.util.List;
 
 @Controller
 @Builder
-@RequestMapping("/community")
-public class CommunityController {
+@RequestMapping("/post")
+public class PostController {
 
     private final PostService postService;
 

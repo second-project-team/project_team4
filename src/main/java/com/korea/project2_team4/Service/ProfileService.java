@@ -25,10 +25,11 @@ public class ProfileService {
 
     public Profile setDefaultProfile(Member member) {
         Profile profile = new Profile();
-        profile.setProfileName(member.getNickName());
-        profile.setContent(" ");
         profile.setMember(member);
+        profile.setProfileName(member.getUserName());
+        profile.setContent(" ");
         return this.profileRepository.save(profile);
+
     }
 
 

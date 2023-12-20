@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -58,6 +59,26 @@ public class PostController {
         List<Post> allPosts = postService.postList();
         model.addAttribute("allPosts",allPosts);
         return "community_main";
+    }
+
+    @GetMapping("/TestPost")
+    public String saveTestPost() {
+        postService.saveTestPost();
+
+        return "redirect:/";
+
+    }
+
+    @GetMapping("/search")
+    public String searchPosts(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(name = "sort",required = false) String sort, Model model) {
+        List<Post> searchResults;
+        searchResults = postService.searchPosts(kw);
+
+        model.addAttribute("searchResults",searchResults);
+        model.addAttribute("kw", kw);
+        model.addAttribute("sort", sort);
+
+        return "search_form";
     }
 
 }

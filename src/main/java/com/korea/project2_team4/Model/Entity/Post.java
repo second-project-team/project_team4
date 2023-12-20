@@ -20,6 +20,7 @@ public class Post {
     private Profile author;
 
     private String title;
+
     private String content;
 
 

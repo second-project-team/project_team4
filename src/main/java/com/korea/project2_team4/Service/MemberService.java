@@ -39,9 +39,9 @@ public class MemberService {
         member.setRealName(memberCreateForm.getRealName());
         member.setNickName(memberCreateForm.getNickName());
         member.setPhoneNum(memberCreateForm.getPhoneNum());
+
         memberRepository.save(member);
         member.setProfile(profileService.setDefaultProfile(member));
-
         return member;
     }
 

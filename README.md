@@ -28,6 +28,7 @@ build.gradle 에 implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialec
 + 소셜로그인 이어서 진행
 + 기능보단 아예 컨트롤러, 서비스를 나눠맡아서 분담하는게 좋을것 같음(for 충돌방지?) -> 엔티티별
 ++건의사항 : post에 title속성 빼는게 나을것 같음. 딱히 쓸모x
+++ 우선 post 의 author를 member로 변경. -> 여러프로필생성기능 추가가능할때, profile로 수정하기
 
 
 memberController

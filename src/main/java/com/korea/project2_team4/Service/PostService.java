@@ -24,11 +24,14 @@ public class PostService {
         return postRepository.findAll();
     }
 
+
+    //테스트 데이터
     @PostConstruct
     public void init() {
         saveTestPost();
     }
 
+    //테스트 데이터
     @Transactional
     public void saveTestPost() {
         if (postRepository.findAll().isEmpty()) {
@@ -43,6 +46,7 @@ public class PostService {
 
         }
     }
+
 
     // 게시물 검색기능
     public List<Post> searchPosts(String kw) {

@@ -15,10 +15,8 @@ public class Pet {
     @ManyToOne
     private Profile owner;
 
-    private String species;
     private String name;
-    private Long age;
-
+    private String content;
 
     @OneToOne(mappedBy = "petImage", cascade = CascadeType.REMOVE)
     private Image petImage;

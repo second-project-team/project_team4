@@ -37,6 +37,9 @@ public class Post {
     @ManyToMany
     private Set<Member> likeMembers;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TagMap> tagMaps;
+
 
 
 

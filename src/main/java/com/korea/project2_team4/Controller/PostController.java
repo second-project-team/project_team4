@@ -1,12 +1,8 @@
 package com.korea.project2_team4.Controller;
 
-import com.korea.project2_team4.Model.Entity.Post;
-import com.korea.project2_team4.Model.Entity.Member;
-import com.korea.project2_team4.Model.Entity.Profile;
+import com.korea.project2_team4.Model.Entity.*;
 import com.korea.project2_team4.Model.Form.PostForm;
-import com.korea.project2_team4.Service.ImageService;
-import com.korea.project2_team4.Service.MemberService;
-import com.korea.project2_team4.Service.PostService;
+import com.korea.project2_team4.Service.*;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,6 +28,8 @@ public class PostController {
 
     private final ImageService imageService;
     private final MemberService memberService;
+    private final TagService tagService;
+    private final TagMapService tagMapService;
 
 
     @GetMapping("/main")
@@ -42,6 +40,8 @@ public class PostController {
 
     @GetMapping("/createPost")
     public String createPost(Model model, PostForm postForm) {
+        List<Tag> allTags = tagService.getAllTags();
+        model.addAttribute("allTags",allTags);
         return "createPost_form";
     }
 
@@ -57,7 +57,9 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/createPost")
-    public String createPost(Principal principal, PostForm postForm, BindingResult bindingResult, @RequestParam(value = "imageFiles") List<MultipartFile> imageFiles) throws IOException, NoSuchAlgorithmException {//      Profile testProfile = profileService.getProfilelist().get(0);
+    public String createPost(Principal principal, PostForm postForm, BindingResult bindingResult
+            , @RequestParam(value = "imageFiles",required = false) List<MultipartFile> imageFiles, @RequestParam(value = "selectedTagNames",required = false) List<String> selectedTagNames) throws IOException, NoSuchAlgorithmException {
+        //      Profile testProfile = profileService.getProfilelist().get(0);
 //      profileService.updateprofile(testProfile,profileForm.getProfileName(),profileForm.getContent());
         Post post = new Post();
 //        System.out.println(imageFiles.size());
@@ -70,7 +72,15 @@ public class PostController {
             imageService.uploadPostImage(imageFiles, post);
         }
         postService.save(post);
-
+        if(selectedTagNames !=null && !selectedTagNames.isEmpty()){
+            for(String selectedTagName : selectedTagNames){
+                Tag tag = tagService.getTagByTagName(selectedTagName);
+                TagMap tagMap = new TagMap();
+                tagMap.setPost(post);
+                tagMap.setTag(tag);
+                tagMapService.save(tagMap);
+            }
+        }
         return "redirect:/post/community/main";
     }
 

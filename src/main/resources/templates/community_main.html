@@ -44,6 +44,9 @@
                                     <!--                                <a th:href="'/profile/' + ${post.userId}" style="text-decoration: none; color:inherit;">-->
                                     <!--                                    <p class="text-muted">프로필이미지+ 닉넴 ( 프로필로 이동)</p>-->
                                     <!--                                </a>-->
+                                    <p style="margin-top: 90px; font-size: 17px; " th:if="${!post.getTagList().isEmpty()}">
+                                        <span th:each="tag, loop : ${post.getTagList()}" th:text="@{|#${tag.name}|}"></span>
+                                    </p>
                                 </div>
                             </div>
                         </div>

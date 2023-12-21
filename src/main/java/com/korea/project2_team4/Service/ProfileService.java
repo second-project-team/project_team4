@@ -6,7 +6,9 @@ import com.korea.project2_team4.Model.Entity.Profile;
 import com.korea.project2_team4.Repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 @Service
@@ -14,8 +16,31 @@ import java.util.List;
 public class ProfileService {
     private final ProfileRepository profileRepository;
 
+    public boolean deleteExistingFile(String existingFilePath){
+        if (existingFilePath !=null && !existingFilePath.isEmpty()) {
+            File existingFile = new File(existingFilePath);
+            if (existingFile.exists()) {
+                return existingFile.delete();
+            }
+        }
+        return false;
+    }
+
+    //    public void deletePet(Pet pet) {
+//        String filepath = pet.getPetImage().getFilePath();
+//        if (filepath != null && !filepath.isEmpty()) {
+//            deleteExistingFile(filepath);
+//        }
+//        this.petRepository.delete(pet);
+//    }
+
+
     public List<Profile> getProfilelist() {
         return this.profileRepository.findAll();
+    }
+
+    public Profile getProfileById(Long profileId) {
+        return this.profileRepository.findById(profileId).get();
     }
 
     public void updateprofile(Profile profile, String profilename, String content) {
@@ -37,6 +62,9 @@ public class ProfileService {
         profile.getPetList().add(pet);
         this.profileRepository.save(profile);
     }
+
+
+
 
 
 }

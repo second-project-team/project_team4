@@ -17,7 +17,7 @@ public class Post {
     private Long id;
 
     @ManyToOne
-    private Profile author;
+    private Profile  author;
 
     private String title;
 
@@ -39,6 +39,8 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TagMap> tagMaps;
+
+
 
 
 

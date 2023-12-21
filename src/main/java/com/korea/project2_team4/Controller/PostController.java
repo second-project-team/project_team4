@@ -7,6 +7,7 @@ import com.korea.project2_team4.Service.ImageService;
 import com.korea.project2_team4.Service.MemberService;
 import com.korea.project2_team4.Service.PostService;
 import lombok.Builder;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -72,9 +73,9 @@ public class PostController {
     }
 
     @GetMapping("/community/main")
-    public String communityMain(Model model) {
-        List<Post> allPosts = postService.postList();
-        model.addAttribute("allPosts", allPosts);
+    public String communityMain(Model model,@RequestParam(value="page", defaultValue="0") int page) {
+        Page<Post> allPosts = postService.postList(page);
+        model.addAttribute("paging", allPosts);
         return "community_main";
     }
 

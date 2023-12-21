@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -40,9 +41,10 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TagMap> tagMaps;
 
-
-
-
-
+    public List<Tag> getTagList() {
+        return this.tagMaps.stream()
+                .map(TagMap::getTag) // 값 추출
+                .collect(Collectors.toList()); // 리스트로 변환
+    }
 
 }

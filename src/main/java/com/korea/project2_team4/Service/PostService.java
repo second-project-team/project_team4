@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Builder
 @Service
@@ -23,11 +24,14 @@ public class PostService {
         return postRepository.findAll();
     }
 
+
+    //테스트 데이터
     @PostConstruct
     public void init() {
         saveTestPost();
     }
 
+    //테스트 데이터
     @Transactional
     public void saveTestPost() {
         if (postRepository.findAll().isEmpty()) {
@@ -43,8 +47,16 @@ public class PostService {
         }
     }
 
+
     // 게시물 검색기능
     public List<Post> searchPosts(String kw) {
         return postRepository.findAllByKw(kw);
+    }
+
+    // post를 optional타입으로 가져오기
+    public Post getPost(Long id) {
+        Optional<Post> postOptional = postRepository.findById(id);
+        return postOptional.orElse(null); //값이 없으면 null 값으로 반환
+
     }
 }

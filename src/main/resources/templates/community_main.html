@@ -3,7 +3,6 @@
 <div layout:fragment="content" class="content-area d-flex justify-content-center align-items-center">
 
 
-
     <div class="container">
         <div>
             <div class="container">
@@ -22,90 +21,39 @@
                         <a href="#">글쓰기</a>
                     </div>
                 </div>
-        </div>
-        <div class="row row-cols-1 align-items-center">
-            <div class="col">
-<!--============================이부분 each문으로 포스트 적용하면 됩니다.=====================================-->
-                <div class="col" th:each="post : ${allPosts}">
-                    <div class="card" style="width: 100%;">
-                        <div class="d-flex">
-                            <!-- 이미지를 표시하려면 post에 이미지 경로 등이 들어있는 속성을 사용해야 합니다. -->
-                            <div th:each="img, iterStat : ${post.postImages}" th:if="${iterStat.index lt 3}">
-                                <img class="me-3" th:src="@{|/resources/${img.saveName}|}" alt="리뷰 이미지"
-                                     style="width: 14rem; height: 14rem; border-radius: 1rem; max-width: 100%; max-height: 100%">
-                            </div>
-                            <div class="card-body">
-<!--                                <a th:href="'/post/' + ${post.id}" style="text-decoration: none; color:inherit;">-->
-                                    <h5 class="card-title" th:text="${post.title}">게시물제목</h5>
-<!--                                    <p th:text="${post.someProperty}"></p>-->
+            </div>
+            <div class="row row-cols-1 align-items-center">
+                <div class="col">
+                    <!--============================이부분 each문으로 포스트 적용하면 됩니다.=====================================-->
+                    <div class="col" th:each="post : ${allPosts}">
+                        <div class="card" style="width: 100%;">
+                            <div class="d-flex">
+                                <!-- 이미지를 표시하려면 post에 이미지 경로 등이 들어있는 속성을 사용해야 합니다. -->
+                                <div th:each="img, iterStat : ${post.postImages}" th:if="${iterStat.index lt 3}">
+                                    <img class="me-3" th:src="@{|/resources/${img.saveName}|}" alt="리뷰 이미지"
+                                         style="width: 14rem; height: 14rem; border-radius: 1rem; max-width: 100%; max-height: 100%">
+                                </div>
+                                <div class="card-body">
+                                    <!--                                <a th:href="'/post/' + ${post.id}" style="text-decoration: none; color:inherit;">-->
+                                    <h5 class="card-title">게시물제목 :
+                                        <a th:href=@{|/post/detail/${post.id}|} th:text="${post.title}"></a>
+                                    </h5>
+                                    <!--                                    <p th:text="${post.someProperty}"></p>-->
                                     <p class="card-text" th:text="${post.content}">게시물내용</p>
-<!--                                </a>-->
-<!--                                <a th:href="'/profile/' + ${post.userId}" style="text-decoration: none; color:inherit;">-->
-<!--                                    <p class="text-muted">프로필이미지+ 닉넴 ( 프로필로 이동)</p>-->
-<!--                                </a>-->
+                                    <!--                                </a>-->
+                                    <!--                                <a th:href="'/profile/' + ${post.userId}" style="text-decoration: none; color:inherit;">-->
+                                    <!--                                    <p class="text-muted">프로필이미지+ 닉넴 ( 프로필로 이동)</p>-->
+                                    <!--                                </a>-->
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!--============================여기까지 each문으로 포스트 적용하면 됩니다.=====================================-->
- <!--============================아래부분 예시. 추후 삭제 예정 =====================================-->
-            </div>
-            <div class="col">
-                <div class="card" style="width: 100%;">
-                    <div class="d-flex">
-                        <img src="..." class="card-img-top" alt="게시물첫번째이미지" style="width:25%;">
-                        <div class="card-body">
-                            <a href="#" style="text-decoration: none; color:inherit; ">
-                                <h5  class="card-title">게시물제목</h5>
-                                <p ></p>
-                                <p class="card-text">게시물내용~~  on the card title and make up the bulk of the card's content.</p>
-                            </a>
-                            <a href="#" style="text-decoration: none; color:inherit; ">
-                                <p class="text-muted">프로필이미지+ 닉넴 ( 프로필로 이동)</p>
-                            </a>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card" style="width: 100%;">
-                    <div class="d-flex">
-                        <img src="..." class="card-img-top" alt="게시물첫번째이미지" style="width:25%;">
-                        <div class="card-body">
-                            <a href="#" style="text-decoration: none; color:inherit; ">
-                                <h5 class="card-title">게시물제목</h5>
-                                <p class="card-text">게시물내용~~  on the card title and make up the bulk of the card's content.</p>
-                            </a>
-                            <a href="#" style="text-decoration: none; color:inherit; ">
-                                <p class="text-muted">프로필이미지+ 닉넴 ( 프로필로 이동)</p>
-                            </a>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card" style="width: 100%;">
-                    <div class="d-flex">
-                        <img src="..." class="card-img-top" alt="게시물첫번째이미지" style="width:25%;">
-                        <div class="card-body">
-                            <a href="#" style="text-decoration: none; color:inherit; ">
-                                <h5 class="card-title">게시물제목</h5>
-                                <p class="card-text">게시물내용~~  on the card title and make up the bulk of the card's content.</p>
-                            </a>
-                            <a href="#" style="text-decoration: none; color:inherit; ">
-                                <p class="text-muted">프로필이미지+ 닉넴 ( 프로필로 이동)</p>
-                            </a>
-
-                        </div>
-                    </div>
+                    <!--============================여기까지 each문으로 포스트 적용하면 됩니다.=====================================-->
+                    <!--============================아래부분 예시. 추후 삭제 예정 =====================================-->
                 </div>
             </div>
         </div>
     </div>
-
-
 </div>
 </html>

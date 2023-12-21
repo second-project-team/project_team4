@@ -7,13 +7,11 @@ import com.korea.project2_team4.Service.ImageService;
 import com.korea.project2_team4.Service.MemberService;
 import com.korea.project2_team4.Service.PostService;
 import lombok.Builder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -44,7 +42,17 @@ public class PostController {
         return "createPost_form";
     }
 
+    //테스트 데이터
+    @GetMapping("/TestPost")
+    public String saveTestPost() {
+        postService.saveTestPost();
 
+        return "redirect:/";
+
+    }
+
+
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/createPost")
     public String createPost(Principal principal, PostForm postForm, BindingResult bindingResult, @RequestParam(value = "imageFiles") List<MultipartFile> imageFiles) throws IOException, NoSuchAlgorithmException {//      Profile testProfile = profileService.getProfilelist().get(0);
 //      profileService.updateprofile(testProfile,profileForm.getProfileName(),profileForm.getContent());
@@ -71,13 +79,6 @@ public class PostController {
     }
 
 
-    @GetMapping("/TestPost")
-    public String saveTestPost() {
-        postService.saveTestPost();
-
-        return "redirect:/";
-
-    }
 
     @GetMapping("/search")
     public String searchPosts(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(name = "sort",required = false) String sort, Model model) {
@@ -90,6 +91,15 @@ public class PostController {
         model.addAttribute("sort", sort);
 
         return "search_form";
+    }
+
+    @GetMapping("/detail/{id}")
+    public String postDetail(Model model, @PathVariable Long id) {
+        Post post = postService.getPost(id);
+
+        model.addAttribute("post",post);
+
+        return "postDetail_form";
     }
 
 

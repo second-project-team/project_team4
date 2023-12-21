@@ -16,4 +16,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByKw(@Param("kw") String kw);
 
     Page<Post> findAll(Pageable pageable);
+
+    // 태그명을 기준으로 해당 태그를 갖고 있는 포스트를 페이징하여 조회
+    @Query("SELECT p FROM Post p JOIN p.tagMaps tm JOIN tm.tag t WHERE t.name = :tagName")
+    Page<Post> findByTagName(@Param("tagName") String tagName, Pageable pageable);
 }

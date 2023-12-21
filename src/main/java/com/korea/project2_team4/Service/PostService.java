@@ -39,6 +39,13 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
+    public Page<Post> getPostsByTagName(int page,String searchTagName){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10,Sort.by(sorts));
+        return postRepository.findByTagName(searchTagName,pageable);
+    }
+
 
     //테스트 데이터
     @PostConstruct

@@ -139,5 +139,26 @@ public class PostController {
         }
     }
 
+    @PostMapping("/deletePost/{id}")
+    public String deletePost(@PathVariable Long id) {
+
+        postService.deleteById(id);
+
+        return "redirect:/post/community/main";
+    }
+
+    @PostMapping("/updatePost/{id}")
+    public String updatePost(@PathVariable Long id, @ModelAttribute Post updatePost) {
+
+        Post post = new Post();
+
+        post.setId(id);
+        post.setTitle(updatePost.getTitle());
+        post.setContent(updatePost.getContent());
+        post.setModifyDate(LocalDateTime.now());
+
+        return null;
+    }
+
 
 }

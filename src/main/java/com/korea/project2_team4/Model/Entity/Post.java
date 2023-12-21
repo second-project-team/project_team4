@@ -17,7 +17,7 @@ public class Post {
     private Long id;
 
     @ManyToOne
-    private Profile author;
+    private Profile  author;
 
     private String title;
 
@@ -36,6 +36,8 @@ public class Post {
 
     @ManyToMany
     private Set<Member> likeMembers;
+
+
 
 
 

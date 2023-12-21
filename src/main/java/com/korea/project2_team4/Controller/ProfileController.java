@@ -66,18 +66,11 @@ public class ProfileController {
     }
 
     @PostMapping("/deleteProfileImage")
-    public String deleteProfileImage(@RequestParam("profileid")Long profileid) {
+    public String deleteProfileImage(@RequestParam("profileid")Long profileid) {// 일단안씀.
         Profile profile = profileService.getProfileById(profileid);
         imageService.deleteProfileImage(profile);
 
         return "redirect:/profile/detail";
-    }
-
-
-    @GetMapping("/pet")
-    public String pet() {
-
-        return "Profile/pet_list";
     }
 
 
@@ -86,18 +79,28 @@ public class ProfileController {
                          MultipartFile imageFile) throws Exception, NoSuchAlgorithmException {
         Member sitemember = this.memberService.getMember(principal.getName());
         Pet pet = new Pet();
+
+
         pet.setName(name);
         pet.setContent(content);
         pet.setOwner(sitemember.getProfile());
         petService.savePet(pet);
+//
+//        if (imageFile != null && !imageFile.isEmpty() && pet !=null) { //이미지 첨부를 했을때
+//            imageService.saveImgsForPet(pet,imageFile); // 기존이미지잇으면 지우고 등록함.
+//        }
 
-        if (imageFile != null && !imageFile.isEmpty() && pet !=null) {
+        if (imageFile == null || imageFile.isEmpty()) {
+            if (pet.getPetImage() == null ) {
+                imageService.saveDefaultImgsForPet(pet);
+            }
+        } else if ( pet != null ){
             imageService.saveImgsForPet(pet,imageFile);
         }
 
         profileService.setPetforprofile(sitemember.getProfile(),pet);
 
-        return "redirect:/profile/pet";
+        return "redirect:/profile/detail";
     }
 
     @PostMapping("/deletepet")

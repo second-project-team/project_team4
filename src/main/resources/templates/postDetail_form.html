@@ -23,13 +23,21 @@
             <div>
                 <div class="d-flex justify-content-start">
                     <div class="pt-5">
-                        <div class="border-bottom p-3">
+                        <div class="border-bottom pt-2">
                             <h2 th:text="${post.title}"></h2>
                         </div>
                     </div>
                 </div>
                 <div>
                     <div th:text="${post.author.profileName}"></div>
+                    <div>
+                        <div th:if="${post.modifyDate != null}">
+                            <span th:text="${#temporals.format(post.modifyDate, 'yyyy년 MM월 dd일 HH:mm')}"></span>
+                        </div>
+                        <div th:unless="${post.modifyDate != null}">
+                            <span th:text="${#temporals.format(post.createDate, 'yyyy년 MM월 dd일 HH:mm')}"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="pt-5">
                     <div th:each="img, iterStat : ${post.postImages}" th:if="${iterStat.index lt 3}">
@@ -50,13 +58,37 @@
                             <span class="badge rounded-pill bg-primary" id="voteCount"
                                   th:text="${post.likeMembers.size()}"></span>
                         </button>
-                        <!-- 삭제 버튼은 리뷰를 쓴 사람만 볼 수 있음. 더미 데이터의 경우 id가 1인 관리자만 볼 수 있음 -->
                     </form>
                 </div>
             </div>
+            <style>
+                hr {
+                    height: 4px;
+                    background-color: black;
+                }
+            </style>
+            <hr>
+            <div class="mb-3">
+                <p th:text="|${#lists.size(post.comments)}개의 답변이 있습니다.|"></p>
 
+                <form th:action="@{|/comment/create/${post.id}|}" method="post">
+                    <textarea name="content" class="form-control" id="content" rows="3" placeholder="답변을 작성해 주세요"></textarea>
+                    <br>
+                    <input class="btn btn-outline-primary" type="submit" value="답변작성">
+                </form>
+                <br>
+                <div th:each="comment : ${post.comments}">
+                    <div class="card mb-2">
+                        <div class="card-body">
+<!--                            <div th:text="${comment.author.profileName}"></div>-->
+<!--                            <div th:text="${#temporals.format(comment.createDate, 'yyyy년 MM월 dd일 HH:mm')}"></div>-->
+                            <div th:text="${comment.content}"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
-
 </div>
 </html>

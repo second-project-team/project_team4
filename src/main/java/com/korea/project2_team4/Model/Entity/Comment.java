@@ -24,6 +24,8 @@ public class Comment {
 
     private String content;
 
+    private LocalDateTime createDate;
+
     private LocalDateTime modifyDate;
 
     @ManyToMany

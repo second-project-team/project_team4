@@ -18,7 +18,7 @@ public class Post {
     private Long id;
 
     @ManyToOne
-    private Profile  author;
+    private Profile author;
 
     private String title;
 

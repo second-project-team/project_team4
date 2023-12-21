@@ -2,6 +2,7 @@ package com.korea.project2_team4.Controller;
 
 import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Entity.Pet;
+import com.korea.project2_team4.Model.Entity.Profile;
 import com.korea.project2_team4.Model.Form.ProfileForm;
 import com.korea.project2_team4.Service.ImageService;
 import com.korea.project2_team4.Service.MemberService;
@@ -22,7 +23,6 @@ import java.util.List;
 
 
 @Controller
-//@RequiredArgsConstructor
 @Builder
 @RequestMapping("/profile")
 public class ProfileController {
@@ -50,36 +50,64 @@ public class ProfileController {
     }
 
     @PostMapping("/update")
-    public String profileupdate(ProfileForm profileForm, BindingResult bindingResult, Principal principal) {
+    public String profileupdate(ProfileForm profileForm, @RequestParam(value = "profileImage") MultipartFile newprofileImage,
+                                BindingResult bindingResult, Principal principal)throws Exception {
         Member sitemember = this.memberService.getMember(principal.getName());
+
+        if (profileForm.getProfileImage() !=null && !profileForm.getProfileImage().isEmpty()) {
+            imageService.saveImgsForProfile(sitemember.getProfile(), newprofileImage); // 기존 이미지 먼저 지우게 된다.
+        }
+
         profileService.updateprofile(sitemember.getProfile(),profileForm.getProfileName(),profileForm.getContent());
+
+
+
         return "redirect:/profile/detail";
     }
 
+    @PostMapping("/deleteProfileImage")
+    public String deleteProfileImage(@RequestParam("profileid")Long profileid) {
+        Profile profile = profileService.getProfileById(profileid);
+        imageService.deleteProfileImage(profile);
+
+        return "redirect:/profile/detail";
+    }
+
+
     @GetMapping("/pet")
     public String pet() {
+
         return "Profile/pet_list";
     }
 
 
     @PostMapping("/addpet")
     public String addpet(@RequestParam("name") String name ,@RequestParam("content")String content , Principal principal ,
-                         @RequestParam(value = "imageFile") MultipartFile imageFile) throws IOException, NoSuchAlgorithmException {
+                         MultipartFile imageFile) throws Exception, NoSuchAlgorithmException {
         Member sitemember = this.memberService.getMember(principal.getName());
         Pet pet = new Pet();
         pet.setName(name);
         pet.setContent(content);
         pet.setOwner(sitemember.getProfile());
-
-
-//        if (imageFile != null && !imageFile.isEmpty()) {
-//            imageService.uploadPostImage(imageFile, pet);
-//        }
         petService.savePet(pet);
+
+        if (imageFile != null && !imageFile.isEmpty() && pet !=null) {
+            imageService.saveImgsForPet(pet,imageFile);
+        }
+
         profileService.setPetforprofile(sitemember.getProfile(),pet);
 
         return "redirect:/profile/pet";
     }
+
+    @PostMapping("/deletepet")
+    public String deletepet(@RequestParam("petid")Long petid) {
+        Pet pet = petService.getpetById(petid);
+        petService.deletePet(pet);
+        return "redirect:/profile/detail";
+    }
+
+
 
 
 

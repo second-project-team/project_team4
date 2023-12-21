@@ -56,7 +56,7 @@ public class ImageService {
 
             if(multipartFile.isEmpty()) {
                 continue; 
-            }
+            }//multipartFile 이 비어 있다면 continue 문을 실행 하여 현재 반복을 중지 하고 다음 반복문 으로 넘어갈 것
 
             String saveName = generateRandomFileName(fileName);
 

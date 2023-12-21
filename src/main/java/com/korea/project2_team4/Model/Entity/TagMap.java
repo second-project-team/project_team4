@@ -4,29 +4,22 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-public class Comment {
+public class TagMap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 포스트 정보
     @ManyToOne
-    @JoinColumn(name="post_id", nullable = false)
+    @JoinColumn(name="post_id")
     private Post post;
 
+    // 태그 정보
     @ManyToOne
-    private Profile author;
-
-    private String content;
-
-    private LocalDateTime modifyDate;
-
-    @ManyToMany
-    private Set<Member> likeMembers;
-
+    @JoinColumn(name="tag_id")
+    private Tag tag;
 }

@@ -2,12 +2,14 @@ package com.korea.project2_team4.Controller;
 
 import com.korea.project2_team4.Model.Entity.Post;
 import com.korea.project2_team4.Model.Entity.Member;
+import com.korea.project2_team4.Model.Entity.Profile;
 import com.korea.project2_team4.Model.Form.PostForm;
 import com.korea.project2_team4.Service.ImageService;
 import com.korea.project2_team4.Service.MemberService;
 import com.korea.project2_team4.Service.PostService;
 import lombok.Builder;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -100,6 +102,22 @@ public class PostController {
         model.addAttribute("post",post);
 
         return "postDetail_form";
+    }
+
+    @PostMapping("/postLike")
+    public String postLike(Principal principal, @RequestParam("id") Long id) {
+        if (principal != null) {
+            Post post = this.postService.getPost(id);
+            Member member = this.memberService.getMember(principal.getName());
+            if (postService.isLiked(post, member)) {
+                postService.unLike(post, member);
+            } else {
+                postService.Like(post, member);
+            }
+            return String.format("redirect:/post/detail/%s",post.getId());
+        } else {
+            return "redirect:/member/login";
+        }
     }
 
 

@@ -2,8 +2,10 @@ package com.korea.project2_team4.Service;
 
 import com.korea.project2_team4.Config.UserRole;
 import com.korea.project2_team4.Model.Entity.Member;
+import com.korea.project2_team4.Model.Entity.Profile;
 import com.korea.project2_team4.Model.Form.MemberCreateForm;
 import com.korea.project2_team4.Repository.MemberRepository;
+import com.korea.project2_team4.Repository.ProfileRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.Builder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +25,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final ProfileService profileService;
+    private final ProfileRepository profileRepository;
 
 
     // 멤버 생성
@@ -71,9 +74,21 @@ public class MemberService {
             member.setRole("ROLE_ADMIN");
             member.setRealName("관리자");
             member.setNickName("관리자");
+            member.setCreateDate(LocalDateTime.now());
 
 
             memberRepository.save(member);
+
+            Profile adminProfile = profileRepository.findByProfileName("관리자")
+                    .orElseGet(() -> {
+                        Profile newProfile = new Profile();
+                        newProfile.setProfileName("관리자");
+                        return newProfile;
+                    });
+
+            adminProfile.setMember(member);
+
+            profileRepository.save(adminProfile);
 
         }
     }
@@ -91,6 +106,7 @@ public class MemberService {
                 member.setRole("ROLE_USER");
                 member.setRealName("테스트 유저" + i);
                 member.setNickName("테스트 유저" + i);
+                member.setCreateDate(LocalDateTime.now());
 
                 memberRepository.save(member);
             }

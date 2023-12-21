@@ -27,9 +27,8 @@
                         <div class="card" style="width:100%">
                             <div class="d-flex">
                                 <div class="card-body">
-                                    <div th:text="${post.title}"></div>
-                                    <div th:text="${post.content}"></td>
-                                    </div>
+                                    <a th:href=@{|/post/detail/${post.id}|} th:text="${post.title}"></a>
+                                    <div th:text="${post.content}"></div>
                                 </div>
                             </div>
                         </div>

@@ -34,10 +34,13 @@ public class PetService {
     }
 
     public void deletePet(Pet pet) {
-        String filepath = pet.getPetImage().getFilePath();
-        if (filepath != null && !filepath.isEmpty()) {
-            deleteExistingFile(filepath);
+        if (pet.getPetImage() !=null) {
+            String filepath = pet.getPetImage().getFilePath();
+            if (filepath != null && !filepath.isEmpty()) {
+                deleteExistingFile(filepath);
+            }
         }
+
         this.petRepository.delete(pet);
     }
 

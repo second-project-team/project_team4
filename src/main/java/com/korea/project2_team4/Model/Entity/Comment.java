@@ -20,7 +20,6 @@ public class Comment {
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name="member_id", nullable = false)
     private Profile author;
 
     private String content;

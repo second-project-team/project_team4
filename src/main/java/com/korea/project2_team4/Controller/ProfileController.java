@@ -3,6 +3,7 @@ package com.korea.project2_team4.Controller;
 import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Entity.Pet;
 import com.korea.project2_team4.Model.Form.ProfileForm;
+import com.korea.project2_team4.Service.ImageService;
 import com.korea.project2_team4.Service.MemberService;
 import com.korea.project2_team4.Service.PetService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,8 @@ public class ProfileController {
     private final ProfileService profileService;
     private final MemberService memberService;
     private final PetService petService;
+    private final ImageService imageService;
+
     @GetMapping("/detail")
     public String profileDetail(Model model, Principal principal) {
         Member sitemember = this.memberService.getMember(principal.getName());
@@ -60,14 +63,18 @@ public class ProfileController {
 
 
     @PostMapping("/addpet")
-    public String addpet(@PathVariable("name")String name ,@PathVariable("content")String content , Principal principal ,
+    public String addpet(@RequestParam("name") String name ,@RequestParam("content")String content , Principal principal ,
                          @RequestParam(value = "imageFile") MultipartFile imageFile) throws IOException, NoSuchAlgorithmException {
         Member sitemember = this.memberService.getMember(principal.getName());
         Pet pet = new Pet();
         pet.setName(name);
         pet.setContent(content);
         pet.setOwner(sitemember.getProfile());
-        if (imageFile != null && !imageFile.isEmpty())
+
+
+//        if (imageFile != null && !imageFile.isEmpty()) {
+//            imageService.uploadPostImage(imageFile, pet);
+//        }
         petService.savePet(pet);
         profileService.setPetforprofile(sitemember.getProfile(),pet);
 

@@ -23,29 +23,31 @@
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">이름</label>
-                                    <input type="text" class="form-control" id="name" >
+<!--                                    <label for="name" class="form-label">이름</label>-->
+                                    <input type="text" class="form-control" name="name" >
                                 </div>
                                 <div class="mb-3">
-                                    <label for="content" class="form-label">소개</label>
-                                    <textarea class="form-control" id="content" rows="3"></textarea>
+<!--                                    <label for="content" class="form-label">소개</label>-->
+                                    <textarea class="form-control" name="content" rows="3"></textarea>
                                 </div>
 
                                 <div>
                                     <label for="imageFile">이미지 업로드</label>
                                     <input type="file" id="imageFile" name="imageFile">
                                 </div>
-                                <button type="submit" class="btn btn-light">저장</button>
+<!--                                <button type="submit" class="btn btn-light">저장</button>-->
 
                             </div>
+                            <div class="modal-footer">
+
+                                <button type="submit" class="btn btn-light">저장</button>
+                            </div>
+
                         </form>
 
                         <!-- 폼 종료 -->
                     </div>
-                    <div class="modal-footer">
 
-                        <button type="button" class="btn btn-light">저장</button>
-                    </div>
                 </div>
             </div>
         </div>

@@ -37,17 +37,26 @@ public class PostService {
     public Page<Post> postList(int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10,Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         return postRepository.findAll(pageable);
     }
 
-    public Page<Post> getPostsByTagName(int page,String searchTagName){
+    public Page<Post> getPostsByTagName(int page, String searchTagName) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10,Sort.by(sorts));
-        return postRepository.findByTagName(searchTagName,pageable);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return postRepository.findByTagName(searchTagName, pageable);
     }
 
+        public Page<Post> getPostsOrderByLikeCount(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return postRepository.findAllOrderByLikeMembersSizeDesc(pageable);
+    }
+
+    public Page<Post> getPostsOrderByCommentCount(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return postRepository.findAllOrderByCommentsSizeDesc(pageable);
+    }
 
     //테스트 데이터
     @PostConstruct
@@ -138,6 +147,19 @@ public class PostService {
 
             this.postRepository.deleteById(id);
         }
+    }
+
+    //작성자게시글불러오기
+    public List<Post> getPostsbyAuthor(Profile profile) {
+        List<Post> targetPosts = this.postRepository.findAllByauthor(profile.getProfileName());
+        return targetPosts;
+    }
+    //작성자 게시글 -> 페이징처리
+    public Page<Post> myPostListPage(int page, Profile profile) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10,Sort.by(sorts));
+        return postRepository.findAllByauthorPage(profile.getProfileName(), pageable);
     }
 
 }

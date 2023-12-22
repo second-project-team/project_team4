@@ -32,9 +32,12 @@ public class ProfileController {
     private final MemberService memberService;
     private final PetService petService;
     private final ImageService imageService;
-    @PreAuthorize("isAuthenticated()")
+
     @GetMapping("/detail")
-    public String profileDetail(Model model, Principal principal) {
+    public String profileDetail(Model model, Principal principal,@RequestParam("postid")Long postid) {
+        if (principal == null) {
+            postService.find
+        }
         Member sitemember = this.memberService.getMember(principal.getName());
 
         List<Post> myPosts =  postService.getPostsbyAuthor(sitemember.getProfile());
@@ -76,6 +79,17 @@ public class ProfileController {
         imageService.deleteProfileImage(profile);
 
         return "redirect:/profile/detail";
+    }
+
+
+    @GetMapping("/showallPostsBy")
+    public String showAllMyPosts(Model model, @RequestParam(value="page", defaultValue="0") int page, @RequestParam("profileid")Long profileid, Principal principal) {
+        Member sitemember = this.memberService.getMember(principal.getName());
+        List<Post> myposts = postService.getPostsbyAuthor(sitemember.getProfile());
+
+        model.addAttribute("searchResults", myposts);
+        return "search_form";
+//        return "community_main";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -138,18 +152,9 @@ public class ProfileController {
         return "redirect:/profile/detail";
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/showallPostsBy")
-    public String showAllMyPosts(Model model, @RequestParam(value="page", defaultValue="0") int page, @RequestParam("profileid")Long profileid, Principal principal) {
-        Member sitemember = this.memberService.getMember(principal.getName());
-        List<Post> myposts = postService.getPostsbyAuthor(sitemember.getProfile());
 
-        model.addAttribute("searchResults", myposts);
-        return "search_form";
-//        return "community_main";
-    }
 
-    @PreAuthorize("isAuthenticated()")
+
     @GetMapping("/petprofile")
     public String petprofile(Model model, @RequestParam("petid")Long petid) {
         Pet pet = petService.getpetById(petid);

@@ -9,6 +9,7 @@ import com.korea.project2_team4.Service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import lombok.Builder;
 import org.springframework.stereotype.Controller;
@@ -78,6 +79,29 @@ public class ProfileController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myPage")
+    public String myPage(Model model, Principal principal) {
+        Member sitemember = this.memberService.getMember(principal.getName());
+
+        model.addAttribute("sitemember", sitemember);
+        return "Member/myPage";
+    }
+
+//    @GetMapping("/profile")
+//    public String profile(Authentication authentication, Principal principal, UserPasswordForm userPasswordForm, Model model){
+//        String userId = principal.getName();
+//        User userinfo = this.userService.getUser(userId);
+//        model.addAttribute("userinfo", userinfo);
+//
+//        return "userProfile/profile";
+//    }
+
+
+
+
+// ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓펫 관리↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/addpet")
     public String addpet(@RequestParam("name") String name ,@RequestParam("content")String content , Principal principal ,
                          MultipartFile imageFile) throws Exception, NoSuchAlgorithmException {
@@ -123,6 +147,33 @@ public class ProfileController {
         model.addAttribute("searchResults", myposts);
         return "search_form";
 //        return "community_main";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/petprofile")
+    public String petprofile(Model model, @RequestParam("petid")Long petid) {
+        Pet pet = petService.getpetById(petid);
+
+        model.addAttribute("pet", pet);
+        return "Profile/pet_profile";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/updatepet")
+    public String profileupdate(@RequestParam(value = "petImage") MultipartFile newpetImage, @RequestParam(value="petid") Long petid,
+                                @RequestParam(value="name") String name, @RequestParam(value="content") String content,
+                                Principal principal)throws Exception {
+//        Member sitemember = this.memberService.getMember(principal.getName());
+        Pet pet = petService.getpetById(petid);
+
+
+        if (newpetImage !=null && !newpetImage.isEmpty()) {
+            imageService.saveImgsForPet(pet, newpetImage); // 이미지처리따로.
+        }
+
+        petService.updatePet(pet,name,content);
+
+        return "redirect:/profile/petprofile";
     }
 
 

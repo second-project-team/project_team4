@@ -31,11 +31,11 @@ public class CommentController {
     @PostMapping("/create/{id}")
     public String createComment(Model model, @PathVariable("id") Long id,
                                 @RequestParam(value = "content") String content, Principal principal) {
-        Post post = this.postService.getPostViewNotIncrement(id);
+        Post post = this.postService.getPost(id);
         Member member = this.memberService.getMember(principal.getName());
         commentService.create(post, content, member.getProfile());
 
-        return "redirect:/post/detail/{id}";
+        return "redirect:/post/detail/" + id + "/1";
     }
 
     @PostMapping("/commentLike")
@@ -44,6 +44,7 @@ public class CommentController {
 
         if (principal != null) {
             Comment comment = this.commentService.getComment(id);
+            Long postId = comment.getPost().getId();
             Member member = this.memberService.getMember(principal.getName());
 
             if (commentService.isLiked(comment, member)) {
@@ -53,7 +54,7 @@ public class CommentController {
                 commentService.Like(comment, member);
             }
 
-            return "redirect:/post/detail/" + comment.getPost().getId();
+            return "redirect:/post/detail/" + postId + "/1";
 
         } else {
             return "redirect:/member/login";
@@ -67,7 +68,8 @@ public class CommentController {
         Long postId = comment.getPost().getId();
         commentService.deleteById(id);
 
-        return "redirect:/post/detail/" + postId;
+
+        return "redirect:/post/detail/" + postId + "/1";
     }
 
     @PostMapping("/updateComment/{id}")
@@ -90,7 +92,7 @@ public class CommentController {
 
         }
 
-        return "redirect:/post/detail/" + postId;
+        return "redirect:/post/detail/" + postId + "/1";
 
     }
 

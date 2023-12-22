@@ -21,6 +21,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p JOIN p.tagMaps tm JOIN tm.tag t WHERE t.name = :tagName")
     Page<Post> findByTagName(@Param("tagName") String tagName, Pageable pageable);
 
+    @Query("SELECT p FROM Post p ORDER BY SIZE(p.comments) DESC")
+    Page<Post> findAllOrderByCommentsSizeDesc(Pageable pageable);
+    @Query("SELECT p FROM Post p ORDER BY SIZE(p.likeMembers) DESC")
+    Page<Post> findAllOrderByLikeMembersSizeDesc(Pageable pageable);
+
+
     //작성자 게시물 리스트all 반환
     @Query("SELECT p FROM Post p WHERE p.author.profileName LIKE %:name%")
     List<Post> findAllByauthor(@Param("name")String name);

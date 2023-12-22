@@ -2,6 +2,7 @@ package com.korea.project2_team4.Controller;
 
 import com.korea.project2_team4.Model.Entity.*;
 import com.korea.project2_team4.Model.Form.PostForm;
+import com.korea.project2_team4.Repository.PostRepository;
 import com.korea.project2_team4.Service.*;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-
+    private final PostRepository postRepository;
     private final ImageService imageService;
     private final MemberService memberService;
     private final TagService tagService;
@@ -86,15 +87,26 @@ public class PostController {
     }
 
     @GetMapping("/community/main")
-    public String communityMain(Model model,@RequestParam(value="page", defaultValue="0") int page, @RequestParam(name = "searchTagName", required = false) String searchTagName) {
+    public String communityMain(Model model, @RequestParam(name = "sort", required = false) String sort,@RequestParam(value="page", defaultValue="0") int page, @RequestParam(name = "searchTagName", required = false) String searchTagName) {
         Page<Post> allPosts;
         allPosts = postService.postList(page);
+        if (searchTagName == null) {
+            searchTagName = "";  // 기본적으로 빈 문자열로 설정
+        }
+        if(sort != null && !sort.isEmpty()){
+            if(sort.equals("latest")){
+                allPosts = postService.postList(page);
+            } else if (sort.equals("likeCount")) {
+                allPosts = postService.getPostsOrderByLikeCount(page);
+            }else {
+                allPosts = postService.getPostsOrderByCommentCount(page);
+            }
+        }
         if(searchTagName !=null && !searchTagName.isEmpty()){
            allPosts = postService.getPostsByTagName(page,searchTagName);
-//           if(searchTagName =="전체"){
-//               allPosts = postService.postList(page);
-//           }
         }
+        model.addAttribute("searchTagName",searchTagName);
+        model.addAttribute("sort",sort);
         model.addAttribute("paging", allPosts);
         return "community_main";
     }
@@ -108,6 +120,7 @@ public class PostController {
         System.out.println(searchResults.size());
 
         model.addAttribute("searchResults",searchResults);
+        model.addAttribute("kw",kw);
         model.addAttribute("sort", sort);
 
         return "search_form";
@@ -149,14 +162,18 @@ public class PostController {
     @PostMapping("/updatePost/{id}")
     public String updatePost(@PathVariable Long id, @ModelAttribute Post updatePost) {
 
-        Post post = new Post();
+        Post existingPost = postRepository.findById(id).orElse(null);
 
-        post.setId(id);
-        post.setTitle(updatePost.getTitle());
-        post.setContent(updatePost.getContent());
-        post.setModifyDate(LocalDateTime.now());
+        if (existingPost != null) {
 
-        return null;
+            existingPost.setTitle(updatePost.getTitle());
+            existingPost.setContent(updatePost.getContent());
+            existingPost.setModifyDate(LocalDateTime.now());
+
+            postRepository.save(existingPost);
+        }
+
+        return "redirect:/post/detail/{id}";
     }
 
 

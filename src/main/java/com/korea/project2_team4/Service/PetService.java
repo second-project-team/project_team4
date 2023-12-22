@@ -44,6 +44,14 @@ public class PetService {
         this.petRepository.delete(pet);
     }
 
+    public void updatePet(Pet pet,String name,String content){
+        Pet updatepet = this.petRepository.findById(pet.getId()).get();
+        updatepet.setName(name);
+        updatepet.setContent(content);
+        this.petRepository.save(pet);
+
+    }
+
 
 
 

@@ -126,11 +126,15 @@ public class PostController {
         return "search_form";
     }
 
-    @GetMapping("/detail/{id}")
-    public String postDetail(Model model, @PathVariable Long id) {
-        Post post = postService.getPost(id);
-
-        model.addAttribute("post",post);
+    @GetMapping("/detail/{id}/{hit}")
+    public String postDetail(Model model, @PathVariable("id") Long id, @PathVariable("hit") Integer hit) {
+        if (hit==0) {
+            Post post = postService.getPostIncrementView(id);
+            model.addAttribute("post",post);
+        } else {
+            Post post = postService.getPost(id);
+            model.addAttribute("post",post);
+        }
 
         return "postDetail_form";
     }
@@ -140,12 +144,13 @@ public class PostController {
         if (principal != null) {
             Post post = this.postService.getPost(id);
             Member member = this.memberService.getMember(principal.getName());
+            Long postId = post.getId();
             if (postService.isLiked(post, member)) {
                 postService.unLike(post, member);
             } else {
                 postService.Like(post, member);
             }
-            return String.format("redirect:/post/detail/%s",post.getId());
+            return "redirect:/post/detail/" + postId + "/1";
         } else {
             return "redirect:/member/login";
         }
@@ -173,7 +178,7 @@ public class PostController {
             postRepository.save(existingPost);
         }
 
-        return "redirect:/post/detail/{id}";
+        return "redirect:/post/detail/{id}/1";
     }
 
 

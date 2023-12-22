@@ -42,7 +42,7 @@
                                 <div class="card-body">
                                     <!--                                <a th:href="'/post/' + ${post.id}" style="text-decoration: none; color:inherit;">-->
                                     <h5 class="card-title">게시물제목 :
-                                        <a th:href=@{|/post/detail/${post.id}|} th:text="${post.title}"></a>
+                                        <a th:href=@{|/post/detail/${post.id}/0|} th:text="${post.title}"></a>
                                     </h5>
                                     <!--                                    <p th:text="${post.someProperty}"></p>-->
                                     <p class="card-text" th:text="${post.content}">게시물내용</p>
@@ -66,8 +66,8 @@
                                     <p style="margin-top: 10px; font-size: 17px; " th:if="${!post.getTagList().isEmpty()}">
                                         <span th:each="tag, loop : ${post.getTagList()}" th:text="@{|#${tag.name}|}"></span>
                                     </p>
-                                    <div>조회수 :
-                                        <p th:text="${post.view}"></p>
+                                    <div>
+                                        <p th:text="${'조회수 : ' + post.view}"></p>
                                     </div>
                                 </div>
                             </div>

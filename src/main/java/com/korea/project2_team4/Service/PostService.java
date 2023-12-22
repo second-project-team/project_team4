@@ -105,21 +105,18 @@ public class PostService {
     // post를 optional타입으로 가져오기
     public Post getPost(Long id) {
         Optional<Post> postOptional = postRepository.findById(id);
-        if (postOptional.isPresent()) {
-            Post postView = postOptional.get();
-            postView.setView(postView.getView()+1);
-            this.postRepository.save(postView);
-            return postView;
-        }
-
-        return postOptional.orElse(null); //값이 없으면 null 값으로 반환
+        return postOptional.orElse(null);
 
     }
 
-    public Post getPostViewNotIncrement(Long id) {
+    public Post getPostIncrementView(Long id) {
         Optional<Post> postOptional = postRepository.findById(id);
+        if (postOptional.isPresent()) {
+            Post postView = postOptional.get();
+            postView.setView(postView.getView() + 1);
+            return postRepository.save(postView);
+        }
         return postOptional.orElse(null);
-
     }
 
     //좋아요 기능

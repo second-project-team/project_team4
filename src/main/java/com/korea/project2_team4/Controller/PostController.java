@@ -129,7 +129,6 @@ public class PostController {
     @GetMapping("/detail/{id}")
     public String postDetail(Model model, @PathVariable Long id) {
         Post post = postService.getPost(id);
-
         model.addAttribute("post",post);
 
         return "postDetail_form";

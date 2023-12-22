@@ -87,15 +87,26 @@ public class PostController {
     }
 
     @GetMapping("/community/main")
-    public String communityMain(Model model,@RequestParam(value="page", defaultValue="0") int page, @RequestParam(name = "searchTagName", required = false) String searchTagName) {
+    public String communityMain(Model model, @RequestParam(name = "sort", required = false) String sort,@RequestParam(value="page", defaultValue="0") int page, @RequestParam(name = "searchTagName", required = false) String searchTagName) {
         Page<Post> allPosts;
         allPosts = postService.postList(page);
+        if (searchTagName == null) {
+            searchTagName = "";  // 기본적으로 빈 문자열로 설정
+        }
+        if(sort != null && !sort.isEmpty()){
+            if(sort.equals("latest")){
+                allPosts = postService.postList(page);
+            } else if (sort.equals("likeCount")) {
+                allPosts = postService.getPostsOrderByLikeCount(page);
+            }else {
+                allPosts = postService.getPostsOrderByCommentCount(page);
+            }
+        }
         if(searchTagName !=null && !searchTagName.isEmpty()){
            allPosts = postService.getPostsByTagName(page,searchTagName);
-//           if(searchTagName =="전체"){
-//               allPosts = postService.postList(page);
-//           }
         }
+        model.addAttribute("searchTagName",searchTagName);
+        model.addAttribute("sort",sort);
         model.addAttribute("paging", allPosts);
         return "community_main";
     }
@@ -109,7 +120,7 @@ public class PostController {
         System.out.println(searchResults.size());
 
         model.addAttribute("searchResults",searchResults);
-        model.addAttribute("kw", kw);
+        model.addAttribute("kw",kw);
         model.addAttribute("sort", sort);
 
         return "search_form";

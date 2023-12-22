@@ -10,7 +10,7 @@
                     <div class="profile mr-3">
                         <div class="avatar" style="width:30px, height:30px;">
 
-<!--                            <img th:src="@{|/files/${profile.profileImage.fileName}|}" alt="user" class="avatar-img rounded-circle" style="width:30px, height:30px;"/>-->
+                            <img th:src="@{|/files/${profile.profileImage.fileName}|}" alt="user" class="avatar-img rounded-circle" style="width:30px, height:30px;"/>
                             <form th:action="@{|/profile/deleteProfileImage|}" method="post">
                                 <input type="hidden" name="profileid" th:value="${profile.id}">
                                 <button type="submit" class="btn btn-link" style="text-decoration:none; color:white;">✕</button>
@@ -111,13 +111,29 @@
 
             <div class="py-4 px-4">
                 <div class="d-flex align-items-center justify-content-between mb-3">
-                    <h5 class="mb-0">Recent posts</h5><a href="#" class="btn btn-link text-muted">Show all</a>
+                    <h5 class="mb-0">Recent posts</h5>
+                    <form th:action="@{|/profile/showallPostsBy|}">
+                        <input type="hidden" name="profileid" th:value="${profile.id}">
+                        <button type="submit" class="btn btn-link text-muted" >Show all</button>
+                    </form>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 mb-2 pr-lg-1"><img src="https://bootstrapious.com/i/snippets/sn-profile/img-3.jpg" alt="" class="img-fluid rounded shadow-sm"></div>
-                    <div class="col-lg-6 mb-2 pl-lg-1"><img src="https://bootstrapious.com/i/snippets/sn-profile/img-4.jpg" alt="" class="img-fluid rounded shadow-sm"></div>
-                    <div class="col-lg-6 pr-lg-1 mb-2"><img src="https://bootstrapious.com/i/snippets/sn-profile/img-5.jpg" alt="" class="img-fluid rounded shadow-sm"></div>
-                    <div class="col-lg-6 pl-lg-1"><img src="https://bootstrapious.com/i/snippets/sn-profile/img-6.jpg" alt="" class="img-fluid rounded shadow-sm"></div>
+                    <div th:each="post : ${postList}">
+                        <div class="col-lg-6 mb-2 pr-lg-1">
+<!--                            <div th:text="${post.title}"></div>-->
+                            <a th:href="@{|/post/detail/${post.id}|}">
+                                <div th:each="img : ${post.postImages}">
+                                    <img th:src="@{|/resources/${img.saveName}|}" alt="no_img" class="img-fluid rounded shadow-sm">
+                                </div>
+                            </a>
+
+<!--                            <img th:src="@{|/files/${post.postImages[0].fileName}|}" alt="no_img" class="img-fluid rounded shadow-sm">-->
+<!--                            <img th:src="@{|/files/${post.postImages != null and not #lists.isEmpty(post.postImages) ? post.postImages[0].fileName : 'default-image.jpg'}|}"-->
+<!--                                 alt="no_img" class="img-fluid rounded shadow-sm">-->
+                        </div>
+                    </div>
+
+
                 </div>
 <!--                <div class="py-4">-->
 <!--                    <h5 class="mb-3">Recent posts</h5>-->

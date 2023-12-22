@@ -2,6 +2,7 @@ package com.korea.project2_team4.Controller;
 
 import com.korea.project2_team4.Model.Entity.*;
 import com.korea.project2_team4.Model.Form.PostForm;
+import com.korea.project2_team4.Repository.PostRepository;
 import com.korea.project2_team4.Service.*;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-
+    private final PostRepository postRepository;
     private final ImageService imageService;
     private final MemberService memberService;
     private final TagService tagService;
@@ -161,14 +162,18 @@ public class PostController {
     @PostMapping("/updatePost/{id}")
     public String updatePost(@PathVariable Long id, @ModelAttribute Post updatePost) {
 
-        Post post = new Post();
+        Post existingPost = postRepository.findById(id).orElse(null);
 
-        post.setId(id);
-        post.setTitle(updatePost.getTitle());
-        post.setContent(updatePost.getContent());
-        post.setModifyDate(LocalDateTime.now());
+        if (existingPost != null) {
 
-        return null;
+            existingPost.setTitle(updatePost.getTitle());
+            existingPost.setContent(updatePost.getContent());
+            existingPost.setModifyDate(LocalDateTime.now());
+
+            postRepository.save(existingPost);
+        }
+
+        return "redirect:/post/detail/{id}";
     }
 
 

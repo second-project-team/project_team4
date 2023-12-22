@@ -19,13 +19,13 @@
                     </div>
 
                     <div class="media-body mb-5 text-white">
-                        <a th:href="@{|/profile/update|}" class="btn btn-dark btn-sm btn-block text-muted">프로필 수정</a>
+                        <a sec:authorize="isAuthenticated()" th:href="@{|/profile/update|}" class="btn btn-dark btn-sm btn-block text-muted">프로필 수정</a>
                         <h4 class="mt-0 mb-0" th:text="${profile.profileName}"></h4>
                         <p class="small mb-4" th:text="${profile.content}"> <i class="fa fa-map-marker mr-2"></i></p>
 
 
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-dark btn-sm btn-block text-muted" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button sec:authorize="isAuthenticated()" type="button" class="btn btn-dark btn-sm btn-block text-muted" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             펫추가
                         </button>
                         <!-- Modal -->

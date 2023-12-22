@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -85,12 +86,19 @@ public class PostController {
     }
 
     @GetMapping("/community/main")
-    public String communityMain(Model model,@RequestParam(value="page", defaultValue="0") int page) {
-        Page<Post> allPosts = postService.postList(page);
+    public String communityMain(Model model,@RequestParam(value="page", defaultValue="0") int page, @RequestParam(name = "searchTagName", required = false) String searchTagName) {
+        Page<Post> allPosts;
+        allPosts = postService.postList(page);
+        if(searchTagName !=null && !searchTagName.isEmpty()){
+           allPosts = postService.getPostsByTagName(page,searchTagName);
+//           if(searchTagName =="전체"){
+//               allPosts = postService.postList(page);
+//           }
+        }
         model.addAttribute("paging", allPosts);
         return "community_main";
     }
-
+    // 내일 전체로 다시 돌아가는 버튼 만들기.
 
 
     @GetMapping("/search")
@@ -129,6 +137,27 @@ public class PostController {
         } else {
             return "redirect:/member/login";
         }
+    }
+
+    @PostMapping("/deletePost/{id}")
+    public String deletePost(@PathVariable Long id) {
+
+        postService.deleteById(id);
+
+        return "redirect:/post/community/main";
+    }
+
+    @PostMapping("/updatePost/{id}")
+    public String updatePost(@PathVariable Long id, @ModelAttribute Post updatePost) {
+
+        Post post = new Post();
+
+        post.setId(id);
+        post.setTitle(updatePost.getTitle());
+        post.setContent(updatePost.getContent());
+        post.setModifyDate(LocalDateTime.now());
+
+        return null;
     }
 
 

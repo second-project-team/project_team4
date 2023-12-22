@@ -1,5 +1,6 @@
 package com.korea.project2_team4.Service;
 
+import com.korea.project2_team4.Model.Entity.Image;
 import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Entity.Post;
 import com.korea.project2_team4.Model.Entity.Profile;
@@ -27,6 +28,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final ProfileRepository profileRepository;
     private final MemberRepository memberRepository;
+    private final ImageService imageService;
 
     public void save(Post post) {
         postRepository.save(post);
@@ -37,6 +39,13 @@ public class PostService {
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10,Sort.by(sorts));
         return postRepository.findAll(pageable);
+    }
+
+    public Page<Post> getPostsByTagName(int page,String searchTagName){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10,Sort.by(sorts));
+        return postRepository.findByTagName(searchTagName,pageable);
     }
 
 
@@ -107,6 +116,28 @@ public class PostService {
             return false;
         }
         return post.getLikeMembers().contains(member);
+    }
+
+    public void deleteById(Long id) {
+        Optional<Post> optionalPost = postRepository.findById(id);
+
+        if (optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+
+            List<Image> postImages = post.getPostImages();
+
+            if (postImages != null) {
+                for (Image image : postImages) {
+                    String filepath = image.getFilePath();
+
+                    if (filepath != null && !filepath.isEmpty()) {
+                        imageService.deleteExistingFile(filepath);
+                    }
+                }
+            }
+
+            this.postRepository.deleteById(id);
+        }
     }
 
 }

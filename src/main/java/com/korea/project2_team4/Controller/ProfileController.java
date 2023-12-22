@@ -83,10 +83,34 @@ public class ProfileController {
     public String myPage(Model model, Principal principal) {
         Member sitemember = this.memberService.getMember(principal.getName());
 
-        model.addAttribute("sitemember", sitemember);
+        model.addAttribute("siteMember", sitemember);
         return "Member/myPage";
     }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myPage/update")
+    public String memberUpdate(Principal principal,Model model){
+        Member sitemember = this.memberService.getMember(principal.getName());
+        model.addAttribute("siteMember",sitemember);
+        return "/Member/updateMember_form";
+    }
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/myPage/delete")
+    public String memberDelete(Principal principal){
+        Member member = this.memberService.getMember(principal.getName());
+        memberService.delete(member);
+        return "redirect:/";
+    }
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/myPage/update")
+    public String memberUpdate(Principal principal,String nickName,String phoneNum,String email){
+        Member sitemember = this.memberService.getMember(principal.getName());
+        sitemember.setNickName(nickName);
+        sitemember.setEmail(email);
+        sitemember.setPhoneNum(phoneNum);
+        memberService.save(sitemember);
 
+        return "redirect:/Member/profile/myPage";
+    }
 //    @GetMapping("/profile")
 //    public String profile(Authentication authentication, Principal principal, UserPasswordForm userPasswordForm, Model model){
 //        String userId = principal.getName();

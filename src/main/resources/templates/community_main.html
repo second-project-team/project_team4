@@ -67,7 +67,7 @@
                                         <span th:each="tag, loop : ${post.getTagList()}" th:text="@{|#${tag.name}|}"></span>
                                     </p>
                                     <div>
-                                        <p th:text="${post.view}"></p>
+                                        <p th:text="${'조회수 : ' + post.view}"></p>
                                     </div>
                                 </div>
                             </div>

@@ -51,7 +51,11 @@
                                     <!--                                    <p class="text-muted">프로필이미지+ 닉넴 ( 프로필로 이동)</p>-->
                                     <!--                                </a>-->
                                     <div>
-                                    <div style="margin-top: 30px;" th:text="${post.author.profileName}"></div>
+                                        <form th:action="@{|/profile/detail|}">
+                                            <input type="hidden" name="postid" th:value="${post.id}">
+                                            <button type="submit" class="btn btn-link" th:text="${post.author.profileName}" style="text-decoration:none; color:inherit;"></button>
+                                        </form>
+<!--                                        <a th:href="@{|/profile/detail|}" th:text="${post.author.profileName}" style="text-decoration:none; color:inherit;"></a>-->
                                         <div>
                                             <div th:if="${post.modifyDate != null}">
                                                 <span th:text="${#temporals.format(post.modifyDate, 'yyyy년 MM월 dd일 HH:mm')}"></span>

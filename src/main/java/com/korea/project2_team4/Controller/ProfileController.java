@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import lombok.Builder;
 import org.springframework.stereotype.Controller;
@@ -32,17 +33,48 @@ public class ProfileController {
     private final MemberService memberService;
     private final PetService petService;
     private final ImageService imageService;
-    @PreAuthorize("isAuthenticated()")
+
     @GetMapping("/detail")
-    public String profileDetail(Model model, Principal principal) {
-        Member sitemember = this.memberService.getMember(principal.getName());
+    public String profileDetail(Model model, @AuthenticationPrincipal Principal principal, @RequestParam(name = "postid", required = false) Long postid) {
+        if (principal == null) { //postid가 null일수가 없음
+            Post thispost = postService.getPost(postid);
+            model.addAttribute("postList", postService.getPostsbyAuthor(thispost.getAuthor()));
+            model.addAttribute("profile", thispost.getAuthor());
+            return "Profile/profile_detail";
+        } else { // postid는 null로비교아니고 아예없거나 있는걸로? 예외처리로 해야하는듯
+            try{ // 회원이 포스트에서 프로필누를때? principal있고, postid받아온거 있을때,,
+                Member sitemember = this.memberService.getMember(principal.getName());
+                List<Post> myPosts = postService.getPostsbyAuthor(sitemember.getProfile());
+                model.addAttribute("postList", myPosts);
+                model.addAttribute("profile", sitemember.getProfile());
+                return "Profile/profile_detail";
+            } catch (IllegalArgumentException e) { //principal있고, postid받아온거 없을때
+                Member sitemember = this.memberService.getMember(principal.getName());
+                List<Post> myPosts = postService.getPostsbyAuthor(sitemember.getProfile());
+                model.addAttribute("postList", myPosts);
+                model.addAttribute("profile", sitemember.getProfile());
+                return "Profile/profile_detail";
+            }
+        }
 
-        List<Post> myPosts =  postService.getPostsbyAuthor(sitemember.getProfile());
-
-
-        model.addAttribute("postList", postService.getPostsbyAuthor(sitemember.getProfile()));
-        model.addAttribute("profile",sitemember.getProfile());
-        return "Profile/profile_detail";
+//        try {
+//            if (principal == null) {
+//                Post thispost = postService.getPost(postid);
+//                model.addAttribute("postList", postService.getPostsbyAuthor(thispost.getAuthor()));
+//                model.addAttribute("profile", thispost.getAuthor());
+//                return "Profile/profile_detail";
+//            } else {
+//                Member sitemember = this.memberService.getMember(principal.getName());
+//                List<Post> myPosts = postService.getPostsbyAuthor(sitemember.getProfile());
+//                model.addAttribute("postList", myPosts);
+//                model.addAttribute("profile", sitemember.getProfile());
+//                return "Profile/profile_detail";
+//            }
+//        } catch (IllegalArgumentException e) {
+//            // postid가 요청에 없거나 값이 null인 경우에 대한 예외 처리
+//            // 예: 기본 페이지로 리다이렉트 또는 에러 페이지 표시
+//            return "community_main";
+//        }
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/update")
@@ -76,6 +108,23 @@ public class ProfileController {
         imageService.deleteProfileImage(profile);
 
         return "redirect:/profile/detail";
+    }
+
+
+    @GetMapping("/showallPostsBy")
+    public String showAllMyPosts(Model model, @RequestParam(value="page", defaultValue="0") int page, @RequestParam("profileid")Long profileid, Principal principal) {
+        if (principal == null) {
+            List<Post> myposts = postService.getPostsbyAuthor(profileService.getProfileById(profileid));
+            model.addAttribute("searchResults", myposts);
+            return "search_form";
+        } else {
+            Member sitemember = this.memberService.getMember(principal.getName());
+            List<Post> myposts = postService.getPostsbyAuthor(sitemember.getProfile());
+
+            model.addAttribute("searchResults", myposts);
+            return "search_form";
+//        return "community_main";
+        }
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -138,18 +187,9 @@ public class ProfileController {
         return "redirect:/profile/detail";
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/showallPostsBy")
-    public String showAllMyPosts(Model model, @RequestParam(value="page", defaultValue="0") int page, @RequestParam("profileid")Long profileid, Principal principal) {
-        Member sitemember = this.memberService.getMember(principal.getName());
-        List<Post> myposts = postService.getPostsbyAuthor(sitemember.getProfile());
 
-        model.addAttribute("searchResults", myposts);
-        return "search_form";
-//        return "community_main";
-    }
 
-    @PreAuthorize("isAuthenticated()")
+
     @GetMapping("/petprofile")
     public String petprofile(Model model, @RequestParam("petid")Long petid) {
         Pet pet = petService.getpetById(petid);

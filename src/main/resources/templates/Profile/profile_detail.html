@@ -19,13 +19,13 @@
                     </div>
 
                     <div class="media-body mb-5 text-white">
-                        <a th:href="@{|/profile/update|}" class="btn btn-dark btn-sm btn-block text-muted">프로필 수정</a>
+                        <a sec:authorize="isAuthenticated()" th:href="@{|/profile/update|}" class="btn btn-dark btn-sm btn-block text-muted">프로필 수정</a>
                         <h4 class="mt-0 mb-0" th:text="${profile.profileName}"></h4>
                         <p class="small mb-4" th:text="${profile.content}"> <i class="fa fa-map-marker mr-2"></i></p>
 
 
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-dark btn-sm btn-block text-muted" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button sec:authorize="isAuthenticated()" type="button" class="btn btn-dark btn-sm btn-block text-muted" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             펫추가
                         </button>
                         <!-- Modal -->
@@ -80,9 +80,9 @@
                                 <div class="d-flex flex-column" style="width: 100%; height:100%; margin:5px;">
 
 
-                                    <form th:action="@{|/profile/petprofile|}" id="pet-profile" method="get">
+                                    <form th:action="@{|/profile/petprofile|}" th:id="'petForm' + ${pet.id}" method="get">
                                         <input type="hidden" name="petid" th:value="${pet.id}">
-                                        <a onclick="submitForm()" class="d-flex align-items-center" >
+                                        <a onclick="submitForm('${pet.id}')" class="d-flex align-items-center" >
                                             <img th:if="${pet.petImage.fileName != null}" th:src="@{|/files/${pet.petImage.fileName}|}" alt="pet" class="avatar-img rounded-circle" style="width:100px; height:100px; object-fit: cover; cursor:pointer;" />
                                         </a>
                                     </form>
@@ -157,10 +157,26 @@
 
     </div>
 
+<!--    <script>-->
+<!--        function submitForm(petid) {-->
+<!--            var formId = 'petForm' + petid;-->
+<!--            document.getElementById(formId).submit();-->
+<!--        }-->
+<!--    </script>-->
+
     <script>
-        function submitForm() {
-            document.getElementById('pet-profile').submit();
-        }
+        document.addEventListener("DOMContentLoaded", function() {
+            function submitForm(petid) {
+                var formId = 'petForm' + petid;
+                var form = document.getElementById(formId);
+
+                if (form) {
+                    form.submit();
+                } else {
+                    console.error('Form not found:', formId);
+                }
+            }
+        });
     </script>
 </div>
 

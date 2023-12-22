@@ -11,8 +11,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    @Query("SELECT p FROM Post p WHERE LOWER(p.title) LIKE LOWER(CONCAT('%',:kw,'%'))" +
-            "OR LOWER(p.content) LIKE LOWER(CONCAT('%',:kw,'%'))")
+    @Query("SELECT p FROM Post p " + "LEFT JOIN p.author pr " + "LEFT JOIN p.comments c " +
+            "WHERE LOWER(p.title) LIKE LOWER(CONCAT('%',:kw,'%')) " +
+            "OR LOWER(p.content) LIKE LOWER(CONCAT('%',:kw,'%')) " +
+            "OR LOWER(pr.profileName) LIKE LOWER(CONCAT('%',:kw,'%')) " +
+            "OR LOWER(c.content) LIKE LOWER(CONCAT('%',:kw,'%')) " +
+            "ORDER BY p.id DESC")
     List<Post> findAllByKw(@Param("kw") String kw);
 
     Page<Post> findAll(Pageable pageable);

@@ -109,6 +109,22 @@ public class MemberService {
                 member.setCreateDate(LocalDateTime.now());
 
                 memberRepository.save(member);
+
+                final int finalI = i;
+
+                Profile adminProfile = profileRepository.findByProfileName("테스트 유저" + finalI)
+                        .orElseGet(() -> {
+                            Profile newProfile = new Profile();
+                            newProfile.setProfileName("테스트 유저" + finalI);
+                            return newProfile;
+                        });
+
+                // Set the member for the profile
+                adminProfile.setMember(member);
+
+                profileRepository.save(adminProfile);
+
+
             }
         }
     }

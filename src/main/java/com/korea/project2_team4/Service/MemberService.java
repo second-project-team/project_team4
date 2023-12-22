@@ -128,6 +128,12 @@ public class MemberService {
             }
         }
     }
+    public void delete(Member member){
+        memberRepository.delete(member);
+    }
+    public void save(Member member){
+        memberRepository.save(member);
+    }
 
 
 

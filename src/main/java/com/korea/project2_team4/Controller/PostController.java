@@ -108,6 +108,7 @@ public class PostController {
         System.out.println(searchResults.size());
 
         model.addAttribute("searchResults",searchResults);
+        model.addAttribute("kw",kw);
         model.addAttribute("sort", sort);
 
         return "search_form";

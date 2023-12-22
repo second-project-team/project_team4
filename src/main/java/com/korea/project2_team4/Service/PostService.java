@@ -172,4 +172,11 @@ public class PostService {
         return postRepository.findAllByauthorPage(profile.getProfileName(), pageable);
     }
 
+
+
+    public void viewsUp(Post post) {
+        post.setView(post.getView()+1);
+        this.postRepository.save(post);
+    }
+
 }

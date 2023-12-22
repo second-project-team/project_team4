@@ -78,9 +78,16 @@
                             <div class="pet-card" th:each="pet : ${profile.petList}" >
                                 <!-- 부트스트랩 카드 -->
                                 <div class="d-flex flex-column" style="width: 100%; height:100%; margin:5px;">
-                                    <a href="#" class="d-flex align-items-center">
-                                        <img th:if="${pet.petImage.fileName != null}" th:src="@{|/files/${pet.petImage.fileName}|}" alt="pet" class="avatar-img rounded-circle" style="width:100px; height:100px; object-fit: cover;" />
-                                    </a>
+
+
+                                    <form th:action="@{|/profile/petprofile|}" id="pet-profile" method="get">
+                                        <input type="hidden" name="petid" th:value="${pet.id}">
+                                        <a onclick="submitForm()" class="d-flex align-items-center" >
+                                            <img th:if="${pet.petImage.fileName != null}" th:src="@{|/files/${pet.petImage.fileName}|}" alt="pet" class="avatar-img rounded-circle" style="width:100px; height:100px; object-fit: cover; cursor:pointer;" />
+                                        </a>
+                                    </form>
+
+
                                     <div style="width:100%; height:10%;">
                                         <p class="small mb-4 " th:text="${pet.name}" style="margin:0;"><i class="fa fa-map-marker mr-2"></i></p>
                                     </div>
@@ -98,7 +105,7 @@
             <div class="bg-light p-4 d-flex justify-content-end text-center">
                 <ul class="list-inline mb-0">
                     <li class="list-inline-item">
-                        <h5 class="font-weight-bold mb-0 d-block">30</h5><small class="text-muted"> <i class="fa fa-picture-o mr-1"></i>게시물</small>
+                        <h5 class="font-weight-bold mb-0 d-block" th:text="${postList.size}"></h5><small class="text-muted"> <i class="fa fa-picture-o mr-1"></i>게시물</small>
                     </li>
                     <li class="list-inline-item">
                         <h5 class="font-weight-bold mb-0 d-block">848</h5><small class="text-muted"> <i class="fa fa-user-circle-o mr-1"></i>팔로워</small>
@@ -149,5 +156,12 @@
         </div><!-- End profile widget -->
 
     </div>
+
+    <script>
+        function submitForm() {
+            document.getElementById('pet-profile').submit();
+        }
+    </script>
 </div>
+
 </html>

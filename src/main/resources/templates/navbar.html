@@ -54,7 +54,7 @@
 
             <form th:action="@{/post/search}" class="d-flex" role="search">
                 <input class="form-control me-2" type="text" id="search_kw" name="kw" placeholder="원하시는 제목이나 내용을 검색하세요." aria-label="Search"
-                       style="width: 330px;">
+                       style="width: 330px;" th:value="${kw}">
 
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>

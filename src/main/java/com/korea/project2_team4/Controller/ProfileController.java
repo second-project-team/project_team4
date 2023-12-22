@@ -2,14 +2,14 @@ package com.korea.project2_team4.Controller;
 
 import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Entity.Pet;
+import com.korea.project2_team4.Model.Entity.Post;
 import com.korea.project2_team4.Model.Entity.Profile;
 import com.korea.project2_team4.Model.Form.ProfileForm;
-import com.korea.project2_team4.Service.ImageService;
-import com.korea.project2_team4.Service.MemberService;
-import com.korea.project2_team4.Service.PetService;
+import com.korea.project2_team4.Service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
-import com.korea.project2_team4.Service.ProfileService;
 import lombok.Builder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -27,19 +27,23 @@ import java.util.List;
 @RequestMapping("/profile")
 public class ProfileController {
     private final ProfileService profileService;
+    private final PostService postService;
     private final MemberService memberService;
     private final PetService petService;
     private final ImageService imageService;
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail")
     public String profileDetail(Model model, Principal principal) {
         Member sitemember = this.memberService.getMember(principal.getName());
 
+        List<Post> myPosts =  postService.getPostsbyAuthor(sitemember.getProfile());
 
+
+        model.addAttribute("postList", postService.getPostsbyAuthor(sitemember.getProfile()));
         model.addAttribute("profile",sitemember.getProfile());
         return "Profile/profile_detail";
     }
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/update")
     public String profileupdate(Model model, ProfileForm profileForm,Principal principal) {
         Member sitemember = this.memberService.getMember(principal.getName());
@@ -48,7 +52,7 @@ public class ProfileController {
         profileForm.setContent(sitemember.getProfile().getContent());
         return "Profile/profile_form";
     }
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/update")
     public String profileupdate(ProfileForm profileForm, @RequestParam(value = "profileImage") MultipartFile newprofileImage,
                                 BindingResult bindingResult, Principal principal)throws Exception {
@@ -64,7 +68,7 @@ public class ProfileController {
 
         return "redirect:/profile/detail";
     }
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/deleteProfileImage")
     public String deleteProfileImage(@RequestParam("profileid")Long profileid) {// 일단안씀.
         Profile profile = profileService.getProfileById(profileid);
@@ -73,7 +77,7 @@ public class ProfileController {
         return "redirect:/profile/detail";
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/addpet")
     public String addpet(@RequestParam("name") String name ,@RequestParam("content")String content , Principal principal ,
                          MultipartFile imageFile) throws Exception, NoSuchAlgorithmException {
@@ -102,7 +106,7 @@ public class ProfileController {
 
         return "redirect:/profile/detail";
     }
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/deletepet")
     public String deletepet(@RequestParam("petid")Long petid) {
         Pet pet = petService.getpetById(petid);
@@ -110,6 +114,16 @@ public class ProfileController {
         return "redirect:/profile/detail";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/showallPostsBy")
+    public String showAllMyPosts(Model model, @RequestParam(value="page", defaultValue="0") int page, @RequestParam("profileid")Long profileid, Principal principal) {
+        Member sitemember = this.memberService.getMember(principal.getName());
+        List<Post> myposts = postService.getPostsbyAuthor(sitemember.getProfile());
+
+        model.addAttribute("searchResults", myposts);
+        return "search_form";
+//        return "community_main";
+    }
 
 
 

@@ -43,7 +43,7 @@ public class PostController {
     @GetMapping("/createPost")
     public String createPost(Model model, PostForm postForm) {
         List<Tag> allTags = tagService.getAllTags();
-        model.addAttribute("allTags",allTags);
+        model.addAttribute("allTags", allTags);
         return "createPost_form";
     }
 
@@ -60,7 +60,7 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/createPost")
     public String createPost(Principal principal, PostForm postForm, BindingResult bindingResult
-            , @RequestParam(value = "imageFiles",required = false) List<MultipartFile> imageFiles, @RequestParam(value = "selectedTagNames",required = false) List<String> selectedTagNames) throws IOException, NoSuchAlgorithmException {
+            , @RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles, @RequestParam(value = "selectedTagNames", required = false) List<String> selectedTagNames) throws IOException, NoSuchAlgorithmException {
         //      Profile testProfile = profileService.getProfilelist().get(0);
 //      profileService.updateprofile(testProfile,profileForm.getProfileName(),profileForm.getContent());
         Post post = new Post();
@@ -74,8 +74,8 @@ public class PostController {
             imageService.uploadPostImage(imageFiles, post);
         }
         postService.save(post);
-        if(selectedTagNames !=null && !selectedTagNames.isEmpty()){
-            for(String selectedTagName : selectedTagNames){
+        if (selectedTagNames != null && !selectedTagNames.isEmpty()) {
+            for (String selectedTagName : selectedTagNames) {
                 Tag tag = tagService.getTagByTagName(selectedTagName);
                 TagMap tagMap = new TagMap();
                 tagMap.setPost(post);
@@ -87,26 +87,26 @@ public class PostController {
     }
 
     @GetMapping("/community/main")
-    public String communityMain(Model model, @RequestParam(name = "sort", required = false) String sort,@RequestParam(value="page", defaultValue="0") int page, @RequestParam(name = "searchTagName", required = false) String searchTagName) {
+    public String communityMain(Model model, @RequestParam(name = "sort", required = false) String sort, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(name = "searchTagName", required = false) String searchTagName) {
         Page<Post> allPosts;
         allPosts = postService.postList(page);
         if (searchTagName == null) {
             searchTagName = "";  // 기본적으로 빈 문자열로 설정
         }
-        if(sort != null && !sort.isEmpty()){
-            if(sort.equals("latest")){
+        if (sort != null && !sort.isEmpty()) {
+            if (sort.equals("latest")) {
                 allPosts = postService.postList(page);
             } else if (sort.equals("likeCount")) {
                 allPosts = postService.getPostsOrderByLikeCount(page);
-            }else {
+            } else {
                 allPosts = postService.getPostsOrderByCommentCount(page);
             }
         }
-        if(searchTagName !=null && !searchTagName.isEmpty()){
-           allPosts = postService.getPostsByTagName(page,searchTagName);
+        if (searchTagName != null && !searchTagName.isEmpty()) {
+            allPosts = postService.getPostsByTagName(page, searchTagName);
         }
-        model.addAttribute("searchTagName",searchTagName);
-        model.addAttribute("sort",sort);
+        model.addAttribute("searchTagName", searchTagName);
+        model.addAttribute("sort", sort);
         model.addAttribute("paging", allPosts);
         return "community_main";
     }
@@ -114,22 +114,27 @@ public class PostController {
 
 
     @GetMapping("/search")
-    public String searchPosts(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(name = "sort",required = false) String sort, Model model) {
-        List<Post> searchResults  = postService.searchPosts(kw);
+    public String searchPosts(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(name = "sort", required = false) String sort, Model model) {
+        List<Post> searchResults = postService.searchPosts(kw);
 
         System.out.println(searchResults.size());
 
-        model.addAttribute("searchResults",searchResults);
-        model.addAttribute("kw",kw);
+        model.addAttribute("searchResults", searchResults);
+        model.addAttribute("kw", kw);
         model.addAttribute("sort", sort);
 
         return "search_form";
     }
 
-    @GetMapping("/detail/{id}")
-    public String postDetail(Model model, @PathVariable Long id) {
-        Post post = postService.getPost(id);
-        model.addAttribute("post",post);
+    @GetMapping("/detail/{id}/{hit}")
+    public String postDetail(Model model, @PathVariable("id") Long id, @PathVariable("hit") Integer hit) {
+        if (hit == 0) {
+            Post post = postService.getPostIncrementView(id);
+            model.addAttribute("post", post);
+        } else {
+            Post post = postService.getPost(id);
+            model.addAttribute("post", post);
+        }
 
         return "postDetail_form";
     }
@@ -139,12 +144,13 @@ public class PostController {
         if (principal != null) {
             Post post = this.postService.getPost(id);
             Member member = this.memberService.getMember(principal.getName());
+            Long postId = post.getId();
             if (postService.isLiked(post, member)) {
                 postService.unLike(post, member);
             } else {
                 postService.Like(post, member);
             }
-            return String.format("redirect:/post/detail/%s",post.getId());
+            return "redirect:/post/detail/" + postId + "/1";
         } else {
             return "redirect:/member/login";
         }
@@ -172,7 +178,7 @@ public class PostController {
             postRepository.save(existingPost);
         }
 
-        return "redirect:/post/detail/{id}";
+        return "redirect:/post/detail/{id}/1";
     }
 
 

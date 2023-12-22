@@ -37,17 +37,26 @@ public class PostService {
     public Page<Post> postList(int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10,Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         return postRepository.findAll(pageable);
     }
 
-    public Page<Post> getPostsByTagName(int page,String searchTagName){
+    public Page<Post> getPostsByTagName(int page, String searchTagName) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10,Sort.by(sorts));
-        return postRepository.findByTagName(searchTagName,pageable);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return postRepository.findByTagName(searchTagName, pageable);
     }
 
+        public Page<Post> getPostsOrderByLikeCount(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return postRepository.findAllOrderByLikeMembersSizeDesc(pageable);
+    }
+
+    public Page<Post> getPostsOrderByCommentCount(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return postRepository.findAllOrderByCommentsSizeDesc(pageable);
+    }
 
     //테스트 데이터
     @PostConstruct

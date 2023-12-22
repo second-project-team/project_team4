@@ -66,6 +66,9 @@
                                     <p style="margin-top: 10px; font-size: 17px; " th:if="${!post.getTagList().isEmpty()}">
                                         <span th:each="tag, loop : ${post.getTagList()}" th:text="@{|#${tag.name}|}"></span>
                                     </p>
+                                    <div>조회수 :
+                                        <p th:text="${post.view}"></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

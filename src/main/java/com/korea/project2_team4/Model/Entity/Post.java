@@ -47,4 +47,7 @@ public class Post {
                 .collect(Collectors.toList()); // 리스트로 변환
     }
 
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int view;
+
 }

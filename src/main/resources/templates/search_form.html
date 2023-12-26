@@ -24,12 +24,14 @@
             <div class="row row-cols-1 align-items-center">
                 <div class="col">
                     <h2>제목 검색 결과 조회</h2>
-                    <div class="col" th:if="${searchResultsByPostTitle.size() > 0}" th:each="post : ${searchResultsByPostTitle}" th:limit="5">
+                    <div class="col" th:if="${searchResultsByPostTitle.size() > 0}"
+                         th:each="post : ${searchResultsByPostTitle}">
                         <div class="card" style="width:100%">
                             <div class="d-flex">
                                 <div class="card-body">
                                     <a th:href=@{|/post/detail/${post.id}/0|} th:text="${post.title}"></a>
                                     <div th:text="${post.content}"></div>
+                                    <div th:text="${post.author.profileName}"></div>
                                 </div>
                             </div>
                         </div>
@@ -37,15 +39,18 @@
                     <div class="col" th:unless="${searchResultsByPostTitle.size() > 0}">
                         <p>검색 결과가 없습니다.</p>
                     </div>
+                    <button class="btn btn-primary load-more-btn" onclick="loadMoreResults('searchResultsByPostTitle')">더 보기</button>
                 </div>
                 <div class="col">
                     <h2>내용 검색 결과 조회</h2>
-                    <div class="col" th:if="${searchResultsByPostContent.size() > 0}" th:each="post : ${searchResultsByPostContent}" th:limit="5">
+                    <div class="col" th:if="${searchResultsByPostContent.size() > 0}"
+                         th:each="post : ${searchResultsByPostContent}">
                         <div class="card" style="width:100%">
                             <div class="d-flex">
                                 <div class="card-body">
                                     <a th:href=@{|/post/detail/${post.id}/0|} th:text="${post.title}"></a>
                                     <div th:text="${post.content}"></div>
+                                    <div th:text="${post.author.profileName}"></div>
                                 </div>
                             </div>
                         </div>
@@ -56,12 +61,14 @@
                 </div>
                 <div class="col">
                     <h2>이름 검색 결과 조회</h2>
-                    <div class="col" th:if="${searchResultsByProfileName.size() > 0}" th:each="post : ${searchResultsByProfileName}" th:limit="5">
+                    <div class="col" th:if="${searchResultsByProfileName.size() > 0}"
+                         th:each="post : ${searchResultsByProfileName}">
                         <div class="card" style="width:100%">
                             <div class="d-flex">
                                 <div class="card-body">
                                     <a th:href=@{|/post/detail/${post.id}/0|} th:text="${post.title}"></a>
                                     <div th:text="${post.content}"></div>
+                                    <div th:text="${post.author.profileName}"></div>
                                 </div>
                             </div>
                         </div>
@@ -72,12 +79,14 @@
                 </div>
                 <div class="col">
                     <h2>댓글 검색 결과 조회</h2>
-                    <div class="col" th:if="${searchResultsByCommentContent.size() > 0}" th:each="post : ${searchResultsByCommentContent}" th:limit="5">
+                    <div class="col" th:if="${searchResultsByCommentContent.size() > 0}"
+                         th:each="post : ${searchResultsByCommentContent}">
                         <div class="card" style="width:100%">
                             <div class="d-flex">
                                 <div class="card-body">
                                     <a th:href=@{|/post/detail/${post.id}/0|} th:text="${post.title}"></a>
                                     <div th:text="${post.content}"></div>
+                                    <div th:text="${post.author.profileName}"></div>
                                 </div>
                             </div>
                         </div>
@@ -90,4 +99,28 @@
         </div>
     </div>
 </div>
+<script layout:fragment="script" type='text/javascript'>
+    function loadMoreResults(resultType) {
+
+        let page = 1;
+
+        page++;
+
+        $.ajax({
+            url: `/api/loadMoreResults/${resultType}?page=${page}`,
+            method: 'GET',
+            success: function (data) {
+                $(`.${resultType}`).append(data);
+
+                if (data.length === 0) {
+                    $(`.load-more-btn`).hide();
+                }
+            },
+            error: function (error) {
+                console.error('ERROR:', error);
+            }
+        });
+    }
+</script>
+
 </html>

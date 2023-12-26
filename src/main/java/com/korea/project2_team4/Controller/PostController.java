@@ -100,6 +100,11 @@ public class PostController {
         if (category == null) {
             category = "";
         }
+        if (sort == null) {
+            sort = "latest";
+        }
+//        세가지..레파지토리?
+//                postService.sortList(searchTagName, sort, category); 세가지 한꺼번에, 메서드에 소트, 정렬된 포스트 넘겨서
         if (sort != null && !sort.isEmpty()) {
             if (sort.equals("latest")) {
                 allPosts = postService.postList(page);
@@ -111,14 +116,17 @@ public class PostController {
             }
         }
         if (searchTagName != null && !searchTagName.isEmpty()) {
+//            allPosts = postService.getPostsByTagName(page, searchTagName, sort); 이렇게 하라고 하심 내일수정
             allPosts = postService.getPostsByTagName(page, searchTagName);
+        }
+        if (category !=null && !category.isEmpty()) {
+            allPosts = postService.getPostsByCategory(page,category);
         }
         model.addAttribute("searchTagName", searchTagName);
         model.addAttribute("sort", sort);
         model.addAttribute("paging", allPosts);
         return "community_main";
     }
-    // 내일 전체로 다시 돌아가는 버튼 만들기.
 
 
     @GetMapping("/search")

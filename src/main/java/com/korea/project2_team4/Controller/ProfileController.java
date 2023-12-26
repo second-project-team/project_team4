@@ -236,7 +236,7 @@ public class ProfileController {
 
 
     @GetMapping("/petprofile")
-    public String petprofile(Model model, @RequestParam("petid")Long petid) {
+    public String petprofile(Model model, @RequestParam(name="petid", required=false)Long petid) {
         Pet pet = petService.getpetById(petid);
 
         model.addAttribute("pet", pet);
@@ -245,7 +245,7 @@ public class ProfileController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/updatepet")
-    public String profileupdate(@RequestParam(value = "petImage") MultipartFile newpetImage, @RequestParam(value="petid") Long petid,
+    public String profileupdate(@RequestParam(value = "petImage") MultipartFile newpetImage, @RequestParam("petid") Long petid,
                                 @RequestParam(value="name") String name, @RequestParam(value="content") String content,
                                 Principal principal)throws Exception {
 //        Member sitemember = this.memberService.getMember(principal.getName());

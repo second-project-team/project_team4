@@ -45,7 +45,21 @@ public class PostService {
         return postRepository.findByTagName(searchTagName, pageable);
     }
 
-        public Page<Post> getPostsOrderByLikeCount(int page) {
+//    public Page<Post> getPostsByTagName(int page, String searchTagName, String sort, String category) {
+//        Page<Post> sortedList;
+//        if ( sort.equals("latest")) {
+//            sortedList = this.postList(page);
+//        }
+//        if (sort.equals("likeCount")) {
+//            sortedList = this.getPostsOrderByLikeCount(page);
+//        }
+//        List<Sort.Order> sorts = new ArrayList<>();
+//        sorts.add(Sort.Order.desc("createDate"));
+//        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+//        return postRepository.findByTagName(searchTagName, pageable);
+//    } 선영추가 , 수정중
+
+    public Page<Post> getPostsOrderByLikeCount(int page) {
         Pageable pageable = PageRequest.of(page, 10);
         return postRepository.findAllOrderByLikeMembersSizeDesc(pageable);
     }
@@ -202,29 +216,16 @@ public class PostService {
         return postRepository.findAllByauthorPage(profile.getProfileName(), pageable);
     }
 
-
-
-    public List<Post> getListBytag(String tag) {
-        return this.postRepository.findAllBytag(tag);
+    public Page<Post> getPostsByCategory(int page, String category) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return postRepository.findByTagName(category, pageable);
     }
-//    public void getTag(Long id){
-//        Post post = postRepository.findById(id).get();
-//        List<Tag> tagList = post.getTagList();
-//        for(Tag tag : tagList){
-//
-//        }
-//    }
 
 
-    public List<Post> sortBycategory (List<Post> getListByTag, String category) {
-        List<Post> newList = new ArrayList<>();
-        for (Post post : getListByTag) {
-            if (post.getCategory().equals(category)) {
-                newList.add(post);
-            }
-        }
-        return newList;
-    }
+
+
 
 
 //   ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 선영 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑

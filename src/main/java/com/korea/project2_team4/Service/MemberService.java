@@ -4,19 +4,24 @@ import com.korea.project2_team4.Config.UserRole;
 import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Entity.Profile;
 import com.korea.project2_team4.Model.Form.MemberCreateForm;
+import com.korea.project2_team4.Model.Form.MemberResetForm;
 import com.korea.project2_team4.Repository.MemberRepository;
 import com.korea.project2_team4.Repository.ProfileRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.Builder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -46,6 +51,13 @@ public class MemberService {
         memberRepository.save(member);
         member.setProfile(profileService.setDefaultProfile(member));
         return member;
+    }
+
+    public void resetPassword(MemberResetForm memberResetForm, Principal principal) {
+        Member member = getMember(principal.getName());
+
+        member.setPassword(passwordEncoder.encode(memberResetForm.getNew_password()));
+        memberRepository.save(member);
     }
 
     public Member getMember(String username) {
@@ -128,15 +140,14 @@ public class MemberService {
             }
         }
     }
-    public void delete(Member member){
+
+    public void delete(Member member) {
         memberRepository.delete(member);
     }
-    public void save(Member member){
+
+    public void save(Member member) {
         memberRepository.save(member);
     }
-
-
-
 
 
 }

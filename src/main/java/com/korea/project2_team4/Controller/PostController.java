@@ -6,6 +6,7 @@ import com.korea.project2_team4.Repository.PostRepository;
 import com.korea.project2_team4.Service.*;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,8 @@ public class PostController {
 
     private final PostService postService;
     private final PostRepository postRepository;
+    private final ProfileService profileService;
+    private final CommentService commentService;
     private final ImageService imageService;
     private final MemberService memberService;
     private final TagService tagService;
@@ -122,7 +125,7 @@ public class PostController {
 
 
     @GetMapping("/search")
-    public String searchPosts(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(name = "sort", required = false) String sort, Model model) {
+    public String searchPosts(@RequestParam(value = "kw", defaultValue = "") String kw, Model model) {
 
         List<Post> searchResultsByPostTitle = postService.searchPostTitle(kw);
         List<Post> searchResultsByPostContent = postService.searchPostContent(kw);
@@ -144,9 +147,16 @@ public class PostController {
         model.addAttribute("searchResultsByProfileName", searchResultsByProfileName);
         model.addAttribute("searchResultsByCommentContent", searchResultsByCommentContent);
         model.addAttribute("kw", kw);
-        model.addAttribute("sort", sort);
 
         return "search_form";
+    }
+
+    @GetMapping("/api/loadMoreResults/{resultType}")
+    public ResponseEntity<List<Post>> loadMoreResults(@PathVariable String resultType,
+                                                      @RequestParam int page) {
+        List<Post> moreResults = postService.getMoreResults(resultType, page);
+
+        return ResponseEntity.ok(moreResults);
     }
 
     @GetMapping("/detail/{id}/{hit}")

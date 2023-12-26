@@ -224,19 +224,35 @@ public class PostService {
         }
         return newList;
     }
-    public List<Post> getMoreResults(String resultType, int page) {
-        int pageSize = 10;
-        List<Post> moreResults = new ArrayList<>();
-
-        if ("searchResultsByPostTitle".equals(resultType)) {
-            Pageable pageable = PageRequest.of(page, pageSize);
-            moreResults = postRepository.findResultsByPostTitle("", pageable);
-        }
-
-        return moreResults;
-    }
 
 //   ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 선영 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
+    public Page<Post> pagingByTitle(String kw, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return postRepository.findByPostTitleFromPaging(kw, pageable);
+    }
+
+    public Page<Post> pagingByContent(String kw, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return postRepository.findByPostContentFromPaging(kw, pageable);
+    }
+
+    public Page<Post> pagingByProfileName(String kw, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return postRepository.findByProfileNameFromPaging(kw, pageable);
+    }
+
+    public Page<Post> pagingByComment(String kw, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return postRepository.findByCommentFromPaging(kw, pageable);
+    }
 
 }

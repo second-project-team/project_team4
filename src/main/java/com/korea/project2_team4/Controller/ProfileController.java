@@ -6,11 +6,15 @@ import com.korea.project2_team4.Model.Entity.Post;
 import com.korea.project2_team4.Model.Entity.Profile;
 import com.korea.project2_team4.Model.Form.ProfileForm;
 import com.korea.project2_team4.Service.*;
+
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import lombok.Builder;
 import org.springframework.stereotype.Controller;
@@ -28,6 +32,8 @@ import java.util.List;
 @Builder
 @RequestMapping("/profile")
 public class ProfileController {
+    @Autowired
+    private HttpSession session;
     private final ProfileService profileService;
     private final PostService postService;
     private final MemberService memberService;
@@ -160,6 +166,8 @@ public class ProfileController {
     public String memberDelete(Principal principal){
         Member member = this.memberService.getMember(principal.getName());
         memberService.delete(member);
+
+        session.invalidate();
         return "redirect:/";
     }
     @PreAuthorize("isAuthenticated()")
@@ -171,7 +179,7 @@ public class ProfileController {
         sitemember.setPhoneNum(phoneNum);
         memberService.save(sitemember);
 
-        return "redirect:/Member/profile/myPage";
+        return "redirect:/profile/myPage";
     }
 //    @GetMapping("/profile")
 //    public String profile(Authentication authentication, Principal principal, UserPasswordForm userPasswordForm, Model model){

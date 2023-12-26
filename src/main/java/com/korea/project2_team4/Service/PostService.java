@@ -115,6 +115,22 @@ public class PostService {
         return postRepository.findAllByKw(kw);
     }
 
+    public List<Post> searchPostTitle(String kw) {
+        return postRepository.findByPostTitle(kw);
+    }
+
+    public List<Post> searchPostContent(String kw) {
+        return postRepository.findByPostContent(kw);
+    }
+
+    public List<Post> searchProfileName(String kw) {
+        return postRepository.findByProfileName(kw);
+    }
+
+    public List<Post> searchCommentContent(String kw) {
+        return postRepository.findByCommentContent(kw);
+    }
+
     // post를 optional타입으로 가져오기
     public Post getPost(Long id) {
         Optional<Post> postOptional = postRepository.findById(id);

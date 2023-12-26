@@ -151,12 +151,52 @@ public class PostController {
         return "search_form";
     }
 
-    @GetMapping("/api/loadMoreResults/{resultType}")
-    public ResponseEntity<List<Post>> loadMoreResults(@PathVariable String resultType,
-                                                      @RequestParam int page) {
-        List<Post> moreResults = postService.getMoreResults(resultType, page);
+    @GetMapping("/showMoreTitle")
+    public String showMorePosts(@RequestParam(value = "kw", defaultValue = "") String kw,
+                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                  Model model) {
+        Page<Post> pagingByTitle = postService.pagingByTitle(kw,page);
 
-        return ResponseEntity.ok(moreResults);
+        model.addAttribute("pagingByTitle", pagingByTitle);
+        model.addAttribute("kw", kw);
+
+        return "showMoreTitle_form";
+    }
+
+    @GetMapping("/showMoreContent")
+    public String showMoreContents(@RequestParam(value = "kw", defaultValue = "") String kw,
+                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                  Model model) {
+        Page<Post> pagingByContent = postService.pagingByContent(kw,page);
+
+        model.addAttribute("pagingByContent", pagingByContent);
+        model.addAttribute("kw", kw);
+
+        return "showMoreContent_form";
+    }
+
+    @GetMapping("/showMoreProfileName")
+    public String showMoreProfileNames(@RequestParam(value = "kw", defaultValue = "") String kw,
+                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                  Model model) {
+        Page<Post> pagingByProfileName = postService.pagingByProfileName(kw,page);
+
+        model.addAttribute("pagingByProfileName", pagingByProfileName);
+        model.addAttribute("kw", kw);
+
+        return "showMoreProfileName_form";
+    }
+
+    @GetMapping("/showMoreComment")
+    public String showMoreComments(@RequestParam(value = "kw", defaultValue = "") String kw,
+                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                  Model model) {
+        Page<Post> pagingByComment = postService.pagingByComment(kw,page);
+
+        model.addAttribute("pagingByComment", pagingByComment);
+        model.addAttribute("kw", kw);
+
+        return "showMoreComment_form";
     }
 
     @GetMapping("/detail/{id}/{hit}")

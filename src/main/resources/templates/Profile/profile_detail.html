@@ -5,12 +5,12 @@
 
         <!-- Profile widget -->
         <div class="bg-white shadow rounded overflow-hidden">
-            <div class="px-4 pt-0 pb-4 bg-dark">
+            <div class="px-4 pt-0 pb-4 bg-secondary" >
                 <div class="media align-items-end profile-header">
                     <div class="profile mr-3">
                         <div class="avatar" style="width:30px, height:30px;">
 
-                            <img th:src="@{|/files/${profile.profileImage.fileName}|}" alt="user" class="avatar-img rounded-circle" style="width:30px, height:30px;"/>
+                            <img th:src="@{/files/${profile.profileImage.fileName}}" alt="user" class="avatar-img rounded-circle" style="width:30px, height:30px;"/>
                             <form th:action="@{|/profile/deleteProfileImage|}" method="post">
                                 <input type="hidden" name="profileid" th:value="${profile.id}">
                                 <button type="submit" class="btn btn-link" style="text-decoration:none; color:white;">✕</button>
@@ -80,16 +80,19 @@
                                 <div class="d-flex flex-column" style="width: 100%; height:100%; margin:5px;">
 
 
-                                    <form th:action="@{|/profile/petprofile|}" th:id="'petForm' + ${pet.id}" method="get">
+
+
+                                    <form th:action="@{/profile/petprofile}" th:id="'petForm' + ${pet.id}" method="get">
                                         <input type="hidden" name="petid" th:value="${pet.id}">
-                                        <a onclick="submitForm('${pet.id}')" class="d-flex align-items-center" >
+                                        <a th:onclick="submitForm('${pet.id}')" class="d-flex align-items-center" >
                                             <img th:if="${pet.petImage.fileName != null}" th:src="@{|/files/${pet.petImage.fileName}|}" alt="pet" class="avatar-img rounded-circle" style="width:100px; height:100px; object-fit: cover; cursor:pointer;" />
                                         </a>
                                     </form>
 
 
                                     <div style="width:100%; height:10%;">
-                                        <p class="small mb-4 " th:text="${pet.name}" style="margin:0;"><i class="fa fa-map-marker mr-2"></i></p>
+                                        <a th:href="@{/profile/petprofile(petid=${pet.id})}" th:text="${pet.name}" style="margin:0;" ></a>
+<!--                                        <p class="small mb-4 " th:text="${pet.name}" style="margin:0;"><i class="fa fa-map-marker mr-2"></i></p>-->
                                     </div>
                                     <form th:action="@{|/profile/deletepet|}" method="post">
                                         <input type="hidden" name="petid" th:value="${pet.id}">
@@ -118,7 +121,9 @@
 
             <div class="py-4 px-4">
                 <div class="d-flex align-items-center justify-content-between mb-3">
-                    <h5 class="mb-0">Recent posts</h5>
+                    <h5 class
+
+                                ="mb-0">Recent posts</h5>
                     <form th:action="@{|/profile/showallPostsBy|}">
                         <input type="hidden" name="profileid" th:value="${profile.id}">
                         <button type="submit" class="btn btn-link text-muted" >Show all</button>
@@ -157,27 +162,41 @@
 
     </div>
 
+
+
 <!--    <script>-->
-<!--        function submitForm(petid) {-->
-<!--            var formId = 'petForm' + petid;-->
-<!--            document.getElementById(formId).submit();-->
-<!--        }-->
+<!--        document.addEventListener("DOMContentLoaded", function() {-->
+<!--            function submitForm(petid) {-->
+<!--                var formId = 'petForm' + petid;-->
+<!--                var form = document.getElementById(formId);-->
+
+<!--                if (form) {-->
+<!--                    form.submit();-->
+<!--                } else {-->
+<!--                    console.error('Form not found:', formId);-->
+<!--                }-->
+<!--            }-->
+<!--        });-->
 <!--    </script>-->
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            function submitForm(petid) {
-                var formId = 'petForm' + petid;
-                var form = document.getElementById(formId);
-
-                if (form) {
-                    form.submit();
-                } else {
-                    console.error('Form not found:', formId);
-                }
-            }
-        });
-    </script>
 </div>
+<script>
+<!--    function submitForm(petid) {-->
+<!--        var formId = 'petForm' + petid;-->
+<!--        document.getElementById(formId).submit();-->
+<!--    }-->
+
+        function submitForm(petid) {
+            var formId = 'petForm' + petid;
+            var form = document.getElementById(formId);
+
+            if (form) {
+                form.submit();
+            } else {
+                console.error('Form not found:', formId);
+            }
+    }
+
+
+</script>
 
 </html>

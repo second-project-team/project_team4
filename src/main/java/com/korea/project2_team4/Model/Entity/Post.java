@@ -17,6 +17,12 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TagMap> tagMaps;
+
+    @Column(columnDefinition = "VARCHAR(100)")
+    private String category;
+
     @ManyToOne
     private Profile author;
 
@@ -38,8 +44,7 @@ public class Post {
     @ManyToMany
     private Set<Member> likeMembers;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TagMap> tagMaps;
+
 
     public List<Tag> getTagList() {
         return this.tagMaps.stream()

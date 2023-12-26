@@ -1,9 +1,6 @@
 package com.korea.project2_team4.Service;
 
-import com.korea.project2_team4.Model.Entity.Image;
-import com.korea.project2_team4.Model.Entity.Member;
-import com.korea.project2_team4.Model.Entity.Post;
-import com.korea.project2_team4.Model.Entity.Profile;
+import com.korea.project2_team4.Model.Entity.*;
 import com.korea.project2_team4.Repository.MemberRepository;
 import com.korea.project2_team4.Repository.PostRepository;
 import com.korea.project2_team4.Repository.ProfileRepository;
@@ -189,6 +186,8 @@ public class PostService {
         }
     }
 
+//   ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 선영 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
     //작성자게시글불러오기
     public List<Post> getPostsbyAuthor(Profile profile) {
         List<Post> targetPosts = this.postRepository.findAllByauthor(profile.getProfileName());
@@ -204,11 +203,27 @@ public class PostService {
 
 
 
-    public void viewsUp(Post post) {
-        post.setView(post.getView()+1);
-        this.postRepository.save(post);
+    public List<Post> getListBytag(String tag) {
+        return this.postRepository.findAllBytag(tag);
     }
+//    public void getTag(Long id){
+//        Post post = postRepository.findById(id).get();
+//        List<Tag> tagList = post.getTagList();
+//        for(Tag tag : tagList){
+//
+//        }
+//    }
 
+
+    public List<Post> sortBycategory (List<Post> getListByTag, String category) {
+        List<Post> newList = new ArrayList<>();
+        for (Post post : getListByTag) {
+            if (post.getCategory().equals(category)) {
+                newList.add(post);
+            }
+        }
+        return newList;
+    }
     public List<Post> getMoreResults(String resultType, int page) {
         int pageSize = 10;
         List<Post> moreResults = new ArrayList<>();
@@ -220,5 +235,8 @@ public class PostService {
 
         return moreResults;
     }
+
+//   ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 선영 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
 
 }

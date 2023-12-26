@@ -1,6 +1,8 @@
 package com.korea.project2_team4.Repository;
 
+import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Entity.Post;
+import com.korea.project2_team4.Model.Entity.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -51,6 +53,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllOrderByCommentsSizeDesc(Pageable pageable);
     @Query("SELECT p FROM Post p ORDER BY SIZE(p.likeMembers) DESC")
     Page<Post> findAllOrderByLikeMembersSizeDesc(Pageable pageable);
+
+    Page<Post> findByAuthor(Profile author,Pageable pageable);
+
+    // 사용자가 좋아요 누른 글을 찾는 메서드
+    Page<Post> findByLikeMembers(Member member, Pageable pageable);
 
 
     //작성자 게시물 리스트all 반환

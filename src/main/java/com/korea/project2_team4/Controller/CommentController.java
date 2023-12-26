@@ -10,6 +10,8 @@ import com.korea.project2_team4.Service.MemberService;
 import com.korea.project2_team4.Service.PostService;
 import com.korea.project2_team4.Service.ProfileService;
 import lombok.Builder;
+import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -96,7 +98,57 @@ public class CommentController {
 
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myComments")
+    public String getMyPosts(Model model,Principal principal,@RequestParam(value = "page", defaultValue = "0") int page){
+        Profile author = memberService.getMember(principal.getName()).getProfile();
+        Page<Comment> myComments = commentService.getMyComments(page,author);
+        model.addAttribute("paging", myComments);
+        return "Member/findMyComments_form";
+    }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myLikedComments")
+    public String getMyLikedComments(Model model,Principal principal,@RequestParam(value = "page", defaultValue = "0") int page){
+        Member member = memberService.getMember(principal.getName());
+        Page<Comment> myLikedComments = commentService.getMyLikedComments(page,member);
+        model.addAttribute("paging", myLikedComments);
+        return "Member/findMyLikedComments_form";
+    }
+
+    @PostMapping("/removeComment/{id}")
+    public String removeComment(@PathVariable Long id) {
+        Comment comment = commentService.getComment(id);
+        Long postId = comment.getPost().getId();
+        commentService.deleteById(id);
+
+
+        return "redirect:/comment/myComments";
+    }
+
+    @PostMapping("/editComment/{id}")
+    public String editComment(Model model,@PathVariable Long id, @ModelAttribute Comment updateComment) {
+
+        Comment existingComment = commentRepository.findById(id).orElse(null);
+
+        Comment comment = commentService.getComment(id);
+        Long postId = comment.getPost().getId();
+
+        if (existingComment != null) {
+
+            existingComment.setContent(updateComment.getContent());
+            existingComment.setModifyDate(LocalDateTime.now());
+
+            commentService.save(existingComment);
+
+            Post post = existingComment.getPost();
+            model.addAttribute("post", post);
+
+        }
+
+        return "redirect:/comment/myComments";
+
+    }
 
 
 }

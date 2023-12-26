@@ -19,6 +19,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -122,11 +123,26 @@ public class PostController {
 
     @GetMapping("/search")
     public String searchPosts(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(name = "sort", required = false) String sort, Model model) {
-        List<Post> searchResults = postService.searchPosts(kw);
 
-        System.out.println(searchResults.size());
+        List<Post> searchResultsByPostTitle = postService.searchPostTitle(kw);
+        List<Post> searchResultsByPostContent = postService.searchPostContent(kw);
+        List<Post> searchResultsByProfileName = postService.searchProfileName(kw);
+        List<Post> searchResultsByCommentContent = postService.searchCommentContent(kw);
 
-        model.addAttribute("searchResults", searchResults);
+        Collections.reverse(searchResultsByPostTitle);
+        Collections.reverse(searchResultsByPostContent);
+        Collections.reverse(searchResultsByProfileName);
+        Collections.reverse(searchResultsByCommentContent);
+
+        searchResultsByPostTitle = searchResultsByPostTitle.subList(0, Math.min(5, searchResultsByPostTitle.size()));
+        searchResultsByPostContent = searchResultsByPostContent.subList(0, Math.min(5, searchResultsByPostContent.size()));
+        searchResultsByProfileName = searchResultsByProfileName.subList(0, Math.min(5, searchResultsByProfileName.size()));
+        searchResultsByCommentContent = searchResultsByCommentContent.subList(0, Math.min(5, searchResultsByCommentContent.size()));
+
+        model.addAttribute("searchResultsByPostTitle", searchResultsByPostTitle);
+        model.addAttribute("searchResultsByPostContent", searchResultsByPostContent);
+        model.addAttribute("searchResultsByProfileName", searchResultsByProfileName);
+        model.addAttribute("searchResultsByCommentContent", searchResultsByCommentContent);
         model.addAttribute("kw", kw);
         model.addAttribute("sort", sort);
 
@@ -186,6 +202,22 @@ public class PostController {
         }
 
         return "redirect:/post/detail/{id}/1";
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myPosts")
+    public String getMyPosts(Model model,Principal principal,@RequestParam(value = "page", defaultValue = "0") int page){
+        Profile author = memberService.getMember(principal.getName()).getProfile();
+        Page<Post> myPosts = postService.getMyPosts(page,author);
+        model.addAttribute("paging", myPosts);
+        return "Member/findMyPosts_form";
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myLikedPosts")
+    public String getMyLikedPosts(Model model,Principal principal,@RequestParam(value = "page", defaultValue = "0") int page){
+        Member member = memberService.getMember(principal.getName());
+        Page<Post> myLikedPosts = postService.getMyLikedPosts(page,member);
+        model.addAttribute("paging", myLikedPosts);
+        return "Member/findMyLikedPosts_form";
     }
 
     //   ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 선영 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓

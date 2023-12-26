@@ -1,9 +1,6 @@
 package com.korea.project2_team4.Service;
 
-import com.korea.project2_team4.Model.Entity.Image;
-import com.korea.project2_team4.Model.Entity.Member;
-import com.korea.project2_team4.Model.Entity.Post;
-import com.korea.project2_team4.Model.Entity.Profile;
+import com.korea.project2_team4.Model.Entity.*;
 import com.korea.project2_team4.Repository.MemberRepository;
 import com.korea.project2_team4.Repository.PostRepository;
 import com.korea.project2_team4.Repository.ProfileRepository;
@@ -57,6 +54,19 @@ public class PostService {
         Pageable pageable = PageRequest.of(page, 10);
         return postRepository.findAllOrderByCommentsSizeDesc(pageable);
     }
+    public Page<Post> getMyPosts(int page,Profile author){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return postRepository.findByAuthor(author,pageable);
+    }
+    public Page<Post> getMyLikedPosts(int page,Member member){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return postRepository.findByLikeMembers(member,pageable);
+
+    }
 
     //테스트 데이터
     @PostConstruct
@@ -100,6 +110,22 @@ public class PostService {
     // 게시물 검색기능
     public List<Post> searchPosts(String kw) {
         return postRepository.findAllByKw(kw);
+    }
+
+    public List<Post> searchPostTitle(String kw) {
+        return postRepository.findByPostTitle(kw);
+    }
+
+    public List<Post> searchPostContent(String kw) {
+        return postRepository.findByPostContent(kw);
+    }
+
+    public List<Post> searchProfileName(String kw) {
+        return postRepository.findByProfileName(kw);
+    }
+
+    public List<Post> searchCommentContent(String kw) {
+        return postRepository.findByCommentContent(kw);
     }
 
     // post를 optional타입으로 가져오기
@@ -181,6 +207,13 @@ public class PostService {
     public List<Post> getListBytag(String tag) {
         return this.postRepository.findAllBytag(tag);
     }
+//    public void getTag(Long id){
+//        Post post = postRepository.findById(id).get();
+//        List<Tag> tagList = post.getTagList();
+//        for(Tag tag : tagList){
+//
+//        }
+//    }
 
 
     public List<Post> sortBycategory (List<Post> getListByTag, String category) {

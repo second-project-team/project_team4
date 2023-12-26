@@ -1,9 +1,6 @@
 package com.korea.project2_team4.Service;
 
-import com.korea.project2_team4.Model.Entity.Image;
-import com.korea.project2_team4.Model.Entity.Member;
-import com.korea.project2_team4.Model.Entity.Post;
-import com.korea.project2_team4.Model.Entity.Profile;
+import com.korea.project2_team4.Model.Entity.*;
 import com.korea.project2_team4.Repository.MemberRepository;
 import com.korea.project2_team4.Repository.PostRepository;
 import com.korea.project2_team4.Repository.ProfileRepository;
@@ -191,5 +188,12 @@ public class PostService {
         post.setView(post.getView()+1);
         this.postRepository.save(post);
     }
+//    public void getTag(Long id){
+//        Post post = postRepository.findById(id).get();
+//        List<Tag> tagList = post.getTagList();
+//        for(Tag tag : tagList){
+//
+//        }
+//    }
 
 }

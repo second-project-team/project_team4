@@ -2,31 +2,38 @@
 <html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <div layout:fragment="content" class="content-area d-flex justify-content-center align-items-center">
 
-
-    <div class="container">
+<div style="height:50%;">
+    <div class="container" style="margin-top:100px;">
         <div>
             <div class="container">
                 <div class="row row-cols-3">
                     <div class="col" style="">
-                        <a type="button" class="btn btn-outline-warning" th:href="@{|/post/community/main|}">전체</a>
-                        <a type="button" class="btn btn-outline-warning" th:href="@{|/post/community/main?searchTagName=강아지|}">강아지</a>
-                        <a type="button" class="btn btn-outline-warning" th:href="@{|/post/community/main?searchTagName=고양이|}">고양이</a>
-                        <a type="button" class="btn btn-outline-warning" th:href="@{|/post/community/main?searchTagName=기타|}">기타</a>
+<!--                        <a type="button" class="btn btn-outline-warning" th:href="@{|/post/community/main?${searchTagName}|}" th:text="${searchTagName}"></a>-->
+
+                        <a type="button" class="btn btn-outline-warning" th:href="@{/post/community/main}">전체</a>
+                        <a type="button" class="btn btn-outline-warning" th:href="@{/post/community/main(searchTagName='강아지', sort=${sort}, category=${category})}">강아지</a>
+                        <a type="button" class="btn btn-outline-warning" th:href="@{/post/community/main(searchTagName='고양이', sort=${sort}, category=${category})}">고양이</a>
+                        <a type="button" class="btn btn-outline-warning" th:href="@{/post/community/main(searchTagName='기타', sort=${sort}, category=${category})}">기타</a>
                     </div>
-                    <div class="col" style="border:1px solid;">
-                        <a href="#">자유/</a>
-                        <a href="#">QnA/</a>
-                        <a href="#">??</a>
+
+                    <div class="col" style="">
+                        <a type="button" class="btn btn-outline-info" th:href="@{/post/community/main(searchTagName=${searchTagName}, sort=${sort}, category='자유게시판')}">자유게시판</a>
+                        <a type="button" class="btn btn-outline-info" th:href="@{/post/community/main(searchTagName=${searchTagName}, sort=${sort}, category='QnA')}">QnA</a>
                     </div>
-                    <div class="col" style="border:1px solid;">
-                        <a href="#">글쓰기</a>
-                    </div>
+
                 </div>
             </div>
             <div class="btn-group">
-                <a th:href="@{/post/community/main(sort='latest')}" class="btn btn-primary">최신순</a>
-                <a th:href="@{/post/community/main(sort='likeCount')}" class="btn btn-primary">인기 많은순</a>
-                <a th:href="@{/post/community/main(sort='commentCount')}" class="btn btn-primary">댓글 많은순</a>
+
+
+<!--                <a th:href="@{/post/community/main?${sort}}" class="btn btn-primary" th:text="${sort}"></a>-->
+
+<!--                <a th:href="@{/post/community/main(sort='latest')}" class="btn btn-primary">최신순</a>-->
+<!--                <a th:href="@{/post/community/main(sort='likeCount')}" class="btn btn-primary">인기 많은순</a>-->
+<!--                <a th:href="@{/post/community/main(sort='commentCount')}" class="btn btn-primary">댓글 많은순</a>-->
+                <a th:href="@{/post/community/main(searchTagName=${searchTagName}, sort='latest', category=${category})}" class="btn btn-primary">최신순</a>
+                <a th:href="@{/post/community/main(searchTagName=${searchTagName}, sort='likeCount', category=${category})}" class="btn btn-primary">인기 많은순</a>
+                <a th:href="@{/post/community/main(searchTagName=${searchTagName}, sort='commentCount', category=${category})}" class="btn btn-primary">댓글 많은순</a>
             </div>
             <div class="row row-cols-1 align-items-center">
                 <div class="col">
@@ -55,7 +62,7 @@
                                             <input type="hidden" name="postid" th:value="${post.id}">
                                             <button type="submit" class="btn btn-link" th:text="${post.author.profileName}" style="text-decoration:none; color:inherit;"></button>
                                         </form>
-<!--                                        <a th:href="@{|/profile/detail|}" th:text="${post.author.profileName}" style="text-decoration:none; color:inherit;"></a>-->
+                                        <!--                                        <a th:href="@{|/profile/detail|}" th:text="${post.author.profileName}" style="text-decoration:none; color:inherit;"></a>-->
                                         <div>
                                             <div th:if="${post.modifyDate != null}">
                                                 <span th:text="${#temporals.format(post.modifyDate, 'yyyy년 MM월 dd일 HH:mm')}"></span>
@@ -105,5 +112,7 @@
             </div>
         </div>
     </div>
+</div>
+
 </div>
 </html>

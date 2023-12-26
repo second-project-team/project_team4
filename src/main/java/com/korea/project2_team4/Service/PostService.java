@@ -159,6 +159,10 @@ public class PostService {
         }
     }
 
+
+
+//   ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 선영 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
     //작성자게시글불러오기
     public List<Post> getPostsbyAuthor(Profile profile) {
         List<Post> targetPosts = this.postRepository.findAllByauthor(profile.getProfileName());
@@ -174,9 +178,23 @@ public class PostService {
 
 
 
-    public void viewsUp(Post post) {
-        post.setView(post.getView()+1);
-        this.postRepository.save(post);
+    public List<Post> getListBytag(String tag) {
+        return this.postRepository.findAllBytag(tag);
     }
+
+
+    public List<Post> sortBycategory (List<Post> getListByTag, String category) {
+        List<Post> newList = new ArrayList<>();
+        for (Post post : getListByTag) {
+            if (post.getCategory().equals(category)) {
+                newList.add(post);
+            }
+        }
+        return newList;
+    }
+
+
+//   ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 선영 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
 
 }

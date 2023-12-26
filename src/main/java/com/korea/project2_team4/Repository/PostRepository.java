@@ -38,4 +38,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p WHERE p.author.profileName LIKE %:name%")
     Page<Post> findAllByauthorPage(@Param("name")String name, Pageable pageable);
 
+    @Query("SELECT p FROM Post p WHERE p.category LIKE %:category%")
+    List<Post> findAllBycategory(@Param("category")String category);
+
+    @Query("SELECT p FROM Post p JOIN p.tagMaps tm JOIN tm.tag t WHERE t.name = :tagName")
+    List<Post> findAllBytag(@Param("tagName") String tagName);
+
+
 }

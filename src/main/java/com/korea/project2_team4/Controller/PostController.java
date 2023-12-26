@@ -70,6 +70,7 @@ public class PostController {
         post.setContent(postForm.getContent());
         post.setCreateDate(LocalDateTime.now());
         post.setAuthor(sitemember.getProfile());
+        post.setCategory(postForm.getCategory());
         if (imageFiles != null && !imageFiles.isEmpty()) {
             imageService.uploadPostImage(imageFiles, post);
         }
@@ -87,15 +88,21 @@ public class PostController {
     }
 
     @GetMapping("/community/main")
-    public String communityMain(Model model, @RequestParam(name = "sort", required = false) String sort, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(name = "searchTagName", required = false) String searchTagName) {
+    public String communityMain(Model model, @RequestParam(name = "sort", required = false) String sort, @RequestParam(value = "page", defaultValue = "0") int page,
+                                @RequestParam(name = "searchTagName", required = false) String searchTagName,
+                                @RequestParam(name="category", required = false)String category) {
         Page<Post> allPosts;
         allPosts = postService.postList(page);
         if (searchTagName == null) {
             searchTagName = "";  // 기본적으로 빈 문자열로 설정
         }
+        if (category == null) {
+            category = "";
+        }
         if (sort != null && !sort.isEmpty()) {
             if (sort.equals("latest")) {
                 allPosts = postService.postList(page);
+
             } else if (sort.equals("likeCount")) {
                 allPosts = postService.getPostsOrderByLikeCount(page);
             } else {
@@ -181,5 +188,18 @@ public class PostController {
         return "redirect:/post/detail/{id}/1";
     }
 
+    //   ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 선영 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+
+
+
+    //   ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 선영 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 }
+
+
+
+
+
+
+

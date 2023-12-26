@@ -7,10 +7,16 @@
 </head>
 <body>
 <div>
-    <form action="@{|/profile/myPage/update|}" method="post">
-        <input th:text="${siteMember.getNickName()}" name="nickName" th:value="${siteMember.getNickName()}">
-        <input th:text="${siteMember.getPhoneNum()}" name="phoneNum" th:value="${siteMember.getPhoneNum()}">
-        <input th:text="${siteMember.getEmail()}" name="email" th:value="${siteMember.getEmail()}">
+    <form th:action="@{/profile/myPage/update}" method="post">
+        <label for="nickName">닉네임:</label>
+        <input type="text" id="nickName" name="nickName" th:placeholder="${siteMember.getNickName()}">
+
+        <label for="phoneNum">전화번호:</label>
+        <input type="text" id="phoneNum" name="phoneNum" th:placeholder="${siteMember.getPhoneNum()}">
+
+        <label for="email">이메일:</label>
+        <input type="text" id="email" name="email" th:placeholder="${siteMember.getEmail()}">
+
         <input type="submit" value="회원 정보 수정">
     </form>
 </div>

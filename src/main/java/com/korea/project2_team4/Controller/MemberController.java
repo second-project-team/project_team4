@@ -3,6 +3,7 @@ package com.korea.project2_team4.Controller;
 import com.korea.project2_team4.Config.OAuth2.OAuth2UserInfo;
 import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Form.MemberCreateForm;
+import com.korea.project2_team4.Model.Form.MemberResetForm;
 import com.korea.project2_team4.Service.FollowService;
 import com.korea.project2_team4.Service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,12 +13,15 @@ import lombok.Builder;
 import org.springframework.boot.Banner;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.*;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -27,6 +31,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final FollowService followService;
+    private final PasswordEncoder passwordEncoder;
 
 
     @GetMapping("/signup")
@@ -52,7 +57,7 @@ public class MemberController {
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자 입니다.");
-            return "/Member/signup_form";
+            return "Member/signup_form";
         } catch (Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
@@ -61,13 +66,45 @@ public class MemberController {
 
         return "redirect:/";
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/resetPassword")
+    public String resetPassword(Model model, MemberResetForm memberResetForm) {
+        model.addAttribute("memberResetForm", memberResetForm);
+        return "Member/reset_password_from";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/resetPassword")
+    public String resetPassword(@Valid MemberResetForm memberResetForm, BindingResult bindingResult, Principal principal) {
+        Member member = memberService.getMember(principal.getName());
+        if (bindingResult.hasErrors()) {
+            return "Member/reset_password_from";
+        }
+        if (!passwordEncoder.matches(memberResetForm.getPassword(), member.getPassword())) {
+            bindingResult.rejectValue("password", "passwordInCorrect",
+                    "기존의 패스워드와 일치하지 않습니다.");
+            return "Member/reset_password_from";
+        }
+        if (!memberResetForm.getNew_password().equals(memberResetForm.getRe_password())) {
+            bindingResult.rejectValue("re_password", "passwordInCorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "Member/reset_password_from";
+        }
+
+        memberService.resetPassword(memberResetForm, principal);
+
+        return "redirect:/profile/myPage";
+    }
+
     @GetMapping("/login")
     public String login() {
 
         return "Member/login_form";
     }
+
     @PostMapping("/login")
-    public String login(String username, String password){
+    public String login(String username, String password) {
         return "redirect:/";
     }
 
@@ -162,8 +199,6 @@ public class MemberController {
         return "redirect:/";
 
     }
-
-
 
 
 }

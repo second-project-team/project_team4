@@ -6,6 +6,7 @@ import com.korea.project2_team4.Repository.PostRepository;
 import com.korea.project2_team4.Service.*;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,8 @@ public class PostController {
 
     private final PostService postService;
     private final PostRepository postRepository;
+    private final ProfileService profileService;
+    private final CommentService commentService;
     private final ImageService imageService;
     private final MemberService memberService;
     private final TagService tagService;
@@ -130,7 +133,7 @@ public class PostController {
 
 
     @GetMapping("/search")
-    public String searchPosts(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(name = "sort", required = false) String sort, Model model) {
+    public String searchPosts(@RequestParam(value = "kw", defaultValue = "") String kw, Model model) {
 
         List<Post> searchResultsByPostTitle = postService.searchPostTitle(kw);
         List<Post> searchResultsByPostContent = postService.searchPostContent(kw);
@@ -152,9 +155,56 @@ public class PostController {
         model.addAttribute("searchResultsByProfileName", searchResultsByProfileName);
         model.addAttribute("searchResultsByCommentContent", searchResultsByCommentContent);
         model.addAttribute("kw", kw);
-        model.addAttribute("sort", sort);
 
         return "search_form";
+    }
+
+    @GetMapping("/showMoreTitle")
+    public String showMorePosts(@RequestParam(value = "kw", defaultValue = "") String kw,
+                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                  Model model) {
+        Page<Post> pagingByTitle = postService.pagingByTitle(kw,page);
+
+        model.addAttribute("pagingByTitle", pagingByTitle);
+        model.addAttribute("kw", kw);
+
+        return "showMoreTitle_form";
+    }
+
+    @GetMapping("/showMoreContent")
+    public String showMoreContents(@RequestParam(value = "kw", defaultValue = "") String kw,
+                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                  Model model) {
+        Page<Post> pagingByContent = postService.pagingByContent(kw,page);
+
+        model.addAttribute("pagingByContent", pagingByContent);
+        model.addAttribute("kw", kw);
+
+        return "showMoreContent_form";
+    }
+
+    @GetMapping("/showMoreProfileName")
+    public String showMoreProfileNames(@RequestParam(value = "kw", defaultValue = "") String kw,
+                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                  Model model) {
+        Page<Post> pagingByProfileName = postService.pagingByProfileName(kw,page);
+
+        model.addAttribute("pagingByProfileName", pagingByProfileName);
+        model.addAttribute("kw", kw);
+
+        return "showMoreProfileName_form";
+    }
+
+    @GetMapping("/showMoreComment")
+    public String showMoreComments(@RequestParam(value = "kw", defaultValue = "") String kw,
+                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                  Model model) {
+        Page<Post> pagingByComment = postService.pagingByComment(kw,page);
+
+        model.addAttribute("pagingByComment", pagingByComment);
+        model.addAttribute("kw", kw);
+
+        return "showMoreComment_form";
     }
 
     @GetMapping("/detail/{id}/{hit}")

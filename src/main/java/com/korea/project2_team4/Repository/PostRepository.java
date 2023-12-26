@@ -69,5 +69,21 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 
 
+    @Query("SELECT p FROM Post p " + "LEFT JOIN p.author pr " + "LEFT JOIN p.comments c " +
+            "WHERE LOWER(p.title) LIKE LOWER(CONCAT('%',:kw,'%')) ")
+    Page<Post> findByPostTitleFromPaging(@Param("kw") String kw, Pageable pageable);
+
+    @Query("SELECT p FROM Post p " + "LEFT JOIN p.author pr " + "LEFT JOIN p.comments c " +
+            "WHERE LOWER(p.content) LIKE LOWER(CONCAT('%',:kw,'%')) ")
+    Page<Post> findByPostContentFromPaging(@Param("kw") String kw, Pageable pageable);
+
+    @Query("SELECT p FROM Post p " + "LEFT JOIN p.author pr " + "LEFT JOIN p.comments c " +
+            "WHERE LOWER(pr.profileName) LIKE LOWER(CONCAT('%',:kw,'%')) ")
+    Page<Post> findByProfileNameFromPaging(@Param("kw") String kw, Pageable pageable);
+
+    @Query("SELECT p FROM Post p " + "LEFT JOIN p.author pr " + "LEFT JOIN p.comments c " +
+            "WHERE LOWER(c.content) LIKE LOWER(CONCAT('%',:kw,'%')) ")
+    Page<Post> findByCommentFromPaging(@Param("kw") String kw, Pageable pageable);
+
 
 }

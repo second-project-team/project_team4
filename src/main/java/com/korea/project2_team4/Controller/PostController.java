@@ -180,6 +180,22 @@ public class PostController {
 
         return "redirect:/post/detail/{id}/1";
     }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myPosts")
+    public String getMyPosts(Model model,Principal principal,@RequestParam(value = "page", defaultValue = "0") int page){
+        Profile author = memberService.getMember(principal.getName()).getProfile();
+        Page<Post> myPosts = postService.getMyPosts(page,author);
+        model.addAttribute("paging", myPosts);
+        return "Member/findMyPosts_form";
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myLikedPosts")
+    public String getMyLikedPosts(Model model,Principal principal,@RequestParam(value = "page", defaultValue = "0") int page){
+        Member member = memberService.getMember(principal.getName());
+        Page<Post> myLikedPosts = postService.getMyLikedPosts(page,member);
+        model.addAttribute("paging", myLikedPosts);
+        return "Member/findMyLikedPosts_form";
+    }
 
 
 }

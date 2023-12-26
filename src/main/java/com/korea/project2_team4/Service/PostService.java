@@ -57,6 +57,19 @@ public class PostService {
         Pageable pageable = PageRequest.of(page, 10);
         return postRepository.findAllOrderByCommentsSizeDesc(pageable);
     }
+    public Page<Post> getMyPosts(int page,Profile author){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return postRepository.findByAuthor(author,pageable);
+    }
+    public Page<Post> getMyLikedPosts(int page,Member member){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return postRepository.findByLikeMembers(member,pageable);
+
+    }
 
     //테스트 데이터
     @PostConstruct

@@ -36,6 +36,7 @@ public class PostController {
     private final MemberService memberService;
     private final TagService tagService;
     private final TagMapService tagMapService;
+    private final RecentSearchService recentSearchService;
 
 
     @GetMapping("/main")
@@ -139,6 +140,7 @@ public class PostController {
         List<Post> searchResultsByPostContent = postService.searchPostContent(kw);
         List<Post> searchResultsByProfileName = postService.searchProfileName(kw);
         List<Post> searchResultsByCommentContent = postService.searchCommentContent(kw);
+        List<String> recentSearchKeywords = recentSearchService.getRecentSearchKeywords();
 
         Collections.reverse(searchResultsByPostTitle);
         Collections.reverse(searchResultsByPostContent);
@@ -154,13 +156,16 @@ public class PostController {
         model.addAttribute("searchResultsByPostContent", searchResultsByPostContent);
         model.addAttribute("searchResultsByProfileName", searchResultsByProfileName);
         model.addAttribute("searchResultsByCommentContent", searchResultsByCommentContent);
+        model.addAttribute("recentSearchKeywords", recentSearchKeywords);
         model.addAttribute("kw", kw);
+
+        recentSearchService.saveRecentSearch(kw);
 
         return "search_form";
     }
 
     @GetMapping("/showMoreTitle")
-    public String showMorePosts(@RequestParam(value = "kw", defaultValue = "") String kw,
+    public String showMorePosts(@RequestParam(value = "kw", required = false) String kw,
                                   @RequestParam(value = "page", defaultValue = "0") int page,
                                   Model model) {
         Page<Post> pagingByTitle = postService.pagingByTitle(kw,page);

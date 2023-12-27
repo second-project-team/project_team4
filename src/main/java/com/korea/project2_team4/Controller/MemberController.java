@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.Builder;
 import org.springframework.boot.Banner;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,11 +20,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
 import javax.swing.*;
 import java.security.Principal;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:8888")
 @Controller
 @RequestMapping("/member")
 @Builder
@@ -198,6 +201,49 @@ public class MemberController {
 
         return "redirect:/";
 
+    }
+
+    @GetMapping("/findUserName")
+    public String findUserName(Model model) {
+        return "Member/findUserName_form";
+    }
+
+    @PostMapping("/sendVerificationCode")
+    public ResponseEntity<String> sendVerificationCode(@RequestParam String realName, @RequestParam String email,
+                                                       HttpSession session) {
+        try {
+            if (memberService.checkMemberByEmail(email)) {
+                String verificationCode = memberService.generateRandomCode();
+                memberService.SendVerificationCode(email, verificationCode);
+
+                // 클라이언트에게 전송된 인증 코드를 세션에 저장
+                session.setAttribute("expectedVerificationCode", verificationCode);
+
+                return ResponseEntity.ok("Verification code sent successfully!");
+            }
+            return ResponseEntity.badRequest().body("User not found for the provided email.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error sending verification code: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/findUserName")
+    public String findUserName(@RequestParam String verificationCode,
+                               @SessionAttribute("expectedVerificationCode") String expectedVerificationCode,
+                               SessionStatus sessionStatus,
+                               HttpSession session,
+                               String realName, String email,Model model) {
+
+        // 클라이언트에게 전송된 인증 코드와 서버에서 예상하는 인증 코드가 일치하는지 확인
+        if (verificationCode.equals(expectedVerificationCode)) {
+            // 검증에 성공하면 세션에서 인증 코드 제거
+            sessionStatus.setComplete();
+            Member member = memberService.foundUser(realName, email);
+            model.addAttribute("foundMember",member);
+            return "Member/foundUserName_form";
+        }
+        return "redirect:/member/findUserName_form";
     }
 
 

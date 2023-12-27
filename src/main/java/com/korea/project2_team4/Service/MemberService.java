@@ -3,6 +3,7 @@ package com.korea.project2_team4.Service;
 import com.korea.project2_team4.Config.UserRole;
 import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Entity.Profile;
+import com.korea.project2_team4.Model.Form.EditPasswordForm;
 import com.korea.project2_team4.Model.Form.MemberCreateForm;
 import com.korea.project2_team4.Model.Form.MemberResetForm;
 import com.korea.project2_team4.Repository.MemberRepository;
@@ -56,6 +57,10 @@ public class MemberService {
         Member member = getMember(principal.getName());
 
         member.setPassword(passwordEncoder.encode(memberResetForm.getNew_password()));
+        memberRepository.save(member);
+    }
+    public void editPassword(EditPasswordForm editPasswordForm, Member member) {
+        member.setPassword(passwordEncoder.encode(editPasswordForm.getNew_password()));
         memberRepository.save(member);
     }
 
@@ -156,10 +161,17 @@ public class MemberService {
         return memberRepository.findByRealNameAndEmail(realName, email)
                 .orElseThrow(() -> new EntityNotFoundException("유저를 찾을 수 없습니다. 실명: " + realName + ", 이메일: " + email));
     }
+    public Member foundUserByUserName(String realName, String email,String userName) {
+        return memberRepository.findByRealNameAndEmailAndUserName(realName, email, userName)
+                .orElseThrow(() -> new EntityNotFoundException("유저를 찾을 수 없습니다. 실명: " + realName + ", 이메일: " + email));
+    }
 
 
-    public boolean checkMemberByEmail(String email) {
-        return memberRepository.existsByEmail(email);
+    public boolean checkMemberToFindUserName(String email,String realName) {
+        return memberRepository.existsByEmailAndRealName(email,realName);
+    }
+    public boolean checkMemberToFindPassword(String userName, String email, String realName){
+        return memberRepository.existsByUserNameAndEmailAndRealName(userName,email,realName);
     }
 
     public void SendVerificationCode(String email,String verificationCode) {

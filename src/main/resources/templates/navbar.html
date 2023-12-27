@@ -36,7 +36,7 @@
             <div class="d-flex justify-content-end">
                 <ul class="nav">
                     <a class="nav-link rounded" sec:authorize="isAnonymous()" th:href="@{|/member/findUserName|}">아이디 찾기</a>
-                    <a class="nav-link rounded" sec:authorize="isAnonymous()" th:href="@{|/send-email|}">비밀 번호 찾기(미구현, 이메일 전송 테스트)</a>
+                    <a class="nav-link rounded" sec:authorize="isAnonymous()" th:href="@{|/member/findPassword|}">비밀 번호 찾기</a>
                     <li class="nav-item">
                         <a class="nav-link rounded" sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
                         <a class="nav-link rounded" sec:authorize="isAuthenticated()"

@@ -2,6 +2,7 @@ package com.korea.project2_team4.Controller;
 
 import com.korea.project2_team4.Config.OAuth2.OAuth2UserInfo;
 import com.korea.project2_team4.Model.Entity.Member;
+import com.korea.project2_team4.Model.Form.EditPasswordForm;
 import com.korea.project2_team4.Model.Form.MemberCreateForm;
 import com.korea.project2_team4.Model.Form.MemberResetForm;
 import com.korea.project2_team4.Service.FollowService;
@@ -12,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.Builder;
 import org.springframework.boot.Banner;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,11 +21,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
 import javax.swing.*;
 import java.security.Principal;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:8888")
 @Controller
 @RequestMapping("/member")
 @Builder
@@ -97,6 +101,23 @@ public class MemberController {
         return "redirect:/profile/myPage";
     }
 
+
+    @PostMapping("/editPassword")
+    public String editPassword(@Valid EditPasswordForm editPasswordForm, BindingResult bindingResult, String foundMemberName) {
+        Member member = memberService.getMember(foundMemberName);
+        if (bindingResult.hasErrors()) {
+            return "Member/editPassword_from";
+        }
+        if (!editPasswordForm.getNew_password().equals(editPasswordForm.getRe_password())) {
+            bindingResult.rejectValue("re_password", "passwordInCorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "Member/editPassword_from";
+        }
+
+        memberService.editPassword(editPasswordForm, member);
+
+        return "redirect:/";
+    }
     @GetMapping("/login")
     public String login() {
 
@@ -198,6 +219,98 @@ public class MemberController {
 
         return "redirect:/";
 
+    }
+
+    @GetMapping("/findUserName")
+    public String findUserName(Model model) {
+        return "Member/findUserName_form";
+    }
+
+    @PostMapping("/sendVerificationCode")
+    public ResponseEntity<String> sendVerificationCode(@RequestParam String realName, @RequestParam String email,
+                                                       HttpSession session) {
+        try {
+            if (memberService.checkMemberToFindUserName(email, realName)) {
+                String verificationCode = memberService.generateRandomCode();
+                memberService.SendVerificationCode(email, verificationCode);
+
+                // 클라이언트에게 전송된 인증 코드를 세션에 저장
+                session.setAttribute("expectedVerificationCode", verificationCode);
+
+                return ResponseEntity.ok("Verification code sent successfully!");
+            }
+            return ResponseEntity.badRequest().body("User not found for the provided email.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error sending verification code: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/findUserName")
+    public String findUserName(@RequestParam String verificationCode,
+                               @SessionAttribute("expectedVerificationCode") String expectedVerificationCode,
+                               SessionStatus sessionStatus,
+                               HttpSession session,
+                               String realName, String email, Model model) {
+
+        // 클라이언트에게 전송된 인증 코드와 서버에서 예상하는 인증 코드가 일치하는지 확인
+        if (verificationCode.equals(expectedVerificationCode)) {
+            // 검증에 성공하면 세션에서 인증 코드 제거
+            sessionStatus.setComplete();
+            Member member = memberService.foundUser(realName, email);
+            model.addAttribute("foundMember", member);
+            return "Member/foundUserName_form";
+        }
+        return "redirect:/member/findUserName_form";
+    }
+
+    @GetMapping("/findPassword")
+    public String findPassword(Model model) {
+        return "Member/findPassword_form";
+    }
+
+    @PostMapping("/sendVerificationCodeToFindPassword")
+    public ResponseEntity<String> sendVerificationCodeToFindPassword(@RequestParam String realName,
+                                                                     @RequestParam String email,
+                                                                     @RequestParam String userName,
+                                                                     HttpSession session) {
+        try {
+            if (memberService.checkMemberToFindPassword(userName,email, realName)) {
+                String verificationCode = memberService.generateRandomCode();
+                memberService.SendVerificationCode(email, verificationCode);
+
+                // 클라이언트에게 전송된 인증 코드를 세션에 저장
+                session.setAttribute("expectedVerificationCode", verificationCode);
+
+                return ResponseEntity.ok("Verification code sent successfully!");
+            }
+            return ResponseEntity.badRequest().body("User not found for the provided email.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error sending verification code: " + e.getMessage());
+        }
+    }
+    @PostMapping("/findPassword")
+    public String findPassword(@RequestParam String verificationCode,
+                               @SessionAttribute("expectedVerificationCode") String expectedVerificationCode,
+                               SessionStatus sessionStatus,
+                               HttpSession session,
+                               String realName,
+                               String email,
+                               String userName,
+                               Model model,
+                               EditPasswordForm editPasswordForm) {
+
+        // 클라이언트에게 전송된 인증 코드와 서버에서 예상하는 인증 코드가 일치하는지 확인
+        if (verificationCode.equals(expectedVerificationCode)) {
+            // 검증에 성공하면 세션에서 인증 코드 제거
+            sessionStatus.setComplete();
+            Member member = memberService.foundUserByUserName(realName, email, userName);
+            model.addAttribute("foundMember", member);
+            model.addAttribute("editPasswordFrom", editPasswordForm);
+            return "Member/editPassword_form";
+        }
+        return "redirect:/member/findPassword_form";
     }
 
 

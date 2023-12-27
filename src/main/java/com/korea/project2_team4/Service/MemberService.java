@@ -3,11 +3,13 @@ package com.korea.project2_team4.Service;
 import com.korea.project2_team4.Config.UserRole;
 import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Entity.Profile;
+import com.korea.project2_team4.Model.Form.EditPasswordForm;
 import com.korea.project2_team4.Model.Form.MemberCreateForm;
 import com.korea.project2_team4.Model.Form.MemberResetForm;
 import com.korea.project2_team4.Repository.MemberRepository;
 import com.korea.project2_team4.Repository.ProfileRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Builder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,10 +21,7 @@ import org.springframework.http.HttpStatus;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Builder
@@ -31,6 +30,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final ProfileService profileService;
     private final ProfileRepository profileRepository;
+    private final EmailService emailService;
 
 
     // 멤버 생성
@@ -57,6 +57,10 @@ public class MemberService {
         Member member = getMember(principal.getName());
 
         member.setPassword(passwordEncoder.encode(memberResetForm.getNew_password()));
+        memberRepository.save(member);
+    }
+    public void editPassword(EditPasswordForm editPasswordForm, Member member) {
+        member.setPassword(passwordEncoder.encode(editPasswordForm.getNew_password()));
         memberRepository.save(member);
     }
 
@@ -149,5 +153,34 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+//    public Member foundUserByPhoneNum(String realName, String phoneNum) {
+//        return memberRepository.findByRealNameAndPhoneNum(realName, phoneNum)
+//                .orElseThrow(() -> new EntityNotFoundException("유저를 찾을 수 없습니다. 실명: " + realName + ", 전화번호: " + phoneNum));
+//    }
+    public Member foundUser(String realName, String email) {
+        return memberRepository.findByRealNameAndEmail(realName, email)
+                .orElseThrow(() -> new EntityNotFoundException("유저를 찾을 수 없습니다. 실명: " + realName + ", 이메일: " + email));
+    }
+    public Member foundUserByUserName(String realName, String email,String userName) {
+        return memberRepository.findByRealNameAndEmailAndUserName(realName, email, userName)
+                .orElseThrow(() -> new EntityNotFoundException("유저를 찾을 수 없습니다. 실명: " + realName + ", 이메일: " + email));
+    }
+
+
+    public boolean checkMemberToFindUserName(String email,String realName) {
+        return memberRepository.existsByEmailAndRealName(email,realName);
+    }
+    public boolean checkMemberToFindPassword(String userName, String email, String realName){
+        return memberRepository.existsByUserNameAndEmailAndRealName(userName,email,realName);
+    }
+
+    public void SendVerificationCode(String email,String verificationCode) {
+        emailService.sendEmail(email,"비마이펫 인증 번호 입니다","인증 번호 : "+verificationCode);
+    }
+    public static String generateRandomCode() {
+        // 100000부터 999999까지의 랜덤 숫자 생성 (6자리)
+        int randomCode = new Random().nextInt(900000) + 100000;
+        return String.valueOf(randomCode);
+    }
 
 }

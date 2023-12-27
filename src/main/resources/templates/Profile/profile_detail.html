@@ -133,7 +133,7 @@
                     <div th:each="post : ${postList}">
                         <div class="col-lg-6 mb-2 pr-lg-1">
 <!--                            <div th:text="${post.title}"></div>-->
-                            <a th:href="@{|/post/detail/${post.id}|}">
+                            <a th:href="@{|/post/detail/${post.id}/0|}">
                                 <div th:each="img : ${post.postImages}">
                                     <img th:src="@{|/resources/${img.saveName}|}" alt="no_img" class="img-fluid rounded shadow-sm">
                                 </div>

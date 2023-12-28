@@ -216,8 +216,10 @@ public class PostController {
 
     @GetMapping("/detail/{id}/{hit}")
     public String postDetail(Principal principal, Model model, @PathVariable("id") Long id, @PathVariable("hit") Integer hit) {
-        Member member = this.memberService.getMember(principal.getName());
-        model.addAttribute("loginedMember", member);
+        if (principal != null) {
+            Member member = this.memberService.getMember(principal.getName());
+            model.addAttribute("loginedMember", member);
+        }
         if (hit == 0) {
             Post post = postService.getPostIncrementView(id);
             model.addAttribute("post", post);

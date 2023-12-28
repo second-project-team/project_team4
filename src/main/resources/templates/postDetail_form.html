@@ -72,13 +72,13 @@
                 <br>
                 <div class="pb-2">
                     <div class="row justify-content-end">
-                        <div class="col-md-auto">
+                        <div class="col-md-auto" th:if="${post.author?.id == loginedMember?.id}">
                             <button type="button" class="btn btn-primary admin-btn" style="margin-right: 0.1rem"
                                     data-bs-toggle="modal" th:data-bs-target="'#approveModal' + ${post.id}"
                                     th:onclick="'openApproveModal(' + ${post.id} + ')'">수정
                             </button>
                         </div>
-                        <div class="col-md-auto">
+                        <div class="col-md-auto" th:if="${post.author?.id == loginedMember?.id}">
                             <form th:action="@{|/post/deletePost/${post.id}|}" method="post"
                                   onsubmit="return DeletePost();">
                                 <button type="submit" class="btn btn-danger admin-btn" style="margin-right: 2rem">삭제
@@ -152,7 +152,7 @@
                 </form>
                 <hr>
                 <div th:each="comment : ${post.comments}">
-                    <div class="card mb-2" style="width:50%;">
+                    <div class="card mb-4" style="width:50%;">
                         <div class="card-body">
                             <div style="background-color: #f0f0f0; padding: 10px; display: inline-block; border-radius: 1rem;">
                                 <div style="font-size: 18px; font-weight: bold; color: #333;"
@@ -169,19 +169,20 @@
                                           th:text="${comment.likeMembers.size()}"></span>
                                 </button>
                             </form>
+                            <hr>
                             <br>
                             <div style="font-size: 14px; color: #777;" th:text="${comment.content}"></div>
                         </div>
                         <div class="pb-2 pt-5">
                             <div class="row d-flex justify-content-end">
-                                <div class="col-md-auto">
+                                <div class="col-md-auto" th:if="${comment.author?.id == loginedMember?.id}">
                                     <button type="button" class="btn btn-primary admin-btn" style="margin-right: 0.1rem"
                                             data-bs-toggle="modal"
                                             th:data-bs-target="'#approveCommentModal' + ${comment.id}"
                                             th:onclick="'openApproveCommentModal(' + ${comment.id} + ')'">수정
                                     </button>
                                 </div>
-                                <div class="col-md-auto">
+                                <div class="col-md-auto" th:if="${comment.author?.id == loginedMember?.id}">
                                     <form th:action="@{|/comment/deleteComment/${comment.id}|}" method="post"
                                           onsubmit="return DeleteComment();">
                                         <button type="submit" class="btn btn-danger admin-btn"

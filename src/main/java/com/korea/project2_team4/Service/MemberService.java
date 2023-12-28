@@ -11,6 +11,10 @@ import com.korea.project2_team4.Repository.ProfileRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Builder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -66,6 +70,9 @@ public class MemberService {
 
     public Member getMember(String username) {
         return this.memberRepository.findByUserName(username).orElse(null);
+    }
+    public List<Member> getAllMembers() {
+        return memberRepository.findAll();
     }
 
     public Member getMemberById(Long memberId) {
@@ -182,5 +189,20 @@ public class MemberService {
         int randomCode = new Random().nextInt(900000) + 100000;
         return String.valueOf(randomCode);
     }
+    public Page<Member> getMemberListByPage(int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10,Sort.by(sorts));
+        return this.memberRepository.findAll(pageable);
+    }
+    @jakarta.transaction.Transactional
+    public void changeMemberRole(Long id, String Role) {
+        Member member = memberRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("member not found"));
 
+        member.setRole(Role);
+
+        memberRepository.save(member);
+
+    }
 }

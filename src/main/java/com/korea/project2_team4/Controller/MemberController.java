@@ -261,7 +261,7 @@ public class MemberController {
             model.addAttribute("foundMember", member);
             return "Member/foundUserName_form";
         }
-        return "redirect:/member/findUserName_form";
+        return "redirect:/member/findUserName";
     }
 
     @GetMapping("/findPassword")
@@ -310,7 +310,7 @@ public class MemberController {
             model.addAttribute("editPasswordFrom", editPasswordForm);
             return "Member/editPassword_form";
         }
-        return "redirect:/member/findPassword_form";
+        return "redirect:/member/findPassword";
     }
 
 

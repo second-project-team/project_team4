@@ -31,7 +31,7 @@
                 <div>
                     <div style="background-color: #f0f0f0; padding: 10px; display: inline-block; border-radius: 1rem;">
                         <div style="font-size: 18px; font-weight: bold; color: #333;"
-                              th:text="${post.author.profileName}"></div>
+                             th:text="${post.author.profileName}"></div>
                         <div>
                             <div th:if="${post.modifyDate != null}">
                                 <span style="font-size: 14px; color: #777;"
@@ -44,19 +44,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="pb-5">
-                    <div class="row">
-                        <div class="col-md-12 text-end">
-                            <input type="hidden" id="heart-fill"
-                                   th:value="${#lists.contains(post.likeMembers, loginedMember)}">
-                            <form id="likeForm" class="flex-fill" th:action="@{|/post/postLike|}" method="post"
-                                  onsubmit="return toggleHeartIcon()">
-                                <input type="hidden" name="id" th:value="${post.id}">
-                                <i id="heartIcon" class="bi bi-heart" onclick="heartSubmit()"
-                                   style="font-size: 2rem; color:red; cursor:pointer;"></i>
-                            </form>
-                        </div>
-                    </div>
+                <div class="pb-5 col-md-12 text-end">
+                    <input type="hidden" id="heart-fill"
+                           th:value="${#lists.contains(post.likeMembers, loginedMember)}">
+                    <form id="likeForm" class="flex-fill" th:action="@{|/post/postLike|}" method="post"
+                          onsubmit="return toggleHeartIcon()">
+                        <input type="hidden" name="id" th:value="${post.id}">
+                        <i id="heartIcon" class="bi bi-heart" onclick="heartSubmit()"
+                           style="font-size: 2rem; color:red; cursor:pointer;">
+                            <span class="badge rounded-pill bg-primary"
+                                  th:text="${post.likeMembers.size()}"></span></i>
+                    </form>
                 </div>
                 <hr class="mt-1 mb-5">
                 <div class="col">
@@ -160,15 +158,24 @@
                                 <div style="font-size: 14px; color: #777;"
                                      th:text="${#temporals.format(comment.createDate, 'yyyy년 MM월 dd일 HH:mm')}"></div>
                             </div>
-                            <form class="flex-fill d-flex justify-content-end" th:action="@{|/comment/commentLike|}"
-                                  method="post">
-                                <input type="hidden" name="id" th:value="${comment.id}">
-                                <button class="btn btn-outline-primary" type="submit">
-                                    좋아요
-                                    <span class="badge rounded-pill bg-primary" id="commentLikeCheck"
-                                          th:text="${comment.likeMembers.size()}"></span>
-                                </button>
-                            </form>
+<!--                            <form class="flex-fill d-flex justify-content-end" th:action="@{|/comment/commentLike|}"-->
+<!--                                  method="post">-->
+<!--                                <input type="hidden" name="id" th:value="${comment.id}">-->
+<!--                                <button class="btn btn-outline-primary" type="submit">-->
+<!--                                    좋아요-->
+<!--                                    <span class="badge rounded-pill bg-primary" id="commentLikeCheck"-->
+<!--                                          th:text="${comment.likeMembers.size()}"></span>-->
+<!--                                </button>-->
+<!--                            </form>-->
+                            <div>
+                                <input type="hidden" id="CommentHeart-fill-${comment.id}" th:value="${#lists.contains(comment.likeMembers, loginedMember)}">
+                                <form id="CommentLikeForm-${comment.id}" class="flex-fill d-flex justify-content-end" th:action="@{|/comment/commentLike|}" method="post" onsubmit="return toggleCommentHeartIcon('${comment.id}')">
+                                    <input type="hidden" name="id" th:value="${comment.id}">
+                                    <i id="CommentHeartIcon-${comment.id}" class="bi bi-heart" onclick="CommentHeartSubmit('${comment.id}')" style="font-size: 2rem; color:red; cursor:pointer;">
+                                        <span class="badge rounded-pill bg-primary" th:text="${comment.likeMembers.size()}"></span>
+                                    </i>
+                                </form>
+                            </div>
                             <hr>
                             <br>
                             <div style="font-size: 14px; color: #777;" th:text="${comment.content}"></div>
@@ -281,9 +288,28 @@
         function heartSubmit() {
             document.getElementById('likeForm').submit();
         }
+
         toggleHeartIcon();
 
         // 댓글 좋아요
+            function toggleCommentHeartIcon(commentId) {
+        var heartFill = document.getElementById('CommentHeart-fill-' + commentId);
+        var isFilled = heartFill.value;
+        var commentHeartIcon = document.getElementById('CommentHeartIcon-' + commentId);
+        if (isFilled == "" || isFilled === "false") {
+            commentHeartIcon.classList.remove('bi-heart-fill');
+            commentHeartIcon.classList.add('bi-heart');
+        } else {
+            commentHeartIcon.classList.remove('bi-heart');
+            commentHeartIcon.classList.add('bi-heart-fill');
+        }
+    }
+
+    function CommentHeartSubmit(commentId) {
+        document.getElementById('CommentLikeForm-' + commentId).submit();
+    }
+
+        toggleCommentHeartIcon('${comment.id}');
     </script>
 </div>
 </html>

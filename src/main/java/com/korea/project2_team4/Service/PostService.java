@@ -354,6 +354,7 @@ public class PostService {
             Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
             return postRepository.findByProfileNameFromPaging(kw, pageable);
         }
+  
 
         public Page<Post> pagingByComment (String kw,int page){
             List<Sort.Order> sorts = new ArrayList<>();

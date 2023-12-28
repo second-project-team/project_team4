@@ -6,19 +6,30 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{|/post/community/main|}">커뮤니티</a>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        커뮤니티
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{|/post/community/main|}">전체</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" th:href="@{|/post/community/main?category=자유게시판|}">자유게시판</a></li>
+                        <li><a class="dropdown-item" th:href="@{|/post/community/main?category=QnA|}">QnA</a></li>
+                    </ul>
                 </li>
+
+
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="#">분양/입양 공간</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Category
+                        기능추가
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" th:href="@{|/post/community/main?category=자유게시판|}">자유게시판</a></li>
-                        <li><a class="dropdown-item" th:href="@{|/post/community/main?category=QnA|}">QnA</a></li>
+                        <li><a class="dropdown-item" th:href="@{|#|}">1</a></li>
+                        <li><a class="dropdown-item" th:href="@{|/#|}">2</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>

@@ -92,7 +92,7 @@
 
                                     <div style="width:100%; height:10%;">
                                         <a th:href="@{/profile/petprofile(petid=${pet.id})}" th:text="${pet.name}" style="margin:0;" ></a>
-<!--                                        <p class="small mb-4 " th:text="${pet.name}" style="margin:0;"><i class="fa fa-map-marker mr-2"></i></p>-->
+                                        <!--                                        <p class="small mb-4 " th:text="${pet.name}" style="margin:0;"><i class="fa fa-map-marker mr-2"></i></p>-->
                                     </div>
                                     <form th:action="@{|/profile/deletepet|}" method="post">
                                         <input type="hidden" name="petid" th:value="${pet.id}">
@@ -121,44 +121,36 @@
 
             <div class="py-4 px-4">
                 <div class="d-flex align-items-center justify-content-between mb-3">
-                    <h5 class ="mb-0">Recent posts</h5>
-                    <a th:href="@{|/profile/detail/showall|}" class="btn btn-link text-muted">Show all</a>
-<!--                    <form th:action="@{|/profile/showallPostsBy|}">-->
-<!--                        <input type="hidden" name="profileid" th:value="${profile.id}">-->
-<!--                        <button type="submit" class="btn btn-link text-muted" >Show all</button>-->
-<!--                    </form>-->
+                    <h5 class="mb-0">Recent posts</h5>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 mb-2 pr-lg-1 d-flex" th:each="post, iterStat : ${postList}" th:if="${iterStat.index < 4}">
-<!--                        <div class="col-lg-6 mb-2 pr-lg-1 d-flex">-->
-<!--                            <div th:text="${post.title}"></div>-->
+<!--                    <div th:each="post : ${postList}">-->
+                        <div class="col-lg-6 mb-2 pr-lg-1 d-flex" th:each="post : ${postList}">
+                            <!--                            <div th:text="${post.title}"></div>-->
                             <a th:href="@{|/post/detail/${post.id}/0|}">
-                                <div th:if="${post.postImages ne null or not #lists.isEmpty(post.postImages)}">
-                                    <div th:each="img : ${post.postImages}" class="flex-shrink-0">
-                                        <img th:src="@{|/resources/${img.saveName}|}" alt="no_img" class="img-fluid rounded shadow-sm" style="width:450px; height:300px;">
-                                    </div>
+                                <div th:each="img : ${post.postImages}" class="flex-shrink-0">
+                                    <img th:src="@{|/resources/${img.saveName}|}" alt="no_img" class="img-fluid rounded shadow-sm" style="width:450px; height:300px;">
                                 </div>
-
                             </a>
 
-<!--                            <img th:src="@{|/files/${post.postImages[0].fileName}|}" alt="no_img" class="img-fluid rounded shadow-sm">-->
-<!--                            <img th:src="@{|/files/${post.postImages != null and not #lists.isEmpty(post.postImages) ? post.postImages[0].fileName : 'default-image.jpg'}|}"-->
-<!--                                 alt="no_img" class="img-fluid rounded shadow-sm">-->
+                            <!--                            <img th:src="@{|/files/${post.postImages[0].fileName}|}" alt="no_img" class="img-fluid rounded shadow-sm">-->
+                            <!--                            <img th:src="@{|/files/${post.postImages != null and not #lists.isEmpty(post.postImages) ? post.postImages[0].fileName : 'default-image.jpg'}|}"-->
+                            <!--                                 alt="no_img" class="img-fluid rounded shadow-sm">-->
                         </div>
-                    </div>
+<!--                    </div>-->
 
 
                 </div>
-<!--                <div class="py-4">-->
-<!--                    <h5 class="mb-3">Recent posts</h5>-->
-<!--                    <div class="p-4 bg-light rounded shadow-sm">-->
-<!--                        <p class="font-italic mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>-->
-<!--                        <ul class="list-inline small text-muted mt-3 mb-0">-->
-<!--                            <li class="list-inline-item"><i class="fa fa-comment-o mr-2"></i>12 Comments</li>-->
-<!--                            <li class="list-inline-item"><i class="fa fa-heart-o mr-2"></i>200 Likes</li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <!--                <div class="py-4">-->
+                <!--                    <h5 class="mb-3">Recent posts</h5>-->
+                <!--                    <div class="p-4 bg-light rounded shadow-sm">-->
+                <!--                        <p class="font-italic mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>-->
+                <!--                        <ul class="list-inline small text-muted mt-3 mb-0">-->
+                <!--                            <li class="list-inline-item"><i class="fa fa-comment-o mr-2"></i>12 Comments</li>-->
+                <!--                            <li class="list-inline-item"><i class="fa fa-heart-o mr-2"></i>200 Likes</li>-->
+                <!--                        </ul>-->
+                <!--                    </div>-->
+                <!--                </div>-->
             </div>
         </div><!-- End profile widget -->
 
@@ -166,37 +158,37 @@
 
 
 
-<!--    <script>-->
-<!--        document.addEventListener("DOMContentLoaded", function() {-->
-<!--            function submitForm(petid) {-->
-<!--                var formId = 'petForm' + petid;-->
-<!--                var form = document.getElementById(formId);-->
+    <!--    <script>-->
+    <!--        document.addEventListener("DOMContentLoaded", function() {-->
+    <!--            function submitForm(petid) {-->
+    <!--                var formId = 'petForm' + petid;-->
+    <!--                var form = document.getElementById(formId);-->
 
-<!--                if (form) {-->
-<!--                    form.submit();-->
-<!--                } else {-->
-<!--                    console.error('Form not found:', formId);-->
-<!--                }-->
-<!--            }-->
-<!--        });-->
-<!--    </script>-->
+    <!--                if (form) {-->
+    <!--                    form.submit();-->
+    <!--                } else {-->
+    <!--                    console.error('Form not found:', formId);-->
+    <!--                }-->
+    <!--            }-->
+    <!--        });-->
+    <!--    </script>-->
 </div>
 <script>
-<!--    function submitForm(petid) {-->
-<!--        var formId = 'petForm' + petid;-->
-<!--        document.getElementById(formId).submit();-->
-<!--    }-->
+    <!--    function submitForm(petid) {-->
+    <!--        var formId = 'petForm' + petid;-->
+    <!--        document.getElementById(formId).submit();-->
+    <!--    }-->
 
-        function submitForm(petid) {
-            var formId = 'petForm' + petid;
-            var form = document.getElementById(formId);
+            function submitForm(petid) {
+                var formId = 'petForm' + petid;
+                var form = document.getElementById(formId);
 
-            if (form) {
-                form.submit();
-            } else {
-                console.error('Form not found:', formId);
-            }
-    }
+                if (form) {
+                    form.submit();
+                } else {
+                    console.error('Form not found:', formId);
+                }
+        }
 
 
 </script>

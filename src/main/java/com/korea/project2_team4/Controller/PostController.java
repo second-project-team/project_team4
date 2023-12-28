@@ -95,11 +95,14 @@ public class PostController {
     }
 
     @GetMapping("/community/main")
-    public String communityMain(Model model, @RequestParam(name = "sort", required = false) String sort, @RequestParam(value = "page", defaultValue = "0") int page,
-                                @RequestParam(name = "searchTagName", required = false) String searchTagName,
-                                @RequestParam(name="category", required = false)String category) {
+    public String communityMain(Model model, @RequestParam(name="category", required = false)String category,
+                                @RequestParam(name = "sort", required = false) String sort,
+                                @RequestParam(value = "page", defaultValue = "0") int page,
+                                @RequestParam(name = "searchTagName", required = false) String searchTagName) {
         Page<Post> allPosts;
         allPosts = postService.postList(page);
+
+
         if (searchTagName == null) {
             searchTagName = "";  // 기본적으로 빈 문자열로 설정
         }
@@ -109,25 +112,32 @@ public class PostController {
         if (sort == null) {
             sort = "latest";
         }
-//        세가지..레파지토리?
-//                postService.sortList(searchTagName, sort, category); 세가지 한꺼번에, 메서드에 소트, 정렬된 포스트 넘겨서
-        if (sort != null && !sort.isEmpty()) {
-            if (sort.equals("latest")) {
-                allPosts = postService.postList(page);
 
-            } else if (sort.equals("likeCount")) {
-                allPosts = postService.getPostsOrderByLikeCount(page);
-            } else {
-                allPosts = postService.getPostsOrderByCommentCount(page);
-            }
-        }
-        if (searchTagName != null && !searchTagName.isEmpty()) {
-//            allPosts = postService.getPostsByTagName(page, searchTagName, sort); 이렇게 하라고 하심 내일수정
-            allPosts = postService.getPostsByTagName(page, searchTagName);
-        }
-        if (category !=null && !category.isEmpty()) {
-            allPosts = postService.getPostsByCategory(page,category);
-        }
+        allPosts = postService.getPostsBytagAndcategoryAndsort(page, searchTagName, category, sort);
+
+        //잘되던거 밑에
+//        if (searchTagName != null && !searchTagName.isEmpty()) { //태그부터 분류해야함. 뭔 tagMap때매 복잡함;;
+//            allPosts = postService.getPostsByTagName(page,searchTagName);
+//
+//
+//            if ((category !=null && !category.isEmpty()) || (sort != null && !sort.isEmpty())) {
+//                allPosts = postService.getPostsByCategory(allPosts, page ,category);
+//
+//                allPosts = postService.getPostsByCategoryAndSort(allPosts, page, category, sort) ;
+//
+////                    if (sort != null && !sort.isEmpty()) {
+//                        if (sort.equals("latest")) {
+//
+//                        } else if (sort.equals("likeCount")) {
+//                            allPosts = postService.getPostsBysort(allPosts, page, sort);
+//                        } else {
+//                            allPosts = postService.getPostsBysort(allPosts, page, sort);
+//                        }
+////                    }
+//            }
+//        }
+
+        model.addAttribute("category",category);
         model.addAttribute("searchTagName", searchTagName);
         model.addAttribute("sort", sort);
         model.addAttribute("paging", allPosts);

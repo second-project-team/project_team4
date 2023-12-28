@@ -11,9 +11,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -175,7 +177,7 @@ public class PostController {
     }
 
     @GetMapping("/showMoreTitle")
-    public String showMorePosts(@RequestParam(value = "kw", required = false) String kw,
+    public String showMoreTitle(@RequestParam(value = "kw", required = false) String kw,
                                   @RequestParam(value = "page", defaultValue = "0") int page,
                                   Model model) {
         Page<Post> pagingByTitle = postService.pagingByTitle(kw,page);
@@ -223,7 +225,11 @@ public class PostController {
     }
 
     @GetMapping("/detail/{id}/{hit}")
-    public String postDetail(Model model, @PathVariable("id") Long id, @PathVariable("hit") Integer hit) {
+    public String postDetail(Principal principal, Model model, @PathVariable("id") Long id, @PathVariable("hit") Integer hit) {
+        if (principal != null) {
+            Member member = this.memberService.getMember(principal.getName());
+            model.addAttribute("loginedMember", member);
+        }
         if (hit == 0) {
             Post post = postService.getPostIncrementView(id);
             model.addAttribute("post", post);
@@ -236,16 +242,19 @@ public class PostController {
     }
 
     @PostMapping("/postLike")
-    public String postLike(Principal principal, @RequestParam("id") Long id) {
+    public String postLike(Principal principal, @RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
         if (principal != null) {
             Post post = this.postService.getPost(id);
             Member member = this.memberService.getMember(principal.getName());
             Long postId = post.getId();
+            boolean isChecked = false;
             if (postService.isLiked(post, member)) {
                 postService.unLike(post, member);
             } else {
                 postService.Like(post, member);
+                isChecked = true;
             }
+            redirectAttributes.addFlashAttribute("isChecked", isChecked);
             return "redirect:/post/detail/" + postId + "/1";
         } else {
             return "redirect:/member/login";

@@ -244,14 +244,6 @@ public class PostService {
         }
     }
 
-    public Page<Post> getPostsByTagName(Page<Post> categoriedPosts, int page, String searchTagName) {
-
-
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return postRepository.findByTagName(searchTagName, pageable);
-    }
 
     //findAll 메서드 하나 만들고
     // 리스트? 페이지? 로 받아와서 category별 정렬 메서드, sort별, tagname별 세개 따로 메서드 만들고싶은데,

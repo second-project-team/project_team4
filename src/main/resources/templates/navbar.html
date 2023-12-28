@@ -39,7 +39,7 @@
                 </li>
                 <li class="nav-item">
 
-                    <a class="nav-link active" th:href="@{/post/createPost}">글쓰기(임시)</a>
+                    <a class="nav-link active" sec:authorize="isAuthenticated()" th:href="@{/post/createPost}">글쓰기(임시)</a>
 
                 </li>
             </ul>
@@ -49,6 +49,9 @@
                     <a class="nav-link rounded" sec:authorize="isAnonymous()" th:href="@{|/member/findUserName|}">아이디 찾기</a>
                     <a class="nav-link rounded" sec:authorize="isAnonymous()" th:href="@{|/member/findPassword|}">비밀 번호 찾기</a>
                     <li class="nav-item">
+                    <li sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="nav-link rounded" th:href="@{|/member/adminPage|}">관리자</a>
+                    </li>
                         <a class="nav-link rounded" sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
                         <a class="nav-link rounded" sec:authorize="isAuthenticated()"
                            th:href="@{/member/logout}">로그아웃</a>

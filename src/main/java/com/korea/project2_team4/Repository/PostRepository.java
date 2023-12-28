@@ -43,9 +43,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "WHERE LOWER(c.content) LIKE LOWER(CONCAT('%',:kw,'%')) ")
     List<Post> findByCommentContent(@Param("kw") String kw);
 
-    Page<Post> findAll(Pageable pageable);
 
-    // 태그명을 기준으로 해당 태그를 갖고 있는 포스트를 페이징하여 조회
+     //태그명을 기준으로 해당 태그를 갖고 있는 포스트를 페이징하여 조회
     @Query("SELECT p FROM Post p JOIN p.tagMaps tm JOIN tm.tag t WHERE t.name = :tagName")
     Page<Post> findByTagName(@Param("tagName") String tagName, Pageable pageable);
 
@@ -60,12 +59,78 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByLikeMembers(Member member, Pageable pageable);
 
 
+
+//   ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 선영 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
     //작성자 게시물 리스트all 반환
     @Query("SELECT p FROM Post p WHERE p.author.profileName LIKE %:name%")
     List<Post> findAllByauthor(@Param("name")String name);
     //작성자 게시물 리스트 페이징처리 반환
     @Query("SELECT p FROM Post p WHERE p.author.profileName LIKE %:name%")
     Page<Post> findAllByauthorPage(@Param("name")String name, Pageable pageable);
+
+    //태그+카테고리, 좋아요내림차순
+    @Query("SELECT p FROM Post p " +
+            "JOIN p.tagMaps tm JOIN tm.tag t " +
+            "WHERE (t.name = :tagName OR (:category IS NOT NULL AND p.category LIKE %:category%)) ")
+    Page<Post> findAllByTagNameAndCategory(
+            @Param("tagName") String tagName,
+            @Param("category") String category,
+            Pageable pageable
+    );
+    //태그+카테고리, 댓글수내림차순
+    @Query("SELECT p FROM Post p " +
+            "JOIN p.tagMaps tm JOIN tm.tag t " +
+            "WHERE (t.name = :tagName OR (:category IS NOT NULL AND p.category LIKE %:category%)) " +
+            "ORDER BY SIZE(p.comments) DESC")
+    Page<Post> findAllByTagNameAndCategoryOrderByCommentsSizeDesc(
+            @Param("tagName") String tagName,
+            @Param("category") String category,
+            Pageable pageable
+    );
+
+    //태그, 좋아요 내림차순
+    @Query("SELECT p FROM Post p JOIN p.tagMaps tm JOIN tm.tag t WHERE t.name = :tagName ORDER BY SIZE(p.likeMembers) DESC")
+    Page<Post> findAllByTagNameOrderByLikeMembersSizeDesc(@Param("tagName") String tagName, Pageable pageable);
+
+    //태그, 댓글수 내림차순
+    @Query("SELECT p FROM Post p JOIN p.tagMaps tm JOIN tm.tag t WHERE t.name = :tagName ORDER BY SIZE(p.comments) DESC")
+    Page<Post> findAllByTagNameOrderByCommentsSizeDesc(@Param("tagName") String tagName, Pageable pageable);
+
+    //카테고리, 좋아요 내림차순
+    @Query("SELECT p FROM Post p WHERE p.category IS NOT NULL AND p.category LIKE %:category% ORDER BY SIZE(p.likeMembers) DESC")
+    Page<Post> findAllByCategoryAndOrderByLikeMembersSizeDesc(@Param("category") String category, Pageable pageable);
+
+
+    //카테고리, 댓글수 내림차순
+    @Query("SELECT p FROM Post p WHERE p.category IS NOT NULL AND p.category LIKE %:category% ORDER BY SIZE(p.comments) DESC")
+    Page<Post> findAllByCategoryAndOrderByCommentsSizeDesc(@Param("category") String category, Pageable pageable);
+
+    @Query("SELECT p FROM Post p WHERE p.category IS NOT NULL AND p.category LIKE %:category%")
+    Page<Post> findAllByCategory(@Param("category") String category, Pageable pageable);
+
+    @Query("SELECT p FROM Post p JOIN p.tagMaps tm JOIN tm.tag t WHERE t.name = :tagName")
+    Page<Post> findAllByTagName(@Param("tagName") String tagName, Pageable pageable);
+
+    @Query("SELECT p FROM Post p " +
+            "JOIN p.tagMaps tm JOIN tm.tag t " +
+            "WHERE (t.name = :tagName OR (:category IS NOT NULL AND p.category LIKE %:category%)) " +
+            "ORDER BY SIZE(p.likeMembers) DESC")
+    Page<Post> findAllByTagNameAndCategoryOrderByLikeMembersSizeDesc(
+            @Param("tagName") String tagName,
+            @Param("category") String category,
+            Pageable pageable
+    );
+
+    //걍전체 좋아요내림차순
+    //걍전체 댓글수내림차순
+
+
+
+
+
+
+//   ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 선영 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 
 

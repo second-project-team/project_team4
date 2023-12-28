@@ -17,8 +17,10 @@
                     </div>
 
                     <div class="col" style="">
-                        <a type="button" class="btn btn-outline-info" th:href="@{/post/community/main(searchTagName=${searchTagName}, sort=${sort}, category='자유게시판')}">자유게시판</a>
-                        <a type="button" class="btn btn-outline-info" th:href="@{/post/community/main(searchTagName=${searchTagName}, sort=${sort}, category='QnA')}">QnA</a>
+                        <div class="btn btn-outline-info" th:text="${category}"></div>
+
+<!--                        <a type="button" class="btn btn-outline-info" th:href="@{/post/community/main(searchTagName=${searchTagName}, sort=${sort}, category='자유게시판')}">자유게시판</a>-->
+<!--                        <a type="button" class="btn btn-outline-info" th:href="@{/post/community/main(searchTagName=${searchTagName}, sort=${sort}, category='QnA')}">QnA</a>-->
                     </div>
 
                 </div>

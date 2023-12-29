@@ -77,7 +77,7 @@
                             </button>
                         </div>
                         <div class="col-md-auto"
-                             th:if="${post.author?.id == loginedMember?.id or loginedMember.getRole() == 'ROLE_ADMIN'}">
+                             th:if="${post.author?.id == loginedMember?.id or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
                             <form th:action="@{|/post/deletePost/${post.id}|}" method="post"
                                   onsubmit="return DeletePost();">
                                 <button type="submit" class="btn btn-danger admin-btn" style="margin-right: 2rem">삭제
@@ -222,7 +222,7 @@
                                     </button>
                                 </div>
                                 <div class="col-md-auto"
-                                     th:if="${comment.author?.id == loginedMember?.id or loginedMember.getRole() == 'ROLE_ADMIN'}">
+                                     th:if="${comment.author?.id == loginedMember?.id or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
                                     <form th:action="@{|/comment/deleteComment/${comment.id}|}" method="post"
                                           onsubmit="return DeleteComment();">
                                         <button type="submit" class="btn btn-danger admin-btn"

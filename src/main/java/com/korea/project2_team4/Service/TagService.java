@@ -28,4 +28,9 @@ public class TagService {
     public void deleteById(Long id) {
         tagRepository.deleteById(id);
     }
+    public boolean tagExists(String tagName) {
+        // 태그 이름을 사용하여 데이터베이스에서 태그를 조회하고 존재 여부를 반환
+        return tagRepository.existsByName(tagName);
+
+    }
 }

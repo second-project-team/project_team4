@@ -86,13 +86,16 @@ public class PostController {
             imageService.uploadPostImage(imageFiles, post);
         }
         if (newTagNames != null && !newTagNames.isEmpty()) {
+
             for (String newTagName : newTagNames) {
-                Tag tag = new Tag();
-                tag.setName(newTagName);
-                tagService.save(tag);
+                if (!tagService.tagExists(newTagName)) {
+                    Tag tag = new Tag();
+                    tag.setName(newTagName);
+                    tagService.save(tag);
+                }
             }
         }
-            postService.save(post);
+        postService.save(post);
 
         if (selectedTagNames != null && !selectedTagNames.isEmpty()) {
             for (String selectedTagName : selectedTagNames) {

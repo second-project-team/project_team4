@@ -231,6 +231,7 @@ public class PostController {
         } else {
             Post post = postService.getPost(id);
             model.addAttribute("post", post);
+
         }
         List<Tag> allTags = tagService.getAllTags();
         model.addAttribute("allTags", allTags);

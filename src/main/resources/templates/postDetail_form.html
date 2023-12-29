@@ -184,30 +184,34 @@
                             <div style="background-color: #f0f0f0; padding: 10px; display: inline-block; border-radius: 1rem;">
                                 <div style="font-size: 18px; font-weight: bold; color: #333;"
                                      th:text="${comment.author.profileName}"></div>
-                                <div style="font-size: 14px; color: #777;"
-                                     th:text="${#temporals.format(comment.createDate, 'yyyy년 MM월 dd일 HH:mm')}"></div>
+                                <div>
+                                    <div th:if="${comment.modifyDate != null}">
+                                <span style="font-size: 14px; color: #777;"
+                                      th:text="${#temporals.format(comment.modifyDate, 'yyyy년 MM월 dd일 HH:mm')}"></span>
+                                    </div>
+                                    <div th:unless="${comment.modifyDate != null}">
+                                <span style="font-size: 14px; color: #777;"
+                                      th:text="${#temporals.format(comment.createDate, 'yyyy년 MM월 dd일 HH:mm')}"></span>
+                                    </div>
+                                </div>
                             </div>
-                            <!--                            <form class="flex-fill d-flex justify-content-end" th:action="@{|/comment/commentLike|}"-->
-                            <!--                                  method="post">-->
-                            <!--                                <input type="hidden" name="id" th:value="${comment.id}">-->
-                            <!--                                <button class="btn btn-outline-primary" type="submit">-->
-                            <!--                                    좋아요-->
-                            <!--                                    <span class="badge rounded-pill bg-primary" id="commentLikeCheck"-->
-                            <!--                                          th:text="${comment.likeMembers.size()}"></span>-->
-                            <!--                                </button>-->
-                            <!--                            </form>-->
-                            <div>
-                                <input type="hidden" id="CommentHeart-fill-${comment.id}"
-                                       th:value="${#lists.contains(comment.likeMembers, loginedMember)}">
-                                <form id="CommentLikeForm-${comment.id}" class="flex-fill d-flex justify-content-end"
-                                      th:action="@{|/comment/commentLike|}" method="post"
-                                      onsubmit="return toggleCommentHeartIcon('${comment.id}')">
+<!--                            <form class="flex-fill d-flex justify-content-end" th:action="@{|/comment/commentLike|}"-->
+<!--                                  method="post">-->
+<!--                                <input type="hidden" name="id" th:value="${comment.id}">-->
+<!--                                <button class="btn btn-outline-primary" type="submit">-->
+<!--                                    좋아요-->
+<!--                                    <span class="badge rounded-pill bg-primary" id="commentLikeCheck"-->
+<!--                                          th:text="${comment.likeMembers.size()}"></span>-->
+<!--                                </button>-->
+<!--                            </form>-->
+                            <div th:with="fill=${#lists.contains(comment.likeMembers, loginedMember)}">
+                                <input type="hidden" th:id="${'CommentHeart-fill-' + comment.id}" th:value="${fill}">
+                                <form th:id="${'CommentLikeForm-' + comment.id}" class="flex-fill d-flex justify-content-end" th:action="@{|/comment/commentLike|}"
+                                      method="post" onsubmit="return toggleCommentHeartIcon(this)">
                                     <input type="hidden" name="id" th:value="${comment.id}">
-                                    <i id="CommentHeartIcon-${comment.id}" class="bi bi-heart"
-                                       onclick="CommentHeartSubmit('${comment.id}')"
+                                    <i th:id="${'CommentHeartIcon-' + comment.id}" class="bi" th:classappend="${fill} ? 'bi-heart-fill' : 'bi-heart'" th:onclick="CommentHeartSubmit([[${comment.id}]])"
                                        style="font-size: 2rem; color:red; cursor:pointer;">
-                                        <span class="badge rounded-pill bg-primary"
-                                              th:text="${comment.likeMembers.size()}"></span>
+                                        <span class="badge rounded-pill bg-primary" th:text="${comment.likeMembers.size()}"></span>
                                     </i>
                                 </form>
                             </div>
@@ -286,7 +290,7 @@
             </style>
         </div>
     </div>
-    <script layout:fragment="script" type='text/javascript'>
+    <script layout:fragment="script" type='text/javascript' th:inline="javascript">
         function DeletePost() {
             return confirm("게시글을 삭제하시겠습니까?");
         }
@@ -328,24 +332,23 @@
         toggleHeartIcon();
 
         // 댓글 좋아요
-            function toggleCommentHeartIcon(commentId) {
-        var heartFill = document.getElementById('CommentHeart-fill-' + commentId);
-        var isFilled = heartFill.value;
-        var commentHeartIcon = document.getElementById('CommentHeartIcon-' + commentId);
-        if (isFilled == "" || isFilled === "false") {
-            commentHeartIcon.classList.remove('bi-heart-fill');
-            commentHeartIcon.classList.add('bi-heart');
-        } else {
-            commentHeartIcon.classList.remove('bi-heart');
-            commentHeartIcon.classList.add('bi-heart-fill');
+        function toggleCommentHeartIcon(commentId) {
+            var heartFill = document.getElementById('CommentHeart-fill-' + commentId);
+            var isFilled = heartFill.value;
+            var commentHeartIcon = document.getElementById('CommentHeartIcon-' + commentId);
+            if (isFilled == "" || isFilled === "false") {
+                commentHeartIcon.classList.remove('bi-heart-fill');
+                commentHeartIcon.classList.add('bi-heart');
+            } else {
+                commentHeartIcon.classList.remove('bi-heart');
+                commentHeartIcon.classList.add('bi-heart-fill');
+            }
         }
-    }
 
-    function CommentHeartSubmit(commentId) {
-        document.getElementById('CommentLikeForm-' + commentId).submit();
-    }
+        function CommentHeartSubmit(commentId) {
+            document.getElementById('CommentLikeForm-' + commentId).submit();
+        }
 
-        toggleCommentHeartIcon('${comment.id}');
     </script>
 </div>
 </html>

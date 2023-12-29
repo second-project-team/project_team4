@@ -105,7 +105,7 @@ public class PostController {
             model.addAttribute("loginedMember", member);
         }
         Page<Post> allPosts;
-        allPosts = postService.postList(page);
+        allPosts = postService.postList(page);//최신순문제잇음
 
 
         if (searchTagName == null) {
@@ -118,29 +118,19 @@ public class PostController {
             sort = "latest";
         }
 
-        allPosts = postService.getPostsBytagAndcategoryAndsort(page, searchTagName, category, sort);
+        if (searchTagName.equals("전체") ) {
+            if (sort.equals("likeCount")){
+                allPosts = postService.getPostsOrderByLikeCount(page);
+            } else if (sort.equals("commentCount")) {
+                allPosts = postService.getPostsOrderByCommentCount(page);
+            } else {
+                allPosts = postService.postList(page);
+            }
+        }else {
+            allPosts = postService.getPostsBytagAndcategoryAndsort(page, searchTagName, category, sort);
+        }
 
-        //잘되던거 밑에
-//        if (searchTagName != null && !searchTagName.isEmpty()) { //태그부터 분류해야함. 뭔 tagMap때매 복잡함;;
-//            allPosts = postService.getPostsByTagName(page,searchTagName);
-//
-//
-//            if ((category !=null && !category.isEmpty()) || (sort != null && !sort.isEmpty())) {
-//                allPosts = postService.getPostsByCategory(allPosts, page ,category);
-//
-//                allPosts = postService.getPostsByCategoryAndSort(allPosts, page, category, sort) ;
-//
-////                    if (sort != null && !sort.isEmpty()) {
-//                        if (sort.equals("latest")) {
-//
-//                        } else if (sort.equals("likeCount")) {
-//                            allPosts = postService.getPostsBysort(allPosts, page, sort);
-//                        } else {
-//                            allPosts = postService.getPostsBysort(allPosts, page, sort);
-//                        }
-////                    }
-//            }
-//        }
+        //sorting 이랑 태그는 ㅇㅋ 근데 카테고리 이상 --> null들어가는거쩔수없음 . 카테고리 필수선택으로 할지?
 
         model.addAttribute("category", category);
         model.addAttribute("searchTagName", searchTagName);

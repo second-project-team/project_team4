@@ -80,7 +80,7 @@
                                             <p th:text="|${'댓글 : ' + #lists.size(post.comments)}|"></p>
                                         </div>
                                         <p style="margin-top: 10px; font-size: 17px; " th:if="${!post.getTagList().isEmpty()}">
-                                            <span th:each="tag, loop : ${post.getTagList()}" th:text="@{|#${tag.name}|}"></span>
+                                            <span th:each="tag, loop : ${post.getTagList()}" th:text="' '+ @{|#${tag.name}|}"></span>
                                         </p>
                                         <div>
                                             <p th:if="${post.category != '카테고리' && post.category != null}" th:text="${'카테고리 : ' + post.category}"></p>

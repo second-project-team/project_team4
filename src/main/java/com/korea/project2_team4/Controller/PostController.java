@@ -68,7 +68,9 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/createPost")
     public String createPost(Principal principal, PostForm postForm, BindingResult bindingResult
-            , @RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles, @RequestParam(value = "selectedTagNames", required = false) List<String> selectedTagNames) throws IOException, NoSuchAlgorithmException {
+            , @RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
+                             @RequestParam(value = "selectedTagNames", required = false) List<String> selectedTagNames,
+                             @RequestParam(value = "newTagNames", required = false) List<String> newTagNames) throws IOException, NoSuchAlgorithmException {
         //      Profile testProfile = profileService.getProfilelist().get(0);
 //      profileService.updateprofile(testProfile,profileForm.getProfileName(),profileForm.getContent());
         Post post = new Post();
@@ -82,7 +84,15 @@ public class PostController {
         if (imageFiles != null && !imageFiles.isEmpty()) {
             imageService.uploadPostImage(imageFiles, post);
         }
-        postService.save(post);
+        if (newTagNames != null && !newTagNames.isEmpty()) {
+            for (String newTagName : newTagNames) {
+                Tag tag = new Tag();
+                tag.setName(newTagName);
+                tagService.save(tag);
+            }
+        }
+            postService.save(post);
+
         if (selectedTagNames != null && !selectedTagNames.isEmpty()) {
             for (String selectedTagName : selectedTagNames) {
                 Tag tag = tagService.getTagByTagName(selectedTagName);
@@ -90,8 +100,15 @@ public class PostController {
                 tagMap.setPost(post);
                 tagMap.setTag(tag);
                 tagMapService.save(tagMap);
+//                if (newTagNames != null && !newTagNames.isEmpty()) {
+//                    for (String newTagName : newTagNames) {
+//                        tagService.deleteById(tagService.getTagByTagName(newTagName).getId());
+//                    }
+//                }
             }
         }
+
+
         return "redirect:/post/community/main";
     }
 
@@ -118,15 +135,15 @@ public class PostController {
             sort = "latest";
         }
 
-        if (searchTagName.equals("전체") ) {
-            if (sort.equals("likeCount")){
+        if (searchTagName.equals("전체")) {
+            if (sort.equals("likeCount")) {
                 allPosts = postService.getPostsOrderByLikeCount(page);
             } else if (sort.equals("commentCount")) {
                 allPosts = postService.getPostsOrderByCommentCount(page);
             } else {
                 allPosts = postService.postList(page);
             }
-        }else {
+        } else {
             allPosts = postService.getPostsBytagAndcategoryAndsort(page, searchTagName, category, sort);
         }
 
@@ -220,7 +237,7 @@ public class PostController {
     }
 
     @GetMapping("/detail/{id}/{hit}")
-    public String postDetail(Principal principal, Model model, @PathVariable("id") Long id, @PathVariable("hit") Integer hit,PostForm postForm) {
+    public String postDetail(Principal principal, Model model, @PathVariable("id") Long id, @PathVariable("hit") Integer hit, PostForm postForm) {
         if (principal != null) {
             Member member = this.memberService.getMember(principal.getName());
             model.addAttribute("loginedMember", member);
@@ -235,7 +252,7 @@ public class PostController {
         }
         List<Tag> allTags = tagService.getAllTags();
         model.addAttribute("allTags", allTags);
-        model.addAttribute("postForm",postForm);
+        model.addAttribute("postForm", postForm);
 
         return "postDetail_form";
     }

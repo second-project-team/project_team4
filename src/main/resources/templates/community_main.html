@@ -14,11 +14,11 @@
                 <div class="container">
                     <div class="row row-cols-3">
                         <div class="col" style="">
-<!--                            <a type="button"-->
-<!--                               th:href="@{/post/community/main(searchTagName='전체', sort=${sort}, category=${category})}"-->
-<!--                               th:class="'btn btn-outline-warning' + (${category == '전체' ? ' selected' : ''})">-->
-<!--                                전체-->
-<!--                            </a>-->
+                            <!--                            <a type="button"-->
+                            <!--                               th:href="@{/post/community/main(searchTagName='전체', sort=${sort}, category=${category})}"-->
+                            <!--                               th:class="'btn btn-outline-warning' + (${category == '전체' ? ' selected' : ''})">-->
+                            <!--                                전체-->
+                            <!--                            </a>-->
 
                             <a type="button" class="btn btn-outline-warning" th:href="@{/post/community/main(searchTagName='전체', sort=${sort}, category=${category})}">전체</a>
                             <a type="button" class="btn btn-outline-warning" th:href="@{/post/community/main(searchTagName='강아지', sort=${sort}, category=${category})}" >강아지</a>
@@ -33,7 +33,7 @@
                         <!--정렬 기능 버튼을 번갈아가면서 누르면 여러개의 태그, 카테고리, 분류 정보가 꼬여서 인식을 못 하는 것 같습니다. 임시로 본래 분류 기능만 사용하도록 수정해서 쓰겠습니다.-->
                     </div>
 
-<!--정렬 기능 버튼을 번갈아가면서 누르면 여러개의 태그, 카테고리, 분류 정보가 꼬여서 인식을 못 하는 것 같습니다. 임시로 본래 분류 기능만 사용하도록 수정해서 쓰겠습니다.-->
+                    <!--정렬 기능 버튼을 번갈아가면서 누르면 여러개의 태그, 카테고리, 분류 정보가 꼬여서 인식을 못 하는 것 같습니다. 임시로 본래 분류 기능만 사용하도록 수정해서 쓰겠습니다.-->
                 </div>
                 <div class="btn-group">
                     <a th:href="@{/post/community/main(searchTagName=${searchTagName}, sort='latest', category=${category})}" class="btn btn-primary">최신순</a>
@@ -88,25 +88,14 @@
                                         <div>
                                             <p th:text="${'조회수 : ' + post.view}"></p>
                                         </div>
-                                        <span id="voteCount" th:text="${'좋아요 : '+post.likeMembers.size()}"></span>
-                                        <p th:text="|${'댓글 : ' + #lists.size(post.comments)}|"></p>
-                                    </div>
-                                    <p style="margin-top: 10px; font-size: 17px; " th:if="${!post.getTagList().isEmpty()}">
-                                        <span th:each="tag, loop : ${post.getTagList()}" th:text="@{|#${tag.name}|}"></span>
-                                    </p>
-                                    <div>
-                                        <p th:if="${post.category} != '카테고리'" th:text="${'카테고리 : ' + post.category}"></p>
-                                    </div>
-                                    <div>
-                                        <p th:text="${'조회수 : ' + post.view}"></p>
-                                    </div>
-                                    <div class="col-md-auto" th:if="${loginedMember.getRole() == 'ROLE_ADMIN'}">
-                                        <form th:action="@{|/post/deletePost/${post.id}|}" method="post"
-                                              onsubmit="return deletePost()">
-                                            <button type="submit" class="btn btn-danger admin-btn"
-                                                    style="margin-right: 2rem">삭제
-                                            </button>
-                                        </form>
+                                        <div class="col-md-auto" th:if="${loginedMember.getRole() == 'ROLE_ADMIN'}">
+                                            <form th:action="@{|/post/deletePost/${post.id}|}" method="post"
+                                                  onsubmit="return deletePost()">
+                                                <button type="submit" class="btn btn-danger admin-btn"
+                                                        style="margin-right: 2rem">삭제
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -140,13 +129,11 @@
             </div>
         </div>
     </div>
-
-
+        <script layout:fragment="script" type='text/javascript'>
+            function deletePost() {
+            return confirm("게시글을 삭제하시겠습니까?");
+            }
+        </script>
     </body>
 </div>
-<script layout:fragment="script" type='text/javascript'>
-function deletePost() {
-return confirm("게시글을 삭제하시겠습니까?");
-}
-</script>
 </html>

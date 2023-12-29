@@ -182,7 +182,7 @@ public class MemberService {
     }
 
     public void SendVerificationCode(String email,String verificationCode) {
-        emailService.sendEmail(email,"비마이펫 인증 번호 입니다","인증 번호 : "+verificationCode);
+        emailService.sendEmail(email,"PetPlanet 인증 번호 입니다","인증 번호 : "+verificationCode);
     }
     public static String generateRandomCode() {
         // 100000부터 999999까지의 랜덤 숫자 생성 (6자리)

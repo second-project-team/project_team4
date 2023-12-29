@@ -203,37 +203,6 @@ public class PostService {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         return postRepository.findAllByauthorPage(profile.getProfileName(), pageable);
     }
-//
-//    public Page<Post> getPostsByCategory(Page<Post> tagNamedPosts, int page, String category) {
-//        List<Post> newlist = new ArrayList<>();
-//        for (Post post : tagNamedPosts.getContent()) {
-//            if (post.getCategory().equals(category)) {
-//                newlist.add(post);
-//            }
-//        } // 태그+카테고리 화 된 리스트 +sort..
-////a밑에페이징처리학.;ㅏㅓㅣㅏㅓㅣㅏ;
-//        List<Sort.Order> sorts = new ArrayList<>();
-//        sorts.add(Sort.Order.desc("createDate"));
-//        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-//        return postRepository.findAllBycategory(category, pageable);
-//    }
-//
-//    public Page<Post> getPostsBysort(Page<Post> taggedcategoriedPosts, int page, String sort) {
-//
-//        Pageable pageable = PageRequest.of(page, 10);
-//        if (sort.equals("likeCount")) {
-//            return postRepository.findAllByTagNameAndCategoryOrderByLikeMembersSizeDesc(tagname, category, pageable);
-//        } else {
-////            return postRepository.findAllByTagNameAndCategoryOrderByCommentsSizeDesc(tagname, category, pageable);
-//        }
-//
-////페이징처리 ㅜ
-//        List<Sort.Order> sorts = new ArrayList<>();
-//        sorts.add(Sort.Order.desc("createDate"));
-////        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-////        return postRepository.findAllBycategory(category, pageable);
-//    }
-
 
     public Page<Post> getPostsBycategoryAndsortAndtag(int page, String category, String sort, String tagname) {
         Pageable pageable = PageRequest.of(page, 10);
@@ -244,123 +213,92 @@ public class PostService {
         }
     }
 
-
-    //findAll 메서드 하나 만들고
-    // 리스트? 페이지? 로 받아와서 category별 정렬 메서드, sort별, tagname별 세개 따로 메서드 만들고싶은데,
-    //페이징처리가 껴있어서 어떻게해야되는지 모르겠음.
-    // 예:
-    // public Page<Post> getPostsBycategory (Page<Post>, String category) { return postRepository.~~~ }
-    // public Page<Post> getPostsBysort (Page<Post>, String sort) { return postRepository.~~~ }
-    // public Page<Post> getPostsBytagName (Page<Post>, String tagname) { return postRepository.~~~ }
-
-
-//    public Page<Post> getPostsBytagAndcategoryAndsort(int page, String tagName, String category, String sort) {
-//        Pageable pageable = PageRequest.of(page, 10);
-//
-//        if ( (tagName != null) || (category != null) ) {
-//            if (sort.equals("likeCount")) {
-//                return this.postRepository.findAllByTagNameAndCategoryOrderByLikeMembersSizeDesc(tagName, category, pageable);
-//            } else {
-//                return this.postRepository.findAllByTagNameAndCategoryOrderByCommentsSizeDesc(tagName, category, pageable);
-//            }
-//
-//            if (category == null ) { //태그만 잇고 sort두가지
-//                if (sort.equals("likeCount")) {
-//                   return this.postRepository.findAllByTagNameOrderByLikeMembersSizeDesc(tagName, pageable);
-//                } else {
-//                    return this.postRepository.findAllByTagNameOrderByCommentsSizeDesc(tagName, pageable);
-//                }
-//            }
-//            if (tagName == null ) { //카테고리만 있고 sort두가지
-//                if (sort.equals("likeCount")) {
-//                    return this.postRepository.findAllByCategoryAndOrderByLikeMembersSizeDesc(category, pageable);
-//                } else {
-//                    return this.postRepository.findAllByCategoryAndOrderByCommentsSizeDesc(category, pageable);
-//                }
-//            }
-//        } else { //태그 카테고리 둘다 null
-//            if (sort.equals("likeCount")) {
-//                return this.postRepository.findAllOrderByLikeMembersSizeDesc(pageable);
-//            } else {
-//                return this.postRepository.findAllOrderByCommentsSizeDesc(pageable);
-//            }
-//        }
-//
-//    }
-
     public Page<Post> getPostsBytagAndcategoryAndsort(int page, String tagName, String category, String sort) {
         Pageable pageable = PageRequest.of(page, 10);
 
-        if (tagName != null || category != null) {
-            if (category == null) { // 태그만 있고 sort 두 가지
+        if ((!tagName.equals("")) || (!category.equals(""))) {
+            if (category.equals("")) { // 태그만 있고 sort 3 가지
                 if (sort.equals("likeCount")) {
                     return this.postRepository.findAllByTagNameOrderByLikeMembersSizeDesc(tagName, pageable);
                 } else if (sort.equals("commentCount")) {
                     return this.postRepository.findAllByTagNameOrderByCommentsSizeDesc(tagName, pageable);
-                } else {
-                    return this.postRepository.findAllByTagName(tagName,pageable);
+                } else { // 최신순 + 페이징 추가
+                    List<Sort.Order> sorts = new ArrayList<>();
+                    sorts.add(Sort.Order.desc("createDate"));
+                    Pageable pageable2 = PageRequest.of(page, 10, Sort.by(sorts));
+                    return this.postRepository.findAllByTagName(tagName, pageable2);
                 }
-            } else if (tagName == null) { // 카테고리만 있고 sort 두 가지
+            } else if (tagName.equals("")) { // 카테고리만 있고 sort 3 가지
                 if (sort.equals("likeCount")) {
                     return this.postRepository.findAllByCategoryAndOrderByLikeMembersSizeDesc(category, pageable);
                 } else if (sort.equals("commentCount")) {
                     return this.postRepository.findAllByCategoryAndOrderByCommentsSizeDesc(category, pageable);
-                } else {
-                    return this.postRepository.findAllByCategory(category, pageable);
+                } else { // 최신순 + 페이징 추가
+                    List<Sort.Order> sorts = new ArrayList<>();
+                    sorts.add(Sort.Order.desc("createDate"));
+                    Pageable pageable2 = PageRequest.of(page, 10, Sort.by(sorts));
+                    return this.postRepository.findAllByCategory(category, pageable2);
                 }
-            } else { // 태그, 카테고리 둘 다 있고 sort 두 가지
+
+            } else { // 태그, 카테고리 둘 다 있고 sort 3 가지
                 if (sort.equals("likeCount")) {
                     return this.postRepository.findAllByTagNameAndCategoryOrderByLikeMembersSizeDesc(tagName, category, pageable);
                 } else if (sort.equals("commentCount")) {
                     return this.postRepository.findAllByTagNameAndCategoryOrderByCommentsSizeDesc(tagName, category, pageable);
-                } else {
-                    return this.postRepository.findAllByTagNameAndCategory(tagName,category,pageable);
+                } else { // 최신순 + 페이징 추가
+                    List<Sort.Order> sorts = new ArrayList<>();
+                    sorts.add(Sort.Order.desc("createDate"));
+                    Pageable pageable2 = PageRequest.of(page, 10, Sort.by(sorts));
+                    return this.postRepository.findAllByTagNameAndCategory(tagName, category, pageable);
                 }
+
             }
-        } else { // 태그, 카테고리 둘 다 null
+        } else { // 태그, 카테고리 둘 다 ""
 
             if (sort.equals("likeCount")) {
                 return this.postRepository.findAllOrderByLikeMembersSizeDesc(pageable);
             } else if (sort.equals("commentCount")) {
                 return this.postRepository.findAllOrderByCommentsSizeDesc(pageable);
             } else {
-                return this.postRepository.findAll(pageable);
+                List<Sort.Order> sorts = new ArrayList<>();
+                sorts.add(Sort.Order.desc("createDate"));
+                Pageable pageable2 = PageRequest.of(page, 10, Sort.by(sorts));
+                return this.postRepository.findAll(pageable2);
             }
-
-
         }
+
+
     }
 
 
 //   ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 선영 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
-
-        public Page<Post> pagingByTitle (String kw,int page){
-            List<Sort.Order> sorts = new ArrayList<>();
-            sorts.add(Sort.Order.desc("id"));
-            Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
-            return postRepository.findByPostTitleWithPaging(kw, pageable);
-        }
-
-        public Page<Post> pagingByContent (String kw,int page){
-            List<Sort.Order> sorts = new ArrayList<>();
-            sorts.add(Sort.Order.desc("id"));
-            Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
-            return postRepository.findByPostContentWithPaging(kw, pageable);
-        }
-
-        public Page<Post> pagingByProfileName (String kw,int page){
-            List<Sort.Order> sorts = new ArrayList<>();
-            sorts.add(Sort.Order.desc("id"));
-            Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
-            return postRepository.findByProfileNameWithPaging(kw, pageable);
-        }
-  
-
-        public Page<Post> pagingByComment (String kw,int page){
-            List<Sort.Order> sorts = new ArrayList<>();
-            sorts.add(Sort.Order.desc("id"));
-            Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
-            return postRepository.findByCommentWithPaging(kw, pageable);
-        }
-
+    public Page<Post> pagingByTitle(String kw, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return postRepository.findByPostTitleWithPaging(kw, pageable);
     }
+
+    public Page<Post> pagingByContent(String kw, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return postRepository.findByPostContentWithPaging(kw, pageable);
+    }
+
+    public Page<Post> pagingByProfileName(String kw, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return postRepository.findByProfileNameWithPaging(kw, pageable);
+    }
+
+
+    public Page<Post> pagingByComment(String kw, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts));
+        return postRepository.findByCommentWithPaging(kw, pageable);
+    }
+
+}

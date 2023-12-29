@@ -64,6 +64,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 
 //   ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 선영 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    //메인페이지에 쓸 포스트리스트 좋아요순
+    @Query("SELECT p FROM Post p ORDER BY SIZE(p.likeMembers) DESC")
+    List<Post> findAllByLikesDesc();
 
     //작성자 게시물 리스트all 반환
     @Query("SELECT p FROM Post p WHERE p.author.profileName LIKE %:name%")

@@ -88,7 +88,7 @@
                                         <div>
                                             <p th:text="${'조회수 : ' + post.view}"></p>
                                         </div>
-                                        <div class="col-md-auto" th:if="${loginedMember.getRole() == 'ROLE_ADMIN'}">
+                                        <div class="col-md-auto" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
                                             <form th:action="@{|/post/deletePost/${post.id}|}" method="post"
                                                   onsubmit="return deletePost()">
                                                 <button type="submit" class="btn btn-danger admin-btn"

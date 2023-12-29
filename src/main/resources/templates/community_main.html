@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <!-- 추가한 CSS 파일 불러오기 -->
-        <link rel="stylesheet" type="text/css" href="/static/btn_selected.css">
+<!--        <link rel="stylesheet" type="text/css" href="/static/btn_selected.css">-->
         <title>Pet Planet!</title>
     </head>
     <body>
@@ -65,7 +65,7 @@
                                         <div>
                                             <form th:action="@{|/profile/detail|}">
                                                 <input type="hidden" name="postid" th:value="${post.id}">
-                                                <button type="submit" class="btn btn-link" th:text="${post.author.profileName}" style="text-decoration:none; color:inherit;"></button>
+                                                <button type="submit" class="btn btn-link" th:text="${post.author.profileName}" style="font-weight:bold; text-decoration:none; color:inherit;"></button>
                                             </form>
                                             <!--                                        <a th:href="@{|/profile/detail|}" th:text="${post.author.profileName}" style="text-decoration:none; color:inherit;"></a>-->
                                             <div>

@@ -44,7 +44,7 @@ build.gradle 에 implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialec
 ### 4주차: 기능구현 진행  + 템플릿 다듬기
 ### 5주차: 기능구현 진행  + 템플릿 다듬기
 ### 6주차: 기능구현 진행  + 템플릿 다듬기 + 자잘한 버그 수정
-### 7주차: 마무리 및 자잘한 버그 수정
+### 7주차: 마무리 및 자잘한 버그 수정 + 발표자료,대본 만들기
 
 ## ERD 설계_2차수정
 ![image](https://github.com/second-project-team/project_team4/assets/143607484/39430ae4-52a0-45e0-b981-7826379beb39)

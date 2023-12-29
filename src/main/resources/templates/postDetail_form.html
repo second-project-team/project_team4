@@ -76,7 +76,8 @@
                                     th:onclick="'openApproveModal(' + ${post.id} + ')'">수정
                             </button>
                         </div>
-                        <div class="col-md-auto" th:if="${post.author?.id == loginedMember?.id}">
+                        <div class="col-md-auto"
+                             th:if="${post.author?.id == loginedMember?.id or loginedMember.getRole() == 'ROLE_ADMIN'}">
                             <form th:action="@{|/post/deletePost/${post.id}|}" method="post"
                                   onsubmit="return DeletePost();">
                                 <button type="submit" class="btn btn-danger admin-btn" style="margin-right: 2rem">삭제
@@ -99,6 +100,7 @@
                                 <div class="modal-body">
                                     <!-- 여기에 승인 폼이나 내용을 추가하세요 -->
                                     <form th:action="@{|/post/updatePost/${post.id}|}" method="post"
+                                          th:object="${postForm}"
                                           onsubmit="return UpdatePost();">
                                         <input type="hidden" name="postId" th:value="${post.id}"/>
                                         <div class="font-400 ">
@@ -111,6 +113,33 @@
                                             <label for="postContent" class="form-label fw-bold">내용</label>
                                             <textarea name="content" class="form-control" id="postContent"
                                                       th:text="${post.content}" style="height: 300px"></textarea>
+                                        </div>
+                                        <br>
+                                        <div>
+                                            <label class="form=label">태그 선택</label>
+                                            <div th:each="tag : ${allTags}">
+                                                <div th:each="getTag : ${post.getTagList()}">
+                                                <label th:for="${'tag_' + tag.name}">
+
+                                                    <input type="checkbox" id="${'tag_' + tag.name}"
+                                                           name="selectedTagNames" th:value="${tag.name}"
+                                                           th:text="${tag.name}"
+                                                           th:checked="${getTag.name==tag.name}">
+                                                    <!--                <span th:text="${tag.name}"></span>-->
+                                                </label>
+                                                </div>
+                                            </div>
+                                            </label>
+                                        </div>
+                                        <br>
+<!--                                        <option selected>카테고리</option>-->
+                                        카테고리 선택
+                                        <div>
+                                            <select id="category" name="category" class="form-select" aria-label="Default select example">
+                                                <option selected>카테고리</option>
+                                                <option value="자유게시판" th:selected="${post.category == '자유게시판'}">자유게시판</option>
+                                                <option value="QnA" th:selected="${post.category == 'QnA'}">QnA</option>
+                                            </select>
                                         </div>
                                         <br>
                                         <div class="modal-footer">
@@ -158,21 +187,27 @@
                                 <div style="font-size: 14px; color: #777;"
                                      th:text="${#temporals.format(comment.createDate, 'yyyy년 MM월 dd일 HH:mm')}"></div>
                             </div>
-<!--                            <form class="flex-fill d-flex justify-content-end" th:action="@{|/comment/commentLike|}"-->
-<!--                                  method="post">-->
-<!--                                <input type="hidden" name="id" th:value="${comment.id}">-->
-<!--                                <button class="btn btn-outline-primary" type="submit">-->
-<!--                                    좋아요-->
-<!--                                    <span class="badge rounded-pill bg-primary" id="commentLikeCheck"-->
-<!--                                          th:text="${comment.likeMembers.size()}"></span>-->
-<!--                                </button>-->
-<!--                            </form>-->
+                            <!--                            <form class="flex-fill d-flex justify-content-end" th:action="@{|/comment/commentLike|}"-->
+                            <!--                                  method="post">-->
+                            <!--                                <input type="hidden" name="id" th:value="${comment.id}">-->
+                            <!--                                <button class="btn btn-outline-primary" type="submit">-->
+                            <!--                                    좋아요-->
+                            <!--                                    <span class="badge rounded-pill bg-primary" id="commentLikeCheck"-->
+                            <!--                                          th:text="${comment.likeMembers.size()}"></span>-->
+                            <!--                                </button>-->
+                            <!--                            </form>-->
                             <div>
-                                <input type="hidden" id="CommentHeart-fill-${comment.id}" th:value="${#lists.contains(comment.likeMembers, loginedMember)}">
-                                <form id="CommentLikeForm-${comment.id}" class="flex-fill d-flex justify-content-end" th:action="@{|/comment/commentLike|}" method="post" onsubmit="return toggleCommentHeartIcon('${comment.id}')">
+                                <input type="hidden" id="CommentHeart-fill-${comment.id}"
+                                       th:value="${#lists.contains(comment.likeMembers, loginedMember)}">
+                                <form id="CommentLikeForm-${comment.id}" class="flex-fill d-flex justify-content-end"
+                                      th:action="@{|/comment/commentLike|}" method="post"
+                                      onsubmit="return toggleCommentHeartIcon('${comment.id}')">
                                     <input type="hidden" name="id" th:value="${comment.id}">
-                                    <i id="CommentHeartIcon-${comment.id}" class="bi bi-heart" onclick="CommentHeartSubmit('${comment.id}')" style="font-size: 2rem; color:red; cursor:pointer;">
-                                        <span class="badge rounded-pill bg-primary" th:text="${comment.likeMembers.size()}"></span>
+                                    <i id="CommentHeartIcon-${comment.id}" class="bi bi-heart"
+                                       onclick="CommentHeartSubmit('${comment.id}')"
+                                       style="font-size: 2rem; color:red; cursor:pointer;">
+                                        <span class="badge rounded-pill bg-primary"
+                                              th:text="${comment.likeMembers.size()}"></span>
                                     </i>
                                 </form>
                             </div>
@@ -189,7 +224,8 @@
                                             th:onclick="'openApproveCommentModal(' + ${comment.id} + ')'">수정
                                     </button>
                                 </div>
-                                <div class="col-md-auto" th:if="${comment.author?.id == loginedMember?.id}">
+                                <div class="col-md-auto"
+                                     th:if="${comment.author?.id == loginedMember?.id or loginedMember.getRole() == 'ROLE_ADMIN'}">
                                     <form th:action="@{|/comment/deleteComment/${comment.id}|}" method="post"
                                           onsubmit="return DeleteComment();">
                                         <button type="submit" class="btn btn-danger admin-btn"

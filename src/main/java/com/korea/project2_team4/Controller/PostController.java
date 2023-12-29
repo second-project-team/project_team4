@@ -285,7 +285,7 @@ public class PostController {
         return "redirect:/post/community/main";
     }
 
-    @GetMapping("/detail/{id}/updatePost")
+    @GetMapping("/detail/updatePost/{id}")
     public String updatePost(Principal principal,Model model, @PathVariable("id") Long id) {
 
         if (principal != null) {

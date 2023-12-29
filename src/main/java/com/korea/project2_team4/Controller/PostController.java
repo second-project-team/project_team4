@@ -44,6 +44,7 @@ public class PostController {
     @GetMapping("/main")
     public String main() {
 
+
         return "community_main";
     }
 
@@ -95,12 +96,16 @@ public class PostController {
     }
 
     @GetMapping("/community/main")
-    public String communityMain(Model model, @RequestParam(name="category", required = false)String category,
+    public String communityMain(Principal principal, Model model, @RequestParam(name = "category", required = false) String category,
                                 @RequestParam(name = "sort", required = false) String sort,
                                 @RequestParam(value = "page", defaultValue = "0") int page,
                                 @RequestParam(name = "searchTagName", required = false) String searchTagName) {
+        if (principal != null) {
+            Member member = this.memberService.getMember(principal.getName());
+            model.addAttribute("loginedMember", member);
+        }
         Page<Post> allPosts;
-        allPosts = postService.postList(page);
+        allPosts = postService.postList(page);//최신순문제잇음
 
 
         if (searchTagName == null) {
@@ -113,31 +118,21 @@ public class PostController {
             sort = "latest";
         }
 
-        allPosts = postService.getPostsBytagAndcategoryAndsort(page, searchTagName, category, sort);
+        if (searchTagName.equals("전체") ) {
+            if (sort.equals("likeCount")){
+                allPosts = postService.getPostsOrderByLikeCount(page);
+            } else if (sort.equals("commentCount")) {
+                allPosts = postService.getPostsOrderByCommentCount(page);
+            } else {
+                allPosts = postService.postList(page);
+            }
+        }else {
+            allPosts = postService.getPostsBytagAndcategoryAndsort(page, searchTagName, category, sort);
+        }
 
-        //잘되던거 밑에
-//        if (searchTagName != null && !searchTagName.isEmpty()) { //태그부터 분류해야함. 뭔 tagMap때매 복잡함;;
-//            allPosts = postService.getPostsByTagName(page,searchTagName);
-//
-//
-//            if ((category !=null && !category.isEmpty()) || (sort != null && !sort.isEmpty())) {
-//                allPosts = postService.getPostsByCategory(allPosts, page ,category);
-//
-//                allPosts = postService.getPostsByCategoryAndSort(allPosts, page, category, sort) ;
-//
-////                    if (sort != null && !sort.isEmpty()) {
-//                        if (sort.equals("latest")) {
-//
-//                        } else if (sort.equals("likeCount")) {
-//                            allPosts = postService.getPostsBysort(allPosts, page, sort);
-//                        } else {
-//                            allPosts = postService.getPostsBysort(allPosts, page, sort);
-//                        }
-////                    }
-//            }
-//        }
+        //sorting 이랑 태그는 ㅇㅋ 근데 카테고리 이상 --> null들어가는거쩔수없음 . 카테고리 필수선택으로 할지?
 
-        model.addAttribute("category",category);
+        model.addAttribute("category", category);
         model.addAttribute("searchTagName", searchTagName);
         model.addAttribute("sort", sort);
         model.addAttribute("paging", allPosts);
@@ -178,9 +173,9 @@ public class PostController {
 
     @GetMapping("/showMoreTitle")
     public String showMoreTitle(@RequestParam(value = "kw", required = false) String kw,
-                                  @RequestParam(value = "page", defaultValue = "0") int page,
-                                  Model model) {
-        Page<Post> pagingByTitle = postService.pagingByTitle(kw,page);
+                                @RequestParam(value = "page", defaultValue = "0") int page,
+                                Model model) {
+        Page<Post> pagingByTitle = postService.pagingByTitle(kw, page);
 
         model.addAttribute("pagingByTitle", pagingByTitle);
         model.addAttribute("kw", kw);
@@ -190,9 +185,9 @@ public class PostController {
 
     @GetMapping("/showMoreContent")
     public String showMoreContents(@RequestParam(value = "kw", defaultValue = "") String kw,
-                                  @RequestParam(value = "page", defaultValue = "0") int page,
-                                  Model model) {
-        Page<Post> pagingByContent = postService.pagingByContent(kw,page);
+                                   @RequestParam(value = "page", defaultValue = "0") int page,
+                                   Model model) {
+        Page<Post> pagingByContent = postService.pagingByContent(kw, page);
 
         model.addAttribute("pagingByContent", pagingByContent);
         model.addAttribute("kw", kw);
@@ -202,9 +197,9 @@ public class PostController {
 
     @GetMapping("/showMoreProfileName")
     public String showMoreProfileNames(@RequestParam(value = "kw", defaultValue = "") String kw,
-                                  @RequestParam(value = "page", defaultValue = "0") int page,
-                                  Model model) {
-        Page<Post> pagingByProfileName = postService.pagingByProfileName(kw,page);
+                                       @RequestParam(value = "page", defaultValue = "0") int page,
+                                       Model model) {
+        Page<Post> pagingByProfileName = postService.pagingByProfileName(kw, page);
 
         model.addAttribute("pagingByProfileName", pagingByProfileName);
         model.addAttribute("kw", kw);
@@ -214,9 +209,9 @@ public class PostController {
 
     @GetMapping("/showMoreComment")
     public String showMoreComments(@RequestParam(value = "kw", defaultValue = "") String kw,
-                                  @RequestParam(value = "page", defaultValue = "0") int page,
-                                  Model model) {
-        Page<Post> pagingByComment = postService.pagingByComment(kw,page);
+                                   @RequestParam(value = "page", defaultValue = "0") int page,
+                                   Model model) {
+        Page<Post> pagingByComment = postService.pagingByComment(kw, page);
 
         model.addAttribute("pagingByComment", pagingByComment);
         model.addAttribute("kw", kw);
@@ -225,7 +220,7 @@ public class PostController {
     }
 
     @GetMapping("/detail/{id}/{hit}")
-    public String postDetail(Principal principal, Model model, @PathVariable("id") Long id, @PathVariable("hit") Integer hit) {
+    public String postDetail(Principal principal, Model model, @PathVariable("id") Long id, @PathVariable("hit") Integer hit,PostForm postForm) {
         if (principal != null) {
             Member member = this.memberService.getMember(principal.getName());
             model.addAttribute("loginedMember", member);
@@ -238,6 +233,9 @@ public class PostController {
             model.addAttribute("post", post);
 
         }
+        List<Tag> allTags = tagService.getAllTags();
+        model.addAttribute("allTags", allTags);
+        model.addAttribute("postForm",postForm);
 
         return "postDetail_form";
     }
@@ -271,7 +269,8 @@ public class PostController {
     }
 
     @PostMapping("/updatePost/{id}")
-    public String updatePost(@PathVariable Long id, @ModelAttribute Post updatePost) {
+    public String updatePost(@PathVariable Long id, @ModelAttribute Post updatePost, @RequestParam(value = "selectedTagNames", required = false) List<String> selectedTagNames
+    ) {
 
         Post existingPost = postRepository.findById(id).orElse(null);
 
@@ -280,32 +279,43 @@ public class PostController {
             existingPost.setTitle(updatePost.getTitle());
             existingPost.setContent(updatePost.getContent());
             existingPost.setModifyDate(LocalDateTime.now());
+            tagMapService.deleteTagMapsByPostId(id);
+            if (selectedTagNames != null && !selectedTagNames.isEmpty()) {
+                for (String selectedTagName : selectedTagNames) {
+                    Tag tag = tagService.getTagByTagName(selectedTagName);
+                    TagMap tagMap = new TagMap();
+                    tagMap.setPost(existingPost);
+                    tagMap.setTag(tag);
+                    tagMapService.save(tagMap);
+                }
+            }
+            existingPost.setCategory(updatePost.getCategory());
 
             postRepository.save(existingPost);
         }
 
         return "redirect:/post/detail/{id}/1";
     }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myPosts")
-    public String getMyPosts(Model model,Principal principal,@RequestParam(value = "page", defaultValue = "0") int page){
+    public String getMyPosts(Model model, Principal principal, @RequestParam(value = "page", defaultValue = "0") int page) {
         Profile author = memberService.getMember(principal.getName()).getProfile();
-        Page<Post> myPosts = postService.getMyPosts(page,author);
+        Page<Post> myPosts = postService.getMyPosts(page, author);
         model.addAttribute("paging", myPosts);
         return "Member/findMyPosts_form";
     }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myLikedPosts")
-    public String getMyLikedPosts(Model model,Principal principal,@RequestParam(value = "page", defaultValue = "0") int page){
+    public String getMyLikedPosts(Model model, Principal principal, @RequestParam(value = "page", defaultValue = "0") int page) {
         Member member = memberService.getMember(principal.getName());
-        Page<Post> myLikedPosts = postService.getMyLikedPosts(page,member);
+        Page<Post> myLikedPosts = postService.getMyLikedPosts(page, member);
         model.addAttribute("paging", myLikedPosts);
         return "Member/findMyLikedPosts_form";
     }
 
     //   ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 선영 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-
-
 
 
     //   ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 선영 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑

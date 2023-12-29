@@ -59,7 +59,7 @@
                 <hr class="mt-1 mb-5">
                 <div class="col">
                     <div th:each="img, iterStat : ${post.postImages}" th:if="${iterStat.index lt 3}">
-                        <img class="me-3" th:src="@{|/resources/${img.saveName}|}" alt="리뷰 이미지"
+                        <img class="image me-3" th:src="@{|/resources/${img.saveName}|}" alt="리뷰 이미지"
                              style="width: 14rem; height: 14rem; border-radius: 1rem; max-width: 100%; max-height: 100%">
                     </div>
                 </div>
@@ -167,8 +167,10 @@
             <hr>
             <!--       댓글        -->
             <div class="mb-3">
-                <p class="pt-5" th:text="|${#lists.size(post.comments)}개의 답변이 있습니다.|"></p>
-
+                <div class="pt-5">
+                    <p  th:text="|${#lists.size(post.comments)}개의 답변이 있습니다.|"
+                        style="background-color: #87CEEB; padding: 10px; display: inline-block; border-radius: 1rem;"></p>
+                </div>
                 <form th:action="@{|/comment/create/${post.id}|}" method="post" onsubmit="return WriteComment();">
                     <textarea name="content" class="form-control" id="content" rows="3"
                               placeholder="답변을 작성해 주세요"></textarea>
@@ -195,15 +197,6 @@
                                     </div>
                                 </div>
                             </div>
-<!--                            <form class="flex-fill d-flex justify-content-end" th:action="@{|/comment/commentLike|}"-->
-<!--                                  method="post">-->
-<!--                                <input type="hidden" name="id" th:value="${comment.id}">-->
-<!--                                <button class="btn btn-outline-primary" type="submit">-->
-<!--                                    좋아요-->
-<!--                                    <span class="badge rounded-pill bg-primary" id="commentLikeCheck"-->
-<!--                                          th:text="${comment.likeMembers.size()}"></span>-->
-<!--                                </button>-->
-<!--                            </form>-->
                             <div th:with="fill=${#lists.contains(comment.likeMembers, loginedMember)}">
                                 <input type="hidden" th:id="${'CommentHeart-fill-' + comment.id}" th:value="${fill}">
                                 <form th:id="${'CommentLikeForm-' + comment.id}" class="flex-fill d-flex justify-content-end" th:action="@{|/comment/commentLike|}"
@@ -287,6 +280,10 @@
                 .card {
                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                }
+
+                .image{
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+                    }
             </style>
         </div>
     </div>

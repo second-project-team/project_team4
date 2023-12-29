@@ -236,6 +236,7 @@ public class PostController {
         } else {
             Post post = postService.getPost(id);
             model.addAttribute("post", post);
+
         }
 
         return "postDetail_form";

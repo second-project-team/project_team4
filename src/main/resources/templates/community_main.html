@@ -47,7 +47,7 @@
                             <div class="card" style="width: 100%;">
                                 <div class="d-flex">
                                     <!-- 이미지를 표시하려면 post에 이미지 경로 등이 들어있는 속성을 사용해야 합니다. -->
-                                    <div th:each="img, iterStat : ${post.postImages}" th:if="${iterStat.index lt 3}">
+                                    <div th:each="img, iterStat : ${post.postImages}" th:if="${iterStat.index lt 1}">
                                         <img class="me-3" th:src="@{|/resources/${img.saveName}|}" alt="리뷰 이미지"
                                              style="width: 14rem; height: 17rem; border-radius: 1rem; max-width: 100%; max-height: 100%">
                                     </div>

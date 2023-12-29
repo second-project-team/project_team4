@@ -91,7 +91,7 @@
                             </form>
                         </div>
                         <div>
-                            <form th:action="@{|/post/detail/${post.id}/updatePost|}" th:method="get">
+                            <form th:action="@{|/post/detail/updatePost/${post.id}|}" method="get">
                                 <input type="hidden" name="id" th:value="${post.id}" />
                                 <button type="submit" class="btn btn-success admin-btn" style="margin-right: 0.1rem">수정</button>
                             </form>

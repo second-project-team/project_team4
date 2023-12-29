@@ -133,21 +133,21 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 
 
-    @Query("SELECT p FROM Post p " + "LEFT JOIN p.author pr " + "LEFT JOIN p.comments c " +
+    @Query("SELECT p FROM Post p " +
             "WHERE LOWER(p.title) LIKE LOWER(CONCAT('%',:kw,'%')) ")
-    Page<Post> findByPostTitleFromPaging(@Param("kw") String kw, Pageable pageable);
+    Page<Post> findByPostTitleWithPaging(@Param("kw") String kw, Pageable pageable);
 
-    @Query("SELECT p FROM Post p " + "LEFT JOIN p.author pr " + "LEFT JOIN p.comments c " +
+    @Query("SELECT p FROM Post p " +
             "WHERE LOWER(p.content) LIKE LOWER(CONCAT('%',:kw,'%')) ")
-    Page<Post> findByPostContentFromPaging(@Param("kw") String kw, Pageable pageable);
+    Page<Post> findByPostContentWithPaging(@Param("kw") String kw, Pageable pageable);
 
-    @Query("SELECT p FROM Post p " + "LEFT JOIN p.author pr " + "LEFT JOIN p.comments c " +
+    @Query("SELECT pr FROM Profile pr " +
             "WHERE LOWER(pr.profileName) LIKE LOWER(CONCAT('%',:kw,'%')) ")
-    Page<Post> findByProfileNameFromPaging(@Param("kw") String kw, Pageable pageable);
+    Page<Post> findByProfileNameWithPaging(@Param("kw") String kw, Pageable pageable);
 
-    @Query("SELECT p FROM Post p " + "LEFT JOIN p.author pr " + "LEFT JOIN p.comments c " +
+    @Query("SELECT c FROM Comment c " +
             "WHERE LOWER(c.content) LIKE LOWER(CONCAT('%',:kw,'%')) ")
-    Page<Post> findByCommentFromPaging(@Param("kw") String kw, Pageable pageable);
+    Page<Post> findByCommentWithPaging(@Param("kw") String kw, Pageable pageable);
 
 
 }

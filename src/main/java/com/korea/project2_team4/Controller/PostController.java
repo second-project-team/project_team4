@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.management.modelmbean.ModelMBeanOperationInfo;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
@@ -231,7 +232,6 @@ public class PostController {
         } else {
             Post post = postService.getPost(id);
             model.addAttribute("post", post);
-
         }
         List<Tag> allTags = tagService.getAllTags();
         model.addAttribute("allTags", allTags);
@@ -266,6 +266,20 @@ public class PostController {
         postService.deleteById(id);
 
         return "redirect:/post/community/main";
+    }
+
+    @GetMapping("/detail/{id}/updatePost")
+    public String updatePost(Principal principal,Model model, @PathVariable("id") Long id) {
+
+        if (principal != null) {
+            Member member = this.memberService.getMember(principal.getName());
+            model.addAttribute("loginedMember", member);
+        }
+
+        Post post = postService.getPost(id);
+        model.addAttribute("post", post);
+
+        return "postUpdate_form";
     }
 
     @PostMapping("/updatePost/{id}")

@@ -204,6 +204,10 @@ public class PostService {
         return postRepository.findAllByauthorPage(profile.getProfileName(), pageable);
     }
 
+    public List<Post> getPostslikes(){
+        return this.postRepository.findAllByLikesDesc();
+    }
+
     public Page<Post> getPostsBycategoryAndsortAndtag(int page, String category, String sort, String tagname) {
         Pageable pageable = PageRequest.of(page, 10);
         if (sort.equals("likeCount")) {

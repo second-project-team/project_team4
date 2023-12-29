@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <!-- 추가한 CSS 파일 불러오기 -->
-        <link rel="stylesheet" type="text/css" href="/static/btn_selected.css">
+<!--        <link rel="stylesheet" type="text/css" href="/static/btn_selected.css">-->
         <title>Pet Planet!</title>
     </head>
     <body>
@@ -47,7 +47,7 @@
                             <div class="card" style="width: 100%;">
                                 <div class="d-flex">
                                     <!-- 이미지를 표시하려면 post에 이미지 경로 등이 들어있는 속성을 사용해야 합니다. -->
-                                    <div th:each="img, iterStat : ${post.postImages}" th:if="${iterStat.index lt 3}">
+                                    <div th:each="img, iterStat : ${post.postImages}" th:if="${iterStat.index lt 1}">
                                         <img class="me-3" th:src="@{|/resources/${img.saveName}|}" alt="리뷰 이미지"
                                              style="width: 14rem; height: 17rem; border-radius: 1rem; max-width: 100%; max-height: 100%">
                                     </div>
@@ -65,7 +65,7 @@
                                         <div>
                                             <form th:action="@{|/profile/detail|}">
                                                 <input type="hidden" name="postid" th:value="${post.id}">
-                                                <button type="submit" class="btn btn-link" th:text="${post.author.profileName}" style="text-decoration:none; color:inherit;"></button>
+                                                <button type="submit" class="btn btn-link" th:text="${post.author.profileName}" style="font-weight:bold; text-decoration:none; color:inherit;"></button>
                                             </form>
                                             <!--                                        <a th:href="@{|/profile/detail|}" th:text="${post.author.profileName}" style="text-decoration:none; color:inherit;"></a>-->
                                             <div>
@@ -80,7 +80,7 @@
                                             <p th:text="|${'댓글 : ' + #lists.size(post.comments)}|"></p>
                                         </div>
                                         <p style="margin-top: 10px; font-size: 17px; " th:if="${!post.getTagList().isEmpty()}">
-                                            <span th:each="tag, loop : ${post.getTagList()}" th:text="@{|#${tag.name}|}"></span>
+                                            <span th:each="tag, loop : ${post.getTagList()}" th:text="' '+ @{|#${tag.name}|}"></span>
                                         </p>
                                         <div>
                                             <p th:if="${post.category != '카테고리' && post.category != null}" th:text="${'카테고리 : ' + post.category}"></p>

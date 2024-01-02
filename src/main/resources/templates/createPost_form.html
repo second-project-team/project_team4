@@ -38,6 +38,7 @@
             <div class="mb-3">
                 <label for="title" class="form-label">제목</label>
                 <input type="text" class="form-control" id="title" th:field="*{title}">
+                <small class="text-danger" id="title-error"></small>
             </div>
             <div class="mb-3">
                 <label for="content" class="form-label">내용</label>
@@ -50,7 +51,7 @@
                 <input type="file" id="imageFiles" name="imageFiles" multiple>
 
             </div>
-            <button type="submit" class="btn btn-light">저장</button>
+            <button type="submit" class="btn btn-light" onclick="checkTitle()">저장</button>
 
         </div>
     </form>
@@ -81,5 +82,24 @@
         div.appendChild(label);
         container.appendChild(div);
     }
+    function checkTitle() {
+        var titleInput = document.getElementById('title');
+        var titleError = document.getElementById('title-error');
+
+        if (!titleInput.value.trim()) {
+            titleError.textContent = '제목을 입력하세요.';
+            titleError.style.display = 'block';
+            titleInput.focus();
+            return false;
+        } else {
+            titleError.textContent = '';
+            titleError.style.display = 'none';
+            return true;
+        }
+    }
+
+    document.getElementById('myForm').onsubmit = function() {
+        return checkTitle();
+    };
 </script>
 </html>

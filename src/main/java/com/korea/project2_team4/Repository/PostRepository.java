@@ -119,7 +119,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllByTagNameOrderByCommentsSizeDesc(@Param("tagName") String tagName, Pageable pageable);
 
     //카테고리, 작성일 내림차순
-    @Query("SELECT p FROM Post p WHERE p.category IS NOT NULL AND p.category LIKE %:category%") //"ORDER BY p.createDate DESC"
+    @Query("SELECT p FROM Post p WHERE p.category IS NOT NULL AND p.category LIKE %:category%")
     Page<Post> findAllByCategory(@Param("category") String category, Pageable pageable);
 
     //카테고리, 좋아요 내림차순
@@ -130,7 +130,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     //카테고리, 댓글수 내림차순
     @Query("SELECT p FROM Post p WHERE p.category IS NOT NULL AND p.category LIKE %:category% ORDER BY SIZE(p.comments) DESC")
     Page<Post> findAllByCategoryAndOrderByCommentsSizeDesc(@Param("category") String category, Pageable pageable);
-
 
 
 //   ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 선영 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑

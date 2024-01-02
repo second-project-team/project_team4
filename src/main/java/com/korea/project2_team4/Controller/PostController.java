@@ -116,41 +116,64 @@ public class PostController {
     public String communityMain(Principal principal, Model model, @RequestParam(name = "category", required = false) String category,
                                 @RequestParam(name = "sort", required = false) String sort,
                                 @RequestParam(value = "page", defaultValue = "0") int page,
-                                @RequestParam(name = "searchTagName", required = false) String searchTagName) {
+                                @RequestParam(name = "searchTagName", required = false) String TagName) {
         if (principal != null) {
             Member member = this.memberService.getMember(principal.getName());
             model.addAttribute("loginedMember", member);
         }
         Page<Post> allPosts;
-        allPosts = postService.postList(page);//최신순문제잇음
+        allPosts = postService.postList(page);
 
+        if (category.equals("자유게시판")) {
 
-        if (searchTagName == null) {
-            searchTagName = "";  // 기본적으로 빈 문자열로 설정
+            Page<Post> freeboardPosts = postService.getPostsFreeboard(page,sort,TagName);
+
+            model.addAttribute("category", category);
+            model.addAttribute("searchTagName", TagName);
+            model.addAttribute("sort", sort);
+            model.addAttribute("paging", freeboardPosts);
+            return "community_main";
         }
+
+
+        if (category.equals("QnA")) {
+
+            Page<Post> qnaPosts = postService.getPostsQnA(page,sort,TagName);
+
+            model.addAttribute("category", category);
+            model.addAttribute("searchTagName", TagName);
+            model.addAttribute("sort", sort);
+            model.addAttribute("paging", qnaPosts);
+            return "community_main";
+        }
+
+
+//        if (searchTagName == null) {
+//            searchTagName = "";  // 기본적으로 빈 문자열로 설정
+//        }
         if (category == null) {
             category = "";
         }
-        if (sort == null) {
-            sort = "latest";
-        }
+//        if (sort == null) {
+//            sort = "latest";
+//        }
 
-        if (searchTagName.equals("전체")) {
-            if (sort.equals("likeCount")) {
-                allPosts = postService.getPostsOrderByLikeCount(page);
-            } else if (sort.equals("commentCount")) {
-                allPosts = postService.getPostsOrderByCommentCount(page);
-            } else {
-                allPosts = postService.postList(page);
-            }
-        } else {
-            allPosts = postService.getPostsBytagAndcategoryAndsort(page, searchTagName, category, sort);
-        }
+//        if (TagName.equals("전체")) {
+//            if (sort.equals("likeCount")) {
+//                allPosts = postService.getPostsOrderByLikeCount(page);
+//            } else if (sort.equals("commentCount")) {
+//                allPosts = postService.getPostsOrderByCommentCount(page);
+//            } else {
+//                allPosts = postService.postList(page);
+//            }
+//        } else {
+//            allPosts = postService.getPostsBytagAndcategoryAndsort(page, TagName, category, sort);
+//        }
 
         //sorting 이랑 태그는 ㅇㅋ 근데 카테고리 이상 --> null들어가는거쩔수없음 . 카테고리 필수선택으로 할지?
 
         model.addAttribute("category", category);
-        model.addAttribute("searchTagName", searchTagName);
+        model.addAttribute("searchTagName", TagName);
         model.addAttribute("sort", sort);
         model.addAttribute("paging", allPosts);
         return "community_main";

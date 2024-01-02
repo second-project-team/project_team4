@@ -32,6 +32,7 @@ public class PostService {
         postRepository.save(post);
     }
 
+
     public Page<Post> postList(int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));

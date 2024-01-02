@@ -242,6 +242,8 @@ public class PostController {
 
     @GetMapping("/detail/{id}/{hit}")
     public String postDetail(Principal principal, Model model, @PathVariable("id") Long id, @PathVariable("hit") Integer hit, PostForm postForm) {
+        List<Tag> getPostTags = tagService.getTagListByPost(postService.getPost(id));
+        List<Tag> allTags = tagService.getAllTags();
         if (principal != null) {
             Member member = this.memberService.getMember(principal.getName());
             model.addAttribute("loginedMember", member);
@@ -253,7 +255,8 @@ public class PostController {
             Post post = postService.getPost(id);
             model.addAttribute("post", post);
         }
-        List<Tag> allTags = tagService.getAllTags();
+
+        model.addAttribute("getPostTags",getPostTags);
         model.addAttribute("allTags", allTags);
         model.addAttribute("postForm", postForm);
 

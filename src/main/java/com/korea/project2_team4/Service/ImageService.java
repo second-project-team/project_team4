@@ -200,5 +200,7 @@ public class ImageService {
 
     }
 
-
+    public void deleteImage(Long imageId) {
+        imageRepository.deleteById(imageId);
+    }
 }

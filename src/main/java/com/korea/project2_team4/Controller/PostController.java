@@ -288,7 +288,7 @@ public class PostController {
         return "redirect:/post/community/main";
     }
 
-    @GetMapping("/detail/updatePost/{id}")
+    @GetMapping("/updatePost/{id}")
     public String updatePost(Principal principal,Model model, @PathVariable("id") Long id) {
 
         if (principal != null) {
@@ -302,18 +302,25 @@ public class PostController {
         return "postUpdate_form";
     }
 
-    @PostMapping("/updatePost/{id}")
-    public String updatePost(@PathVariable Long id, @ModelAttribute Post updatePost, @RequestParam(value = "selectedTagNames", required = false) List<String> selectedTagNames
-    ) {
+    @PostMapping(value = "/updatePost/{id}", consumes = {"multipart/form-data"})
+    public String updatePost(@PathVariable("id") Long id, @ModelAttribute Post updatePost,
+                             @RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
+                             @RequestParam(value = "selectedTagNames", required = false) List<String> selectedTagNames
+    ) throws IOException, NoSuchAlgorithmException {
 
+        Post post = new Post();
         Post existingPost = postRepository.findById(id).orElse(null);
 
         if (existingPost != null) {
-
             existingPost.setTitle(updatePost.getTitle());
             existingPost.setContent(updatePost.getContent());
             existingPost.setModifyDate(LocalDateTime.now());
             tagMapService.deleteTagMapsByPostId(id);
+
+            if (imageFiles != null && !imageFiles.isEmpty()) {
+                imageService.uploadPostImage(imageFiles, post);
+            }
+
             if (selectedTagNames != null && !selectedTagNames.isEmpty()) {
                 for (String selectedTagName : selectedTagNames) {
                     Tag tag = tagService.getTagByTagName(selectedTagName);
@@ -329,6 +336,14 @@ public class PostController {
         }
 
         return "redirect:/post/detail/{id}/1";
+    }
+
+    @PostMapping("/deleteImage")
+    public String deleteImage(@PathVariable("id") Long id,@PathVariable("imageId") Long imageId) {
+        Post post = this.postService.getPost(id);
+        Long postId = post.getId();
+        imageService.deleteImage(imageId);
+        return "redirect:/post/detail/"+ postId +"/1";
     }
 
     @PreAuthorize("isAuthenticated()")

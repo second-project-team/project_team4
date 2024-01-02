@@ -205,6 +205,78 @@ public class PostService {
         return postRepository.findAllByauthorPage(profile.getProfileName(), pageable);
     }
 
+    public Page<Post> getPostsFreeboard(int page, String sort, String tagname) { //
+        if (tagname == null) {
+            tagname = "";  // 기본적으로 빈 문자열로 설정
+        }
+        if (sort == null) {
+            sort = "latest";
+        }
+
+        Pageable pageable = PageRequest.of(page,10);
+
+        if (tagname.equals("")) {
+            if (sort.equals("likeCount")) {
+                return this.postRepository.findAllByCategoryAndOrderByLikeMembersSizeDesc("자유게시판", pageable);
+            } else if (sort.equals("commentCount")) {
+                return this.postRepository.findAllByCategoryAndOrderByCommentsSizeDesc("자유게시판", pageable);
+            } else { //최신순
+                List<Sort.Order> sorts = new ArrayList<>();
+                sorts.add(Sort.Order.desc("createDate"));
+                Pageable pageable2 = PageRequest.of(page, 10, Sort.by(sorts));
+                return this.postRepository.findAllByCategory("자유게시판", pageable2);
+            }
+        } else {
+            if (sort.equals("likeCount")) {
+                return this.postRepository.findAllByTagNameAndCategoryOrderByLikeMembersSizeDesc(tagname,"자유게시판",pageable);
+            } else if (sort.equals("commentCount")) {
+                return this.postRepository.findAllByTagNameAndCategoryOrderByCommentsSizeDesc(tagname,"자유게시판", pageable);
+            } else { //최신순
+                List<Sort.Order> sorts = new ArrayList<>();
+                sorts.add(Sort.Order.desc("createDate"));
+                Pageable pageable2 = PageRequest.of(page, 10, Sort.by(sorts));
+                return this.postRepository.findAllByTagNameAndCategory(tagname,"자유게시판", pageable2);
+            }
+        }
+    }
+
+    public Page<Post> getPostsQnA(int page, String sort, String tagname) { //
+        if (tagname == null) {
+            tagname = "";  // 기본적으로 빈 문자열로 설정
+        }
+        if (sort == null) {
+            sort = "latest";
+        }
+
+        Pageable pageable = PageRequest.of(page,10);
+
+        if (tagname.equals("")) {
+            if (sort.equals("likeCount")) {
+                return this.postRepository.findAllByCategoryAndOrderByLikeMembersSizeDesc("QnA", pageable);
+            } else if (sort.equals("commentCount")) {
+                return this.postRepository.findAllByCategoryAndOrderByCommentsSizeDesc("QnA", pageable);
+            } else { //최신순
+                List<Sort.Order> sorts = new ArrayList<>();
+                sorts.add(Sort.Order.desc("createDate"));
+                Pageable pageable2 = PageRequest.of(page, 10, Sort.by(sorts));
+                return this.postRepository.findAllByCategory("QnA", pageable2);
+            }
+        } else {
+            if (sort.equals("likeCount")) {
+                return this.postRepository.findAllByTagNameAndCategoryOrderByLikeMembersSizeDesc(tagname,"QnA",pageable);
+            } else if (sort.equals("commentCount")) {
+                return this.postRepository.findAllByTagNameAndCategoryOrderByCommentsSizeDesc(tagname,"QnA", pageable);
+            } else { //최신순
+                List<Sort.Order> sorts = new ArrayList<>();
+                sorts.add(Sort.Order.desc("createDate"));
+                Pageable pageable2 = PageRequest.of(page, 10, Sort.by(sorts));
+                return this.postRepository.findAllByTagNameAndCategory(tagname,"QnA", pageable2);
+            }
+        }
+    }
+
+
+
     public List<Post> getPostslikes(){
         return this.postRepository.findAllByLikesDesc();
     }

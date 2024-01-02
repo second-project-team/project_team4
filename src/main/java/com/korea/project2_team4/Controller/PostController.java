@@ -55,7 +55,7 @@ public class PostController {
     public String createPost(Model model, PostForm postForm) {
         List<Tag> allTags = tagService.getAllTags();
         model.addAttribute("allTags", allTags);
-        return "createPost_form";
+        return "Post/createPost_form";
     }
 
     //테스트 데이터
@@ -207,7 +207,7 @@ public class PostController {
         model.addAttribute("pagingByTitle", pagingByTitle);
         model.addAttribute("kw", kw);
 
-        return "showMoreTitle_form";
+        return "Search/showMoreTitle_form";
     }
 
     @GetMapping("/showMoreContent")
@@ -219,7 +219,7 @@ public class PostController {
         model.addAttribute("pagingByContent", pagingByContent);
         model.addAttribute("kw", kw);
 
-        return "showMoreContent_form";
+        return "Search/showMoreContent_form";
     }
 
     @GetMapping("/showMoreProfileName")
@@ -231,7 +231,7 @@ public class PostController {
         model.addAttribute("pagingByProfileName", pagingByProfileName);
         model.addAttribute("kw", kw);
 
-        return "showMoreProfileName_form";
+        return "Search/showMoreProfileName_form";
     }
 
     @GetMapping("/showMoreComment")
@@ -243,7 +243,7 @@ public class PostController {
         model.addAttribute("pagingByComment", pagingByComment);
         model.addAttribute("kw", kw);
 
-        return "showMoreComment_form";
+        return "Search/showMoreComment_form";
     }
 
     @GetMapping("/detail/{id}/{hit}")
@@ -266,7 +266,7 @@ public class PostController {
         model.addAttribute("allTags", allTags);
         model.addAttribute("postForm", postForm);
 
-        return "postDetail_form";
+        return "Post/postDetail_form";
     }
 
     @PostMapping("/postLike")
@@ -315,7 +315,7 @@ public class PostController {
         Post post = postService.getPost(id);
         model.addAttribute("post", post);
 
-        return "postUpdate_form";
+        return "Post/postUpdate_form";
     }
 
     @PostMapping(value = "/updatePost/{id}", consumes = {"multipart/form-data"})

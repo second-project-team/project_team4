@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @Builder
@@ -46,7 +47,6 @@ public class PostController {
 
     @GetMapping("/main")
     public String main() {
-
 
         return "community_main";
     }
@@ -130,12 +130,15 @@ public class PostController {
                                 @RequestParam(name = "sort", required = false) String sort,
                                 @RequestParam(value = "page", defaultValue = "0") int page,
                                 @RequestParam(name = "TagName", required = false) String TagName) {
+
         if (principal != null) {
             Member member = this.memberService.getMember(principal.getName());
             model.addAttribute("loginedMember", member);
         }
         Page<Post> allPosts;
         allPosts = postService.postList(page);
+
+        List<Tag> defaultTagList = tagService.getDefaultTags();
 
         if (category.equals("QnA")) {
             Page<Post> qnaPosts = postService.getPostsQnA(page,sort,TagName);
@@ -144,6 +147,7 @@ public class PostController {
             model.addAttribute("TagName", TagName);
             model.addAttribute("sort", sort);
             model.addAttribute("paging", qnaPosts);
+            model.addAttribute("defaultTagList", defaultTagList);
             return "community_main";
 
         } else if (category.equals("자유게시판")) {
@@ -154,6 +158,7 @@ public class PostController {
             model.addAttribute("TagName", TagName);
             model.addAttribute("sort", sort);
             model.addAttribute("paging", freeboardPosts);
+            model.addAttribute("defaultTagList", defaultTagList);
             return "community_main";
         } else {
             Page<Post> posts = postService.getAllPosts(page,sort,TagName);
@@ -162,8 +167,10 @@ public class PostController {
             model.addAttribute("TagName", TagName);
             model.addAttribute("sort", sort);
             model.addAttribute("paging", posts);
+            model.addAttribute("defaultTagList", defaultTagList);
             return "community_main";
         }
+
     }
 
 
@@ -306,7 +313,8 @@ public class PostController {
 
     @GetMapping("/updatePost/{id}")
     public String updatePost(Principal principal,Model model, @PathVariable("id") Long id) {
-
+        List<Tag> getPostTags = tagService.getTagListByPost(postService.getPost(id));
+        model.addAttribute("getPostTags",getPostTags);
         if (principal != null) {
             Member member = this.memberService.getMember(principal.getName());
             model.addAttribute("loginedMember", member);

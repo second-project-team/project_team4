@@ -102,6 +102,7 @@ public class PostService {
                 post.setTitle(String.format("테스트 데이터 제목 입니다:[%03d].", i));
                 post.setContent("테스트 데이터 내용 입니다.");
                 post.setCreateDate(LocalDateTime.now());
+                post.setCategory("자유게시판");
 
                 post.setAuthor(admin.getProfile());
 

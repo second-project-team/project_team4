@@ -200,5 +200,9 @@ public class ImageService {
 
     }
 
+//    public boolean deleteImage(String imageName) {
+//        imageRepository.deleteByImageName(imageName);
+//        return true;
+//    }
 
 }

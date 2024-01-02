@@ -334,7 +334,7 @@ public class PostController {
             tagMapService.deleteTagMapsByPostId(id);
 
             if (imageFiles != null && !imageFiles.isEmpty()) {
-                imageService.uploadPostImage(imageFiles, post);
+                imageService.uploadPostImage(imageFiles, existingPost);
             }
 
             if (selectedTagNames != null && !selectedTagNames.isEmpty()) {
@@ -354,13 +354,16 @@ public class PostController {
         return "redirect:/post/detail/{id}/1";
     }
 
-    @PostMapping("/deleteImage")
-    public String deleteImage(@PathVariable("id") Long id,@PathVariable("imageId") Long imageId) {
-        Post post = this.postService.getPost(id);
-        Long postId = post.getId();
-        imageService.deleteImage(imageId);
-        return "redirect:/post/detail/"+ postId +"/1";
-    }
+//    @PostMapping("delete-image")
+//    @ResponseBody
+//    public String deleteImage(@RequestParam("imageName") String imageName) {
+//        if (imageService.deleteImage(imageName)) {
+//            return "success";
+//        } else {
+//            return "failure";
+//        }
+//    }
+
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myPosts")
@@ -380,11 +383,11 @@ public class PostController {
         return "Member/findMyLikedPosts_form";
     }
 
+
+    //   ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 선영 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+
+    //   ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 선영 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
 }
-
-
-
-
-
-
 

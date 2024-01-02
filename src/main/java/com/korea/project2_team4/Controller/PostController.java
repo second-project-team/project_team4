@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @Builder
@@ -44,7 +45,6 @@ public class PostController {
 
     @GetMapping("/main")
     public String main() {
-
 
         return "community_main";
     }
@@ -120,7 +120,10 @@ public class PostController {
     public String communityMain(Principal principal, Model model, @RequestParam(name = "category", required = false) String category,
                                 @RequestParam(name = "sort", required = false) String sort,
                                 @RequestParam(value = "page", defaultValue = "0") int page,
-                                @RequestParam(name = "searchTagName", required = false) String searchTagName) {
+                                @RequestParam(name = "searchTagName", required = false) String searchTagName,
+                                @RequestParam(name = "postId",required = false)Long postId) {
+//        List<Tag> getPostTags = tagService.getTagListByPost(postService.getPost(postId));
+//        model.addAttribute("getPostTags",getPostTags);
         if (principal != null) {
             Member member = this.memberService.getMember(principal.getName());
             model.addAttribute("loginedMember", member);
@@ -149,14 +152,21 @@ public class PostController {
             }
         } else {
             allPosts = postService.getPostsBytagAndcategoryAndsort(page, searchTagName, category, sort);
+            //여기다가 반복문 돌려서 getPostTags를 넣어야 할듯 ??
+//            for(Post post : allPosts){
+            if(postId !=null){
+                List<Tag> getPostTags = tagService.getTagListByPost(postService.getPost(postId));
+                model.addAttribute("getPostTags",getPostTags);}
+//            }
         }
-
+        List<Tag> defaultTagList = tagService.getDefaultTags();
         //sorting 이랑 태그는 ㅇㅋ 근데 카테고리 이상 --> null들어가는거쩔수없음 . 카테고리 필수선택으로 할지?
-
         model.addAttribute("category", category);
         model.addAttribute("searchTagName", searchTagName);
         model.addAttribute("sort", sort);
         model.addAttribute("paging", allPosts);
+        model.addAttribute("defaultTagList", defaultTagList);
+        
         return "community_main";
     }
 
@@ -293,7 +303,8 @@ public class PostController {
 
     @GetMapping("/detail/updatePost/{id}")
     public String updatePost(Principal principal,Model model, @PathVariable("id") Long id) {
-
+        List<Tag> getPostTags = tagService.getTagListByPost(postService.getPost(id));
+        model.addAttribute("getPostTags",getPostTags);
         if (principal != null) {
             Member member = this.memberService.getMember(principal.getName());
             model.addAttribute("loginedMember", member);

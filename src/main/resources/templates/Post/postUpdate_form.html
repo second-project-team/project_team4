@@ -32,6 +32,17 @@
                         </div>
                     </div>
                     <hr class="mt-1 mb-5">
+                    <div class="pb-5">
+                        <h2>태그를 수정하세요~</h2>
+                        <div th:each="tag : ${getPostTags}">
+                            <label th:for="${'tag_' + tag.name}">
+                                <input type="radio" id="${'tag_' + tag.name}"
+                                       name="selectedTagNames" th:value="${tag.name}"
+                                       th:text="${tag.name}"
+                                       th:checked="${post.getTagList().contains(tag)}">
+                            </label>
+                        </div>
+                    </div>
                     <div class="pb-4">
                         <h2>카테고리를 수정하세요~</h2>
                         <select id="category" name="category" class="form-select">

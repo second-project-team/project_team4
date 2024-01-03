@@ -120,27 +120,30 @@
                         <small class="text-muted"> <i class="fa fa-picture-o mr-1"></i>팔로잉</small>
                     </li>
                 </ul>
-                <ul class="list-inline mb-0">
-                    <div class="d-flex align-items-center">
-                        <small class="text-muted mr-1"><i class="fa fa-user-circle-o"></i></small>
-                        <form th:action="@{|/profile/addfollow|}" method="post">
-                            <input type="hidden" name="profileId" th:value="${profile.id}">
-                            <button type="submit" class="btn btn-primary">팔로우</button>
-                        </form>
-                        <form th:action="@{|/profile/unfollow|}" method="post">
-                            <input type="hidden" name="profileId" th:value="${profile.id}">
-                            <button type="submit" class="btn btn-primary">팔로우취소</button>
-                        </form>
+                <li sec:authorize="isAuthenticated()">
+                    <ul class="list-inline mb-0">
+                        <div class="d-flex align-items-center">
+                            <small class="text-muted mr-1"><i class="fa fa-user-circle-o"></i></small>
+                            <form th:action="@{|/profile/addfollow|}" method="post">
+                                <input type="hidden" name="profileId" th:value="${profile.id}">
+                                <button type="submit" class="btn btn-primary">팔로우</button>
+                            </form>
+                            <form th:action="@{|/profile/unfollow|}" method="post">
+                                <input type="hidden" name="profileId" th:value="${profile.id}">
+                                <button type="submit" class="btn btn-primary">팔로우취소</button>
+                            </form>
 
-                    </div>
-                </ul>
+                        </div>
+                    </ul>
+                </li>
+
 
             </div>
 
             <div class="py-4 px-4">
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <h5 class ="mb-0">Recent photos</h5>
-                    <a th:href="@{|/profile/detail/showall|}" class="btn btn-link text-muted">Show all</a>
+                    <a th:href="@{|/profile/detail/${profile.profileName}/showall|}" class="btn btn-link text-muted">Show all</a>
 <!--                    <form th:action="@{|/profile/showallPostsBy|}">-->
 <!--                        <input type="hidden" name="profileid" th:value="${profile.id}">-->
 <!--                        <button type="submit" class="btn btn-link text-muted" >Show all</button>-->

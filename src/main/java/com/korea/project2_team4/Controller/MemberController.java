@@ -33,7 +33,6 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
-    private final FollowService followService;
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private HttpSession session;

@@ -85,6 +85,12 @@ public class Post {
         }
         return getReportCategories;
     }
+
+//    public List<String> getPostReportCategories() {
+//        return reports.stream()
+//                .flatMap(report -> report.getCategory().stream())
+//                .collect(Collectors.toList());
+//    }
     public String getPostReportContent(){
         String getPostReportContent = new String();
         for (Report report : reports) {
@@ -92,6 +98,11 @@ public class Post {
         }
         return getPostReportContent;
     }
+//public String getPostReportContent() {
+//    return reports.stream()
+//            .map(Report::getContent)
+//            .collect(Collectors.joining(" "));
+//}
 
 
 }

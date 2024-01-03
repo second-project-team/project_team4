@@ -284,7 +284,7 @@ public class ProfileController {
         followingMapService.setfollowingMap(follower, followee);
 
 //        model.addAttribute("profile",followee);
-        return "redirect:/profile/detail?profileid=" + followee.getId(); //이부분 수정해야함
+        return "redirect:/profile/detail/" + followee.getProfileName(); //이부분 수정해야함
     }
 
     @PostMapping("/unfollow")
@@ -297,7 +297,7 @@ public class ProfileController {
         followingMapService.deletefollowingMap(follower, followee);
 
 //        model.addAttribute("profile",followee);
-        return "redirect:/profile/detail?profileid=" + followee.getId(); //이부분 수정해야함
+        return "redirect:/profile/detail/" + followee.getProfileName(); //이부분 수정해야함
     }
 
 

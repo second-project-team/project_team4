@@ -98,7 +98,7 @@
                                         <!--                                    <p class="text-muted">프로필이미지+ 닉넴 ( 프로필로 이동)</p>-->
                                         <!--                                </a>-->
                                         <div>
-                                            <form th:action="@{|/profile/detail|}">
+                                            <form th:action="@{|/profile/detail/${post.author.profileName}|}">
                                                 <input type="hidden" name="postid" th:value="${post.id}">
                                                 <button type="submit" class="btn btn-link"
                                                         th:text="${post.author.profileName}"

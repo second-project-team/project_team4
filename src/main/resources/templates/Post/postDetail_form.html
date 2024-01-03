@@ -33,7 +33,7 @@
                 <div>
                     <div style="background-color: #f0f0f0; padding: 10px; display: inline-block; border-radius: 1rem;">
                         <div >
-                            <form th:action="@{|/profile/detail|}">
+                            <form th:action="@{|/profile/detail/${post.author.profileName}|}">
                                 <input type="hidden" name="postid" th:value="${post.id}">
                                 <button type="submit" class="btn btn-link" th:text="${post.author.profileName}" style="font-size: 18px; font-weight: bold; color: #333; text-decoration:none; color:inherit;"></button>
                             </form>

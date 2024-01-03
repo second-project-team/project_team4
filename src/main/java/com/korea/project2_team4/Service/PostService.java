@@ -4,6 +4,7 @@ import com.korea.project2_team4.Model.Entity.*;
 import com.korea.project2_team4.Repository.MemberRepository;
 import com.korea.project2_team4.Repository.PostRepository;
 import com.korea.project2_team4.Repository.ProfileRepository;
+import com.korea.project2_team4.Repository.TagRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Builder
 @Service
@@ -27,6 +29,7 @@ public class PostService {
     private final ProfileRepository profileRepository;
     private final MemberRepository memberRepository;
     private final ImageService imageService;
+    private final TagRepository tagRepository;
 
     public void save(Post post) {
         postRepository.save(post);
@@ -114,16 +117,30 @@ public class PostService {
                 profileRepository.save(authorProfile);
             }
 
+            Tag etcTag = new Tag();
+            etcTag.setName("기타");
+            tagRepository.save(etcTag);
+
             for (int i = 1; i <= 10; i++) {
                 Post post = new Post();
                 post.setTitle(String.format("테스트 데이터 제목 입니다:[%03d].", i));
                 post.setContent("테스트 데이터 내용 입니다.");
                 post.setCreateDate(LocalDateTime.now());
                 post.setCategory("자유게시판");
-
                 post.setAuthor(admin.getProfile());
 
+                List<TagMap> tagMaps = new ArrayList<>();
+                TagMap etcTagMap = new TagMap();
+                etcTagMap.setPost(post);
+                etcTagMap.setTag(etcTag);
+                tagMaps.add(etcTagMap);
+
+                post.setTagMaps(tagMaps);
+
                 postRepository.save(post);
+
+
+
             }
         }
     }

@@ -53,12 +53,6 @@ public class  Member {
     // sns 연동 로그인에 사용되는 provider ID
     private String providerId;
 
-    @OneToMany(mappedBy = "follower")
-    private List<Follow> followers;
-
-    @OneToMany(mappedBy = "following")
-    private List<Follow> followings;
-
     private String role;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL )

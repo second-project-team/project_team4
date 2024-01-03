@@ -200,9 +200,11 @@ public class ImageService {
 
     }
 
-//    public boolean deleteImage(String imageName) {
-//        imageRepository.deleteByImageName(imageName);
-//        return true;
-//    }
+    public void deleteImage(Image image) {
+        imageRepository.delete(image);
+    }
 
+    public Image findBySaveName(String saveName) {
+        return imageRepository.findBySaveName(saveName);
+    }
 }

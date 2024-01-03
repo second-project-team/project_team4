@@ -148,7 +148,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p WHERE p.author.profileName LIKE %:kw%")
     Page<Post> findByProfileNameWithPaging(@Param("kw") String kw, Pageable pageable);
 
-    @Query("SELECT p FROM Post p " + "LEFT JOIN p.comments c " +
+    @Query("SELECT DISTINCT p FROM Post p JOIN p.comments c " +
             "WHERE LOWER(c.content) LIKE LOWER(CONCAT('%',:kw,'%')) ")
     Page<Post> findByCommentWithPaging(@Param("kw") String kw, Pageable pageable);
 

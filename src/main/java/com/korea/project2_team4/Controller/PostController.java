@@ -7,6 +7,7 @@ import com.korea.project2_team4.Repository.ReportRepository;
 import com.korea.project2_team4.Service.*;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
@@ -348,6 +349,7 @@ public class PostController {
             existingPost.setTitle(updatePost.getTitle());
             existingPost.setContent(updatePost.getContent());
             existingPost.setModifyDate(LocalDateTime.now());
+            existingPost.setCategory(updatePost.getCategory());
             tagMapService.deleteTagMapsByPostId(id);
 
             if (imageFiles != null && !imageFiles.isEmpty()) {
@@ -371,15 +373,18 @@ public class PostController {
         return "redirect:/post/detail/{id}/1";
     }
 
-//    @PostMapping("delete-image")
-//    @ResponseBody
-//    public String deleteImage(@RequestParam("imageName") String imageName) {
-//        if (imageService.deleteImage(imageName)) {
-//            return "success";
-//        } else {
-//            return "failure";
-//        }
-//    }
+    @PostMapping("/delete-image")
+    public ResponseEntity<String> deleteImage(@RequestParam String saveName) {
+
+        Image image = imageService.findBySaveName(saveName);
+
+        if(image != null) {
+            imageService.deleteImage(image);
+            return ResponseEntity.ok("success");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failure");
+        }
+    }
 
 
     @PreAuthorize("isAuthenticated()")

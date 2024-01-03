@@ -365,8 +365,12 @@ public class PostController {
     }
 
     @PostMapping("/delete-image")
-    public ResponseEntity<String> deleteImage(@RequestParam("saveName") String saveName) {
-        if (imageService.deleteImage(saveName)) {
+    public ResponseEntity<String> deleteImage(@RequestParam String saveName) {
+
+        Image image = imageService.findBySaveName(saveName);
+
+        if(image != null) {
+            imageService.deleteImage(image);
             return ResponseEntity.ok("success");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failure");

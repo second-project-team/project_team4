@@ -8,13 +8,8 @@ import com.korea.project2_team4.Model.Form.ProfileForm;
 import com.korea.project2_team4.Service.*;
 
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import lombok.Builder;
 import org.springframework.stereotype.Controller;
@@ -22,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.List;
@@ -39,66 +33,46 @@ public class ProfileController {
     private final MemberService memberService;
     private final PetService petService;
     private final ImageService imageService;
+    private final FollowingMapService followingMapService;
 
-    @GetMapping("/detail") // @AuthenticationPrincipal
+    @GetMapping("/detail") // @AuthenticationPrincipal //
     public String profileDetail(Model model,  Principal principal, @RequestParam(name = "postid", required = false) Long postid) {
-        if (principal == null) { //postid가 null일수가 없음
+        if (principal == null) { //postid ㅇ (null일수가 없음) //게시글에서 작성자 플필 클릭한거
             Post thispost = postService.getPost(postid);
+            Profile targetprofile = thispost.getAuthor();
+            List<Profile> followers = followingMapService.getMyfollowers(targetprofile);
+            List<Profile> followings = followingMapService.getMyfollowings(targetprofile);
+
+            model.addAttribute("followers", followers);
+            model.addAttribute("followings", followings);
             model.addAttribute("postList", postService.getPostsbyAuthor(thispost.getAuthor()));
             model.addAttribute("profile", thispost.getAuthor());
             return "Profile/profile_detail";
         } else { // postid는 null이거나 아예없거나 있는걸로? 예외처리로 해야하는듯
-            if (postid == null) { //principal있고, postid받아온거 없을때
+            if (postid == null) { //principal ㅇ, postid X
                 Member sitemember = this.memberService.getMember(principal.getName());
+                List<Profile> followers = followingMapService.getMyfollowers(sitemember.getProfile());
+                List<Profile> followings = followingMapService.getMyfollowings(sitemember.getProfile());
                 List<Post> myPosts = postService.getPostsbyAuthor(sitemember.getProfile());
+
+                model.addAttribute("followers", followers);
+                model.addAttribute("followings", followings);
                 model.addAttribute("postList", myPosts);
                 model.addAttribute("profile", sitemember.getProfile());
                 return "Profile/profile_detail";
-            } else { // 회원이 포스트에서 프로필누를때? principal있고, postid받아온거 있을때,,
-////                Member sitemember = this.memberService.getMember(principal.getName());
-//                Post thispost = postService.getPost(postid);
-//                List<Post> myPosts = postService.getPostsbyAuthor(sitemember.getProfile());
-//                model.addAttribute("postList", myPosts);
-//                model.addAttribute("profile", sitemember.getProfile());
-
+            } else { // 회원이 포스트에서 프로필누를때? principal ㅇ, postid ㅇ,
                 Post thispost = postService.getPost(postid);
+                Profile targetprofile = thispost.getAuthor();
+                List<Profile> followers = followingMapService.getMyfollowers(targetprofile);
+                List<Profile> followings = followingMapService.getMyfollowings(targetprofile);
+
+                model.addAttribute("followers", followers);
+                model.addAttribute("followings", followings);
                 model.addAttribute("postList", postService.getPostsbyAuthor(thispost.getAuthor()));
                 model.addAttribute("profile", thispost.getAuthor());
                 return "Profile/profile_detail";
             }
-//            try{ // 회원이 포스트에서 프로필누를때? principal있고, postid받아온거 있을때,,
-//                Member sitemember = this.memberService.getMember(principal.getName());
-//                List<Post> myPosts = postService.getPostsbyAuthor(sitemember.getProfile());
-//                model.addAttribute("postList", myPosts);
-//                model.addAttribute("profile", sitemember.getProfile());
-//                return "Profile/profile_detail";
-//            } catch (IllegalArgumentException e) { //principal있고, postid받아온거 없을때
-//                Member sitemember = this.memberService.getMember(principal.getName());
-//                List<Post> myPosts = postService.getPostsbyAuthor(sitemember.getProfile());
-//                model.addAttribute("postList", myPosts);
-//                model.addAttribute("profile", sitemember.getProfile());
-//                return "Profile/profile_detail";
-//            }
         }
-
-//        try {
-//            if (principal == null) {
-//                Post thispost = postService.getPost(postid);
-//                model.addAttribute("postList", postService.getPostsbyAuthor(thispost.getAuthor()));
-//                model.addAttribute("profile", thispost.getAuthor());
-//                return "Profile/profile_detail";
-//            } else {
-//                Member sitemember = this.memberService.getMember(principal.getName());
-//                List<Post> myPosts = postService.getPostsbyAuthor(sitemember.getProfile());
-//                model.addAttribute("postList", myPosts);
-//                model.addAttribute("profile", sitemember.getProfile());
-//                return "Profile/profile_detail";
-//            }
-//        } catch (IllegalArgumentException e) {
-//            // postid가 요청에 없거나 값이 null인 경우에 대한 예외 처리
-//            // 예: 기본 페이지로 리다이렉트 또는 에러 페이지 표시
-//            return "community_main";
-//        }
     }
 
     @GetMapping("/detail/showall")
@@ -122,7 +96,6 @@ public class ProfileController {
                 model.addAttribute("profile", sitemember.getProfile());
                 return "Profile/profile_detail_showall";
             }
-//        return "Profile/profile_detail_showall";
         }
     }
 
@@ -291,6 +264,54 @@ public class ProfileController {
 
         return "redirect:/profile/petprofile?petid="+petid;
 
+    }
+
+
+
+    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓팔로우 관리↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    @PostMapping("/addfollow")
+    public String addfollow(Model model, Principal principal, @RequestParam(value = "profileId")Long profileId) {
+//        플필아디 받고
+//                팔로잉맵에 추가 현재로그인 foller로 플필아디followee로
+        Profile followee = profileService.getProfileById(profileId);
+        Member sitemember = this.memberService.getMember(principal.getName());
+        Profile follower = sitemember.getProfile();
+        followingMapService.setfollowingMap(follower, followee);
+
+//        model.addAttribute("profile",followee);
+        return "redirect:/profile/detail?profileid=" + followee.getId(); //이부분 수정해야함
+    }
+
+    @PostMapping("/unfollow")
+    public String unfollow(Model model, Principal principal, @RequestParam(value = "profileId")Long profileId) {
+//        플필아디 받고
+//                팔로잉맵에 추가 현재로그인 foller로 플필아디followee로
+        Profile followee = profileService.getProfileById(profileId);
+        Member sitemember = this.memberService.getMember(principal.getName());
+        Profile follower = sitemember.getProfile();
+        followingMapService.deletefollowingMap(follower,followee);
+
+//        model.addAttribute("profile",followee);
+        return "redirect:/profile/detail?profileid=" + followee.getId(); //이부분 수정해야함
+    }
+
+
+    @GetMapping("/detail/followers/{profileid}")
+    public String followers(Model model, @PathVariable("profileid")Long profileid) {//@RequestParam(value = "profileId")Long profileId
+        Profile targetprofile = profileService.getProfileById(profileid);
+        List<Profile> followerList = followingMapService.getMyfollowers(targetprofile);
+
+        model.addAttribute("followerList",followerList);
+        return "Profile/followers";
+    }
+
+    @GetMapping("/detail/followings/{profileid}")
+    public String followings(Model model, @PathVariable("profileid")Long profileid) {//@RequestParam(value = "profileId")Long profileId
+        Profile targetprofile = profileService.getProfileById(profileid);
+        List<Profile> followingList = followingMapService.getMyfollowings(targetprofile);
+
+        model.addAttribute("followingList",followingList);
+        return "Profile/followings";
     }
 
 

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -60,4 +61,6 @@ public class  Member {
 
     private String role;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL )
+    private Set<Report> reports;
 }

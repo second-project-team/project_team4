@@ -3,6 +3,7 @@ package com.korea.project2_team4.Controller;
 import com.korea.project2_team4.Model.Entity.*;
 import com.korea.project2_team4.Model.Form.PostForm;
 import com.korea.project2_team4.Repository.PostRepository;
+import com.korea.project2_team4.Repository.ReportRepository;
 import com.korea.project2_team4.Service.*;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
@@ -43,6 +44,7 @@ public class PostController {
     private final TagService tagService;
     private final TagMapService tagMapService;
     private final RecentSearchService recentSearchService;
+    private final ReportService reportService;
 
 
     @GetMapping("/main")
@@ -122,7 +124,7 @@ public class PostController {
             encodedCategory = "";
         }
 
-        return String.format("redirect:/post/community/main?category=%s&sort=%s&TagName=%s",encodedCategory, "", "");
+        return String.format("redirect:/post/community/main?category=%s&sort=%s&TagName=%s", encodedCategory, "", "");
     }
 
     @GetMapping("/community/main")
@@ -141,7 +143,7 @@ public class PostController {
         List<Tag> defaultTagList = tagService.getDefaultTags();
 
         if (category.equals("QnA")) {
-            Page<Post> qnaPosts = postService.getPostsQnA(page,sort,TagName);
+            Page<Post> qnaPosts = postService.getPostsQnA(page, sort, TagName);
 
             model.addAttribute("category", category);
             model.addAttribute("TagName", TagName);
@@ -152,7 +154,7 @@ public class PostController {
 
         } else if (category.equals("자유게시판")) {
 
-            Page<Post> freeboardPosts = postService.getPostsFreeboard(page,sort,TagName);
+            Page<Post> freeboardPosts = postService.getPostsFreeboard(page, sort, TagName);
 
             model.addAttribute("category", category);
             model.addAttribute("TagName", TagName);
@@ -161,7 +163,7 @@ public class PostController {
             model.addAttribute("defaultTagList", defaultTagList);
             return "community_main";
         } else {
-            Page<Post> posts = postService.getAllPosts(page,sort,TagName);
+            Page<Post> posts = postService.getAllPosts(page, sort, TagName);
 
             model.addAttribute("category", category);
             model.addAttribute("TagName", TagName);
@@ -268,8 +270,15 @@ public class PostController {
             Post post = postService.getPost(id);
             model.addAttribute("post", post);
         }
+        String username = principal.getName();
+        // 이미 해당 사용자가 신고한 게시물인지 확인
+        if (reportService.isAlreadyReported(id, username)) {
+            // 이미 신고한 경우, 모델에 메시지 추가
+            model.addAttribute("alreadyReportedMessage", "이미 신고한 게시물입니다.");
+            return "Post/postDetail_form"; // 리다이렉트할 뷰 경로
+        }
 
-        model.addAttribute("getPostTags",getPostTags);
+        model.addAttribute("getPostTags", getPostTags);
         model.addAttribute("allTags", allTags);
         model.addAttribute("postForm", postForm);
 
@@ -308,13 +317,13 @@ public class PostController {
         }
         postService.deleteById(id);
 
-        return String.format("redirect:/post/community/main?category=%s&sort=%s&TagName=%s",encodedCategory, "", "");
+        return String.format("redirect:/post/community/main?category=%s&sort=%s&TagName=%s", encodedCategory, "", "");
     }
 
     @GetMapping("/updatePost/{id}")
-    public String updatePost(Principal principal,Model model, @PathVariable("id") Long id) {
+    public String updatePost(Principal principal, Model model, @PathVariable("id") Long id) {
         List<Tag> getPostTags = tagService.getTagListByPost(postService.getPost(id));
-        model.addAttribute("getPostTags",getPostTags);
+        model.addAttribute("getPostTags", getPostTags);
         if (principal != null) {
             Member member = this.memberService.getMember(principal.getName());
             model.addAttribute("loginedMember", member);
@@ -389,6 +398,36 @@ public class PostController {
         Page<Post> myLikedPosts = postService.getMyLikedPosts(page, member);
         model.addAttribute("paging", myLikedPosts);
         return "Member/findMyLikedPosts_form";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/report/{id}")
+    public String reportPost(@PathVariable("id") Long id, @RequestParam("reasons") List<String> categories,
+                             @RequestParam("reportPostContent") String content, Principal principal) {
+        // 현재 사용자 정보 가져오기
+        String username = principal.getName();
+
+        // 이미 해당 사용자가 신고한 게시물인지 확인
+        if (reportService.isAlreadyReported(id, username)) {
+            // 이미 신고한 경우, 여기에서 처리할 내용 추가
+            return "redirect:/post/detail/{id}/1"; // 또는 적절한 경로로 리다이렉트
+        }
+        Report report = new Report();
+        Post post = postService.getPost(id);
+        Member member = memberService.getMember(principal.getName());
+        if (!categories.isEmpty() && categories != null) {
+                report.setCategory(categories);
+            System.out.println("카테고리 : " + categories);
+        }
+        if (!content.isEmpty() && content != null) {
+        report.setContent(content);
+        }
+        report.setMember(member);
+        report.setPost(post);
+        report.setReportDate(LocalDateTime.now());
+        reportService.save(report);
+
+        return "redirect:/post/detail/{id}/1";
     }
 
 

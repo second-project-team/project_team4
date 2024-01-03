@@ -71,6 +71,23 @@ public class PostService {
         return postRepository.findByLikeMembers(member, pageable);
 
     }
+////    신고
+//    public void report(Post post, Member member) {
+//        post.getReportMembers().add(member);
+//        this.postRepository.save(post);
+//    }
+//
+//    public void cancelReport(Post post, Member member) {
+//        post.getReportMembers().remove(member);
+//        this.postRepository.save(post);
+//    }
+//
+//    public boolean isReported(Post post, Member member) {
+//        if (post == null) {
+//            return false;
+//        }
+//        return post.getReportMembers().contains(member);
+//    }
 
     //테스트 데이터
     @PostConstruct

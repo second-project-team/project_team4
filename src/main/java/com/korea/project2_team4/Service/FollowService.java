@@ -1,9 +1,7 @@
 package com.korea.project2_team4.Service;
 
 
-import com.korea.project2_team4.Model.Entity.Follow;
 import com.korea.project2_team4.Model.Entity.Member;
-import com.korea.project2_team4.Repository.FollowRepository;
 import lombok.Builder;
 import org.springframework.stereotype.Service;
 

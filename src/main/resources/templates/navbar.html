@@ -69,7 +69,11 @@
                                         프로필
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="nav-link rounded" th:href="@{/profile/detail}">내 프로필</a></li>
+<!--                                        <li th:if="${authentication != null}">-->
+                                            <a class="nav-link rounded" th:href="@{/profile/my}">내 프로필</a>
+<!--                                        <a class="nav-link rounded" th:if="${authentication != null}" th:href="@{'/profile/detail/' + authentication.name}">내 프로필</a>-->
+
+                                        <!--                                        </li>-->
                                         <li><hr class="dropdown-divider"></li>
 <!--                                        each 루프돌려서 펫 드롭다운리스트 생성-->
                                         <li><a class="dropdown-item" th:href="@{|/#|}">펫1</a></li>

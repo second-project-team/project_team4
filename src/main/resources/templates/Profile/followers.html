@@ -4,7 +4,8 @@
     <div>팔로워리스트</div>
     <div>
         <div th:each="profile : ${followerList}">
-            <a th:href="@{|/profile/detail?profileid=${profile.id}|}">
+            <a th:href="@{|/profile/detail/${profile.profileName}|}">
+<!--                <a th:href="@{|/profile/detail?profileid=${profile.id}|}">-->
                 <div th:text="${profile.profileName}"></div>
             </a>
         </div>

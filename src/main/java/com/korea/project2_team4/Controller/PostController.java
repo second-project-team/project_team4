@@ -429,6 +429,9 @@ public class PostController {
         if (!content.isEmpty() && content != null) {
             report.setContent(content);
         }
+        if(report.getContent()==null){
+            report.setContent("");
+        }
         report.setMember(member);
         report.setPost(post);
         report.setReportDate(LocalDateTime.now());

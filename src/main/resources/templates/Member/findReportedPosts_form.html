@@ -75,11 +75,11 @@
 <!--                                            </div>-->
 <!--                                            <p th:text="${'신고 상세 내용 : ' + post.getPostReportContent}" style="color: #ff0000; font-size: 1.2em;"></p>-->
 <!--                                        </div>-->
-                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#reportModal">
+                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" th:data-bs-target="'#reportModal' + ${post.id}">
                                             신고 정보 보기
                                         </button>
 <!--                                        신고 모달-->
-                                        <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+                                        <div class="modal fade" th:id="'reportModal' + ${post.id}" tabindex="-1" role="dialog" aria-labelledby="'reportModalLabel' + ${post.id}" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">

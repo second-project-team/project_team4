@@ -72,12 +72,13 @@ public class ProfileController {
 
     @GetMapping("/detail/{profileName}/showall")
     public String detailShowall(Model model, Principal principal, @PathVariable("profileName")String profileName) {
-
+        Member siteUser = this.memberService.getMember(principal.getName());
         Profile targetProfile = profileService.getProfileByName(profileName);
         List<Post> postList = postService.getPostsbyAuthor(targetProfile);
         List<Profile> followers = followingMapService.getMyfollowers(targetProfile);
         List<Profile> followings = followingMapService.getMyfollowings(targetProfile);
 
+        model.addAttribute("siteUser", siteUser);
         model.addAttribute("profile", targetProfile);
         model.addAttribute("postList", postList);
         model.addAttribute("followers", followers);

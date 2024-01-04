@@ -10,16 +10,18 @@
                     <div class="profile mr-3">
                         <div class="avatar" style="width:30px, height:30px;">
 
-<!--                            <img th:src="@{|/files/${profile.profileImage.fileName}|}" alt="user" class="avatar-img rounded-circle" style="width:30px, height:30px;"/>-->
-                            <form th:action="@{|/profile/deleteProfileImage|}" method="post">
-                                <input type="hidden" name="profileid" th:value="${profile.id}">
-                                <button th:if="${siteUser == profile.member}" type="submit" class="btn btn-link" style="text-decoration:none; color:white;">✕</button>
-                            </form>
+                            <img th:src="@{|/files/${profile.profileImage.fileName}|}" alt="user" class="avatar-img rounded-circle" style="width:30px, height:30px;"/>
+
+<!--                            프로필이미지 삭제기능 보류. 지우지 X -->
+<!--                            <form th:action="@{|/profile/deleteProfileImage|}" method="post">-->
+<!--                                <input type="hidden" name="profileid" th:value="${profile.id}">-->
+<!--                                <button th:if="${siteUser == profile.member}" type="submit" class="btn btn-link" style="text-decoration:none; color:white;">✕</button>-->
+<!--                            </form>-->
                         </div>
                     </div>
 
                     <div class="media-body mb-5 text-white">
-                        <a th:if="${siteUser == profile.member}" sec:authorize="isAuthenticated()" th:href="@{|/profile/update|}" class="btn btn-dark btn-sm btn-block text-muted">프로필 수정</a>
+                        <a th:if="${siteUser == profile.member}" sec:authorize="isAuthenticated()" th:href="@{|/profile/update|}" class="btn btn-dark btn-sm btn-block text-muted">✎</a>
                         <h4 class="mt-0 mb-0" th:text="${profile.profileName}"></h4>
                         <p class="small mb-4" th:text="${profile.content}"> <i class="fa fa-map-marker mr-2"></i></p>
 

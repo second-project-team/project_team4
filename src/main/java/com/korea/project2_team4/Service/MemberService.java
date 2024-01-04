@@ -42,7 +42,6 @@ public class MemberService {
     // 멤버 생성
     public Member create(MemberCreateForm memberCreateForm) {
         Member member = new Member();
-
         member.setUserName(memberCreateForm.getUserName());
         member.setPassword(passwordEncoder.encode(memberCreateForm.getPassword()));
 
@@ -55,7 +54,7 @@ public class MemberService {
         member.setPhoneNum(memberCreateForm.getPhoneNum());
 
         memberRepository.save(member);
-//        member.setProfile(profileService.setDefaultProfile(member));
+        member.setProfile(profileService.setDefaultProfile(member));
         return member;
     }
 

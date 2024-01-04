@@ -10,7 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 public interface ReportRepository extends JpaRepository<Report,Long> {
     boolean existsByPostIdAndMemberUserName(Long postId, String userName);
 
-    @Query("SELECT DISTINCT r.post FROM Report r WHERE r.post IS NOT NULL ORDER BY r.reportDate DESC")
-    Page<Post> findPostsLinkedWithReportsOrderByReportDateDesc(Pageable pageable);
+//    @Query("SELECT DISTINCT r.post FROM Report r WHERE r.post IS NOT NULL ORDER BY r.reportDate DESC")
+//    Page<Post> findPostsLinkedWithReportsOrderByReportDateDesc(Pageable pageable);
+@Query("SELECT DISTINCT r.post FROM Report r " +
+        "LEFT JOIN FETCH r.post.reports " +
+        "WHERE r.post IS NOT NULL " +
+        "ORDER BY r.post.id, r.reportDate DESC")
+Page<Post> findPostsLinkedWithReportsOrderByReportDateDesc(Pageable pageable);
 
 }

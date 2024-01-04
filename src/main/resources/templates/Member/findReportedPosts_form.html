@@ -92,6 +92,7 @@
                                                         <h3 th:text="${'이 게시물을 신고한 회원 수 : '+post.reports.size()}"></h3>
                                                         <h4 style="color: #ff0000; font-size: 1.5em;">신고 사유</h4>
                                                         <div th:each="report : ${post.reports}" style="color: #ff0000;">
+                                                            <p th:text="${'신고한 회원 닉네임 : ' + report.getMember().getNickName()}" style="font-size: 1.2em;"></p>
                                                             <p th:text="${report.category}" style="font-size: 1.2em;"></p>
                                                             <p th:text="${' 신고 상세 내용 : ' + report.content}" style="font-size: 1.2em;"></p>
                                                         </div>

@@ -44,7 +44,6 @@ public class MemberService {
     // 멤버 생성
     public Member create(MemberCreateForm memberCreateForm) {
         Member member = new Member();
-
         member.setUserName(memberCreateForm.getUserName());
         member.setPassword(passwordEncoder.encode(memberCreateForm.getPassword()));
 

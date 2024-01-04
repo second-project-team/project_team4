@@ -8,6 +8,7 @@ import org.hibernate.mapping.ToOne;
 @Entity
 @Getter
 @Setter
+@Table(name = "following_map", schema = "public", uniqueConstraints = @UniqueConstraint(columnNames = {"follower_id", "followee_id"}))
 public class FollowingMap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

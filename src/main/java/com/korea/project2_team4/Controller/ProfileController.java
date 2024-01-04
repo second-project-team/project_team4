@@ -38,12 +38,13 @@ public class ProfileController {
 
     @GetMapping("/my")
     public String myProfile(Model model, Principal principal) {
-        Member sitemember = this.memberService.getMember(principal.getName());
-        Profile myprofile = profileService.getProfileByName(sitemember.getProfile().getProfileName());
+        Member siteUser = this.memberService.getMember(principal.getName());
+        Profile myprofile = profileService.getProfileByName(siteUser.getProfile().getProfileName());
         List<Post> postList = postService.getPostsbyAuthor(myprofile);
         List<Profile> followers = followingMapService.getMyfollowers(myprofile);
         List<Profile> followings = followingMapService.getMyfollowings(myprofile);
 
+        model.addAttribute("siteUser", siteUser);
         model.addAttribute("profile", myprofile);
         model.addAttribute("postList", postList);
         model.addAttribute("followers", followers);
@@ -53,12 +54,14 @@ public class ProfileController {
 
     @GetMapping("/detail/{profileName}") // @AuthenticationPrincipal //
     public String profileDetail(Model model, Principal principal, @PathVariable("profileName")String profileName) {
+        Member siteUser = this.memberService.getMember(principal.getName());
 
         Profile targetProfile = profileService.getProfileByName(profileName);
         List<Post> postList = postService.getPostsbyAuthor(targetProfile);
         List<Profile> followers = followingMapService.getMyfollowers(targetProfile);
         List<Profile> followings = followingMapService.getMyfollowings(targetProfile);
 
+        model.addAttribute("siteUser", siteUser);
         model.addAttribute("profile", targetProfile);
         model.addAttribute("postList", postList);
         model.addAttribute("followers", followers);
@@ -82,26 +85,6 @@ public class ProfileController {
 
         return "Profile/profile_detail_showall";
 
-//        if (principal == null) { //postid가 null일수가 없음
-//            Post thispost = postService.getPost(postid);
-//            model.addAttribute("postList", postService.getPostsbyAuthor(thispost.getAuthor()));
-//            model.addAttribute("profile", thispost.getAuthor());
-//            return "Profile/profile_detail_showall";
-//        } else { // postid는 null이거나 아예없거나 있는걸로? 예외처리로 해야하는듯
-//            if (postid == null) { //principal있고, postid받아온거 없을때
-//                Member sitemember = this.memberService.getMember(principal.getName());
-//                List<Post> myPosts = postService.getPostsbyAuthor(sitemember.getProfile());
-//                model.addAttribute("postList", myPosts);
-//                model.addAttribute("profile", sitemember.getProfile());
-//                return "Profile/profile_detail_showall";
-//            } else { // 회원이 포스트에서 프로필누를때? principal있고, postid받아온거 있을때,,
-//                Member sitemember = this.memberService.getMember(principal.getName());
-//                List<Post> myPosts = postService.getPostsbyAuthor(sitemember.getProfile());
-//                model.addAttribute("postList", myPosts);
-//                model.addAttribute("profile", sitemember.getProfile());
-//                return "Profile/profile_detail_showall";
-//            }
-//        }
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -127,7 +110,7 @@ public class ProfileController {
         profileService.updateprofile(sitemember.getProfile(), profileForm.getProfileName(), profileForm.getContent());
 
 
-        return "redirect:/profile/detail";
+        return "redirect:/profile/detail/" + sitemember.getProfile().getProfileName();
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -136,7 +119,7 @@ public class ProfileController {
         Profile profile = profileService.getProfileById(profileid);
         imageService.deleteProfileImage(profile);
 
-        return "redirect:/profile/detail";
+        return "redirect:/profile/detail/" + profile.getProfileName();
     }
 
 
@@ -233,7 +216,7 @@ public class ProfileController {
 
         profileService.setPetforprofile(sitemember.getProfile(), pet);
 
-        return "redirect:/profile/detail";
+        return "redirect:/profile/detail/" + sitemember.getProfile().getProfileName();
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -281,10 +264,10 @@ public class ProfileController {
         Profile followee = profileService.getProfileById(profileId);
         Member sitemember = this.memberService.getMember(principal.getName());
         Profile follower = sitemember.getProfile();
-        followingMapService.setfollowingMap(follower, followee);
+        followingMapService.savefollowingMap(follower, followee);
 
 //        model.addAttribute("profile",followee);
-        return "redirect:/profile/detail/" + followee.getProfileName(); //이부분 수정해야함
+        return "redirect:/profile/detail/" + followee.getProfileName();
     }
 
     @PostMapping("/unfollow")
@@ -297,7 +280,7 @@ public class ProfileController {
         followingMapService.deletefollowingMap(follower, followee);
 
 //        model.addAttribute("profile",followee);
-        return "redirect:/profile/detail/" + followee.getProfileName(); //이부분 수정해야함
+        return "redirect:/profile/detail/" + followee.getProfileName();
     }
 
 

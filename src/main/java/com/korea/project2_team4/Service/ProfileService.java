@@ -90,7 +90,7 @@ public class ProfileService {
     public Profile setDefaultProfile(Member member) {
         Profile profile = new Profile();
         profile.setMember(member);
-        profile.setProfileName(member.getUserName());
+        profile.setProfileName(member.getNickName());
         profile.setContent(" ");
 
         this.profileRepository.save(profile);

@@ -24,7 +24,7 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final ImageService imageService;
     private final FollowingMapService followingMapService;
-    private final PostService postService;
+//    private final PostService postService;
 
 
     public boolean deleteExistingFile(String existingFilePath) {
@@ -52,24 +52,24 @@ public class ProfileService {
         return new ProfileDto(null, null, followers, followings);
     }
 
-    public ProfileDto getProfileDtoByNotLogined(Post thispost) {
-        Profile targetprofile = thispost.getAuthor();
-        ProfileDto profileDto = getDefaultProfileDto(targetprofile);
-        List<Post> postList = postService.getPostsbyAuthor(thispost.getAuthor());
-        profileDto.setProfile(targetprofile);
-        profileDto.setPostList(postList);
-
-        return profileDto;
-    }
-
-    public ProfileDto getProfileDtoByLoginId(Member member) {
-        ProfileDto profileDto = getDefaultProfileDto(member.getProfile());
-        List<Post> postList = postService.getPostsbyAuthor(member.getProfile());
+//    public ProfileDto getProfileDtoByNotLogined(Post thispost) {
+//        Profile targetprofile = thispost.getAuthor();
+//        ProfileDto profileDto = getDefaultProfileDto(targetprofile);
+//        List<Post> postList = postService.getPostsbyAuthor(thispost.getAuthor());
 //        profileDto.setProfile(targetprofile);
-        profileDto.setPostList(postList);
-
-        return profileDto;
-    }
+//        profileDto.setPostList(postList);
+//
+//        return profileDto;
+//    }
+//
+//    public ProfileDto getProfileDtoByLoginId(Member member) {
+//        ProfileDto profileDto = getDefaultProfileDto(member.getProfile());
+//        List<Post> postList = postService.getPostsbyAuthor(member.getProfile());
+////        profileDto.setProfile(targetprofile);
+//        profileDto.setPostList(postList);
+//
+//        return profileDto;
+//    }
 
 
     public List<Profile> getProfilelist() {

@@ -1,6 +1,7 @@
 package com.korea.project2_team4.Service;
 
 import com.korea.project2_team4.Config.UserRole;
+import com.korea.project2_team4.Model.Entity.Image;
 import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Entity.Profile;
 import com.korea.project2_team4.Model.Form.EditPasswordForm;
@@ -37,6 +38,7 @@ public class MemberService {
     private final ProfileRepository profileRepository;
     private final EmailService emailService;
     private final ProfileService profileService;
+    private final ImageService imageService;
 
 
     // 멤버 생성
@@ -83,13 +85,13 @@ public class MemberService {
     }
 
     @PostConstruct
-    public void init() {
+    public void init() throws Exception {
         saveDefaultAdmin();
         saveDefaultUser();
     }
 
     @Transactional
-    public void saveDefaultAdmin() { // 테스트 관리자 아이디 아이디: admin, 비밀 번호 admin123!
+    public void saveDefaultAdmin() throws Exception { // 테스트 관리자 아이디 아이디: admin, 비밀 번호 admin123!
         if (memberRepository.findByUserName("admin").isEmpty()) {
             Member member = new Member();
             member.setUserName("admin");
@@ -100,20 +102,34 @@ public class MemberService {
             member.setRealName("관리자");
             member.setNickName("관리자");
             member.setCreateDate(LocalDateTime.now());
-
-
             memberRepository.save(member);
 
-            Profile adminProfile = profileRepository.findByProfileName("관리자")
-                    .orElseGet(() -> {
-                        Profile newProfile = new Profile();
-                        newProfile.setProfileName("관리자");
-                        return newProfile;
-                    });
 
-            adminProfile.setMember(member);
+            Profile newProfile = new Profile();
+            newProfile.setProfileName("관리자프로필");
+            newProfile.setMember(member);
+            profileRepository.save(newProfile);
 
-            profileRepository.save(adminProfile);
+
+//            member.setProfile(newProfile);
+//            memberRepository.findById(member.getId()).get().setProfile(newProfile);
+
+            Member adminprofile = memberRepository.findById(member.getId()).get();
+            adminprofile.setProfile(newProfile);
+            memberRepository.save(adminprofile);
+            profileRepository.save(newProfile);
+
+
+
+            Profile saveImage = profileRepository.findById(newProfile.getId()).get();
+            imageService.saveDefaultImgsForProfile(saveImage);
+            profileRepository.save(saveImage);
+
+//            imageService.saveDefaultImgsForProfile(profileRepository.findById(newProfile.getId()).get());
+
+
+
+
 
         }
     }

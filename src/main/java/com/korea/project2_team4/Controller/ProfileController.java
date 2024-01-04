@@ -118,9 +118,10 @@ public class ProfileController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/deleteProfileImage")
-    public String deleteProfileImage(@RequestParam("profileid") Long profileid)throws UnsupportedEncodingException {// 일단안씀.
+    public String deleteProfileImage(@RequestParam("profileid") Long profileid)throws Exception {// 일단안씀.
         Profile profile = profileService.getProfileById(profileid);
-        imageService.deleteProfileImage(profile);
+        imageService.deleteProfileImage(profile); // 이미지 지우고
+        imageService.saveDefaultImgsForProfile(profile); // 디폴트이미지 재설정
 
         String encodedProfileName = URLEncoder.encode(profile.getProfileName(), "UTF-8");
         return "redirect:/profile/detail/" + encodedProfileName;
@@ -142,6 +143,8 @@ public class ProfileController {
 //        return "community_main";
         }
     }
+
+// ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓마이페이지↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myPage")
@@ -181,14 +184,7 @@ public class ProfileController {
 
         return "redirect:/profile/myPage";
     }
-//    @GetMapping("/profile")
-//    public String profile(Authentication authentication, Principal principal, UserPasswordForm userPasswordForm, Model model){
-//        String userId = principal.getName();
-//        User userinfo = this.userService.getUser(userId);
-//        model.addAttribute("userinfo", userinfo);
-//
-//        return "userProfile/profile";
-//    }
+
 
 
 // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓펫 관리↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓

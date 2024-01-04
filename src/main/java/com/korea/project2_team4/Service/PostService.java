@@ -103,22 +103,25 @@ public class PostService {
     public void saveTestPost() {
         if (postRepository.findAll().isEmpty()) {
 
-            Member admin = memberRepository.findByUserName("admin").orElse(null);
+//            Member admin = memberRepository.findByUserName("admin").orElse(null);
+//
+//
+//
+//
+//            Profile authorProfile = profileRepository.findByMember(admin)
+//                    .orElseGet(() -> { // admin없으면 실행되는?
+//                        Profile newProfile = new Profile();
+//                        newProfile.setProfileName("관리자");
+//                        return profileRepository.save(newProfile);
+//                    });
+//
+            Tag etcTag = new Tag();
+            etcTag.setName("기타");
+            tagRepository.save(etcTag);
+            Profile authorProfile = profileRepository.findByProfileName("관리자프로필").get();
 
-            Profile authorProfile = profileRepository.findByMember(admin)
-                    .orElseGet(() -> {
-                        Profile newProfile = new Profile();
-                        newProfile.setProfileName("관리자");
-                        return profileRepository.save(newProfile);
-                    });
 
-//            Tag etcTag = new Tag();
-//            etcTag.setName("기타");
-//            tagRepository.save(etcTag);
-
-
-
-            Tag etcTag = tagRepository.findByName("기타").orElse(null);
+//            Tag etcTag = tagRepository.findByName("기타").orElse(null);
 
             if (etcTag == null) {
                 Tag tag = new Tag();

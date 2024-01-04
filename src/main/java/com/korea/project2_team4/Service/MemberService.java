@@ -57,7 +57,7 @@ public class MemberService {
         member.setPhoneNum(memberCreateForm.getPhoneNum());
 
         memberRepository.save(member);
-//        member.setProfile(profileService.setDefaultProfile(member));
+        member.setProfile(profileService.setDefaultProfile(member));
         return member;
     }
 

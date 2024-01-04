@@ -56,7 +56,11 @@ public class ProfileController {
 
     @GetMapping("/detail/{profileName}") // @AuthenticationPrincipal //
     public String profileDetail(Model model, Principal principal, @PathVariable("profileName")String profileName) {
-        Member siteUser = this.memberService.getMember(principal.getName());
+        Member siteUser = new Member();
+
+        if (principal != null) {
+            siteUser = this.memberService.getMember(principal.getName());
+        }
 
         Profile targetProfile = profileService.getProfileByName(profileName);
         List<Post> postList = postService.getPostsbyAuthor(targetProfile);
@@ -74,7 +78,12 @@ public class ProfileController {
 
     @GetMapping("/detail/{profileName}/showall")
     public String detailShowall(Model model, Principal principal, @PathVariable("profileName")String profileName) {
-        Member siteUser = this.memberService.getMember(principal.getName());
+        Member siteUser = new Member();
+
+        if (principal != null) {
+            siteUser = this.memberService.getMember(principal.getName());
+        }
+
         Profile targetProfile = profileService.getProfileByName(profileName);
         List<Post> postList = postService.getPostsbyAuthor(targetProfile);
         List<Profile> followers = followingMapService.getMyfollowers(targetProfile);

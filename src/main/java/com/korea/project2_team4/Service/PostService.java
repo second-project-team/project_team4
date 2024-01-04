@@ -90,11 +90,13 @@ public class PostService {
 //        return post.getReportMembers().contains(member);
 //    }
 //
+
 //    테스트 데이터
     @PostConstruct
     public void init() {
         saveTestPost();
     }
+
 
     //테스트 데이터
     @Transactional
@@ -199,7 +201,7 @@ public class PostService {
         return post.getLikeMembers().contains(member);
     }
 
-    public void deleteById(Long id) {
+    public void     deleteById(Long id) {
         Optional<Post> optionalPost = postRepository.findById(id);
 
         if (optionalPost.isPresent()) {

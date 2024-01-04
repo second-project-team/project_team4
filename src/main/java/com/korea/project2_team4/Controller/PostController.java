@@ -274,9 +274,9 @@ public class PostController {
         if (principal != null) {
             String username = principal.getName();
             // 이미 해당 사용자가 신고한 게시물인지 확인
-            if (reportService.isAlreadyReported(id, username)) {
+            if (reportService.isAlreadyPostReported(id, username)) {
                 // 이미 신고한 경우, 모델에 메시지 추가
-                model.addAttribute("alreadyReportedMessage", "이미 신고한 게시물입니다.");
+                model.addAttribute("alreadyPostReportedMessage", "이미 신고한 게시물입니다.");
                 return "Post/postDetail_form"; // 리다이렉트할 뷰 경로
             }
         }
@@ -315,12 +315,26 @@ public class PostController {
         try {
             encodedCategory = URLEncoder.encode(postService.getPost(id).getCategory(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
+
             // 예외 처리 필요
             encodedCategory = "";
         }
         postService.deleteById(id);
 
         return String.format("redirect:/post/community/main?category=%s&sort=%s&TagName=%s", encodedCategory, "", "");
+    }
+    @PostMapping("/deleteReportedPost/{id}")
+    public String deleteReportedPost(@PathVariable("id") Long id) {
+        String encodedCategory;
+        try {
+            encodedCategory = URLEncoder.encode(postService.getPost(id).getCategory(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            // 예외 처리 필요
+            encodedCategory = "";
+        }
+        postService.deleteById(id);
+
+        return "redirect:/report/posts";
     }
 
     @GetMapping("/updatePost/{id}")
@@ -336,6 +350,35 @@ public class PostController {
         model.addAttribute("post", post);
 
         return "Post/postUpdate_form";
+    }
+    @PostMapping("/updatePostByAdmin/{id}")
+    public String updatePostByAdmin(@PathVariable("id") Long id, @ModelAttribute Post updatePost,
+                             @RequestParam(value = "selectedTagNames", required = false) List<String> selectedTagNames
+    ) throws IOException, NoSuchAlgorithmException {
+
+        Post post = new Post();
+        Post existingPost = postRepository.findById(id).orElse(null);
+
+        if (existingPost != null) {
+            existingPost.setModifyDate(LocalDateTime.now());
+            existingPost.setCategory(updatePost.getCategory());
+            tagMapService.deleteTagMapsByPostId(id);
+
+            if (selectedTagNames != null && !selectedTagNames.isEmpty()) {
+                for (String selectedTagName : selectedTagNames) {
+                    Tag tag = tagService.getTagByTagName(selectedTagName);
+                    TagMap tagMap = new TagMap();
+                    tagMap.setPost(existingPost);
+                    tagMap.setTag(tag);
+                    tagMapService.save(tagMap);
+                }
+            }
+            existingPost.setCategory(updatePost.getCategory());
+
+            postRepository.save(existingPost);
+        }
+
+        return "redirect:/post/detail/{id}/1";
     }
 
     @PostMapping(value = "/updatePost/{id}", consumes = {"multipart/form-data"})
@@ -409,27 +452,30 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/report/{id}")
-    public String reportPost(@PathVariable("id") Long id, @RequestParam("reasons") List<String> categories,
+    public String reportPost(@PathVariable("id") Long id, @RequestParam(value = "reasons", required = false) List<String> categories,
                              @RequestParam("reportPostContent") String content, Principal principal) {
         // 현재 사용자 정보 가져오기
-        String username = principal.getName();
+        if (principal != null) {
+            String username = principal.getName();
 
-        // 이미 해당 사용자가 신고한 게시물인지 확인
-        if (reportService.isAlreadyReported(id, username)) {
-            // 이미 신고한 경우, 여기에서 처리할 내용 추가
-            return "redirect:/post/detail/{id}/1"; // 또는 적절한 경로로 리다이렉트
+            // 이미 해당 사용자가 신고한 게시물인지 확인
+            if (reportService.isAlreadyPostReported(id, username)) {
+                // 이미 신고한 경우, 여기에서 처리할 내용 추가
+                return "redirect:/post/detail/{id}/1"; // 또는 적절한 경로로 리다이렉트
+            }
         }
         Report report = new Report();
         Post post = postService.getPost(id);
         Member member = memberService.getMember(principal.getName());
-        if (!categories.isEmpty() && categories != null) {
+        if (categories != null && !categories.isEmpty()) {
             report.setCategory(categories);
             System.out.println("카테고리 : " + categories);
+        } else {
+            report.setCategory(new ArrayList<>());
         }
         if (!content.isEmpty() && content != null) {
             report.setContent(content);
-        }
-        if(report.getContent()==null){
+        } else {
             report.setContent("");
         }
         report.setMember(member);

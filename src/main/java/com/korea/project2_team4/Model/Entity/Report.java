@@ -21,15 +21,15 @@ public class Report {
 
     private String content;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
 //    @JoinColumn(name="post_id")
     private Post post;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
 //    @JoinColumn(name="comment_id")
     private Comment comment;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name="member_id", nullable = false)
     private Member member;
 

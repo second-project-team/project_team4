@@ -91,10 +91,10 @@ public class PostService {
 //    }
 
     //테스트 데이터
-    @PostConstruct
-    public void init() {
-        saveTestPost();
-    }
+//    @PostConstruct
+//    public void init() {
+//        saveTestPost();
+//    }
 
     //테스트 데이터
     @Transactional

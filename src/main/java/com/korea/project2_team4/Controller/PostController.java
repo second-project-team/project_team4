@@ -271,12 +271,14 @@ public class PostController {
             Post post = postService.getPost(id);
             model.addAttribute("post", post);
         }
-        String username = principal.getName();
-        // 이미 해당 사용자가 신고한 게시물인지 확인
-        if (reportService.isAlreadyReported(id, username)) {
-            // 이미 신고한 경우, 모델에 메시지 추가
-            model.addAttribute("alreadyReportedMessage", "이미 신고한 게시물입니다.");
-            return "Post/postDetail_form"; // 리다이렉트할 뷰 경로
+        if (principal != null) {
+            String username = principal.getName();
+            // 이미 해당 사용자가 신고한 게시물인지 확인
+            if (reportService.isAlreadyReported(id, username)) {
+                // 이미 신고한 경우, 모델에 메시지 추가
+                model.addAttribute("alreadyReportedMessage", "이미 신고한 게시물입니다.");
+                return "Post/postDetail_form"; // 리다이렉트할 뷰 경로
+            }
         }
 
         model.addAttribute("getPostTags", getPostTags);
@@ -378,7 +380,7 @@ public class PostController {
 
         Image image = imageService.findBySaveName(saveName);
 
-        if(image != null) {
+        if (image != null) {
             imageService.deleteImage(image);
             return ResponseEntity.ok("success");
         } else {
@@ -421,11 +423,14 @@ public class PostController {
         Post post = postService.getPost(id);
         Member member = memberService.getMember(principal.getName());
         if (!categories.isEmpty() && categories != null) {
-                report.setCategory(categories);
+            report.setCategory(categories);
             System.out.println("카테고리 : " + categories);
         }
         if (!content.isEmpty() && content != null) {
-        report.setContent(content);
+            report.setContent(content);
+        }
+        if(report.getContent()==null){
+            report.setContent("");
         }
         report.setMember(member);
         report.setPost(post);

@@ -224,7 +224,7 @@ public class MemberController {
     }
 
     @GetMapping("/member")
-    public String saveDefaultAdmin() {
+    public String saveDefaultAdmin() throws Exception {
         memberService.saveDefaultAdmin();
 
         return "redirect:/";

@@ -11,12 +11,12 @@
                         <div class="avatar" style="width:30px, height:30px;">
 
                             <img th:src="@{|/files/${profile.profileImage.fileName}|}" alt="user" class="avatar-img rounded-circle" style="width:30px, height:30px;"/>
-
-<!--                            프로필이미지 삭제기능 보류. 지우지 X -->
-<!--                            <form th:action="@{|/profile/deleteProfileImage|}" method="post">-->
-<!--                                <input type="hidden" name="profileid" th:value="${profile.id}">-->
-<!--                                <button th:if="${siteUser == profile.member}" type="submit" class="btn btn-link" style="text-decoration:none; color:white;">✕</button>-->
-<!--                            </form>-->
+<!--                            기본이미지로 변경하는 폼-->
+                            <form th:action="@{|/profile/deleteProfileImage|}" method="post" th:unless="${'no_img.jpg' == profile.profileImage.fileName}">
+                                <input type="hidden" name="profileid" th:value="${profile.id}">
+                                <button th:if="${siteUser == profile.member}" type="submit" class="btn btn-link" style="text-decoration:none; color:white;">✕</button>
+                            </form>
+<!--                            기본이미지로 변경하는 폼-->
                         </div>
                     </div>
 

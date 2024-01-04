@@ -183,6 +183,7 @@ public class ImageService {
         String filepath = profile.getProfileImage().getFilePath();
         deleteExistingFile(filepath);
         this.imageRepository.delete(profileImage);
+
     }
 
     public void createPostImage(String fileName, String saveName, String filePath, Post post) {

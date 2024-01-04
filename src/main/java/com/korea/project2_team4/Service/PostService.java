@@ -1,10 +1,7 @@
 package com.korea.project2_team4.Service;
 
 import com.korea.project2_team4.Model.Entity.*;
-import com.korea.project2_team4.Repository.MemberRepository;
-import com.korea.project2_team4.Repository.PostRepository;
-import com.korea.project2_team4.Repository.ProfileRepository;
-import com.korea.project2_team4.Repository.TagRepository;
+import com.korea.project2_team4.Repository.*;
 import jakarta.annotation.PostConstruct;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
@@ -30,6 +27,7 @@ public class PostService {
     private final MemberRepository memberRepository;
     private final ImageService imageService;
     private final TagRepository tagRepository;
+    private final TagMapRepository tagMapRepository;
 
     public void save(Post post) {
         postRepository.save(post);
@@ -105,21 +103,26 @@ public class PostService {
 
             Member admin = memberRepository.findByUserName("admin").orElse(null);
 
-            Profile authorProfile = profileRepository.findByProfileName("관리자")
+            Profile authorProfile = profileRepository.findByMember(admin)
                     .orElseGet(() -> {
                         Profile newProfile = new Profile();
                         newProfile.setProfileName("관리자");
-                        return newProfile;
+                        return profileRepository.save(newProfile);
                     });
 
-            // Profile 저장 (만약 새로 생성한 경우에만 저장)
-            if (!profileRepository.existsById(authorProfile.getId())) {
-                profileRepository.save(authorProfile);
-            }
+//            Tag etcTag = new Tag();
+//            etcTag.setName("기타");
+//            tagRepository.save(etcTag);
 
-            Tag etcTag = new Tag();
-            etcTag.setName("기타");
-            tagRepository.save(etcTag);
+
+
+            Tag etcTag = tagRepository.findByName("기타").orElse(null);
+
+            if (etcTag == null) {
+                Tag tag = new Tag();
+                tag.setName("기타");
+                etcTag = tagRepository.save(tag);
+            }
 
             for (int i = 1; i <= 10; i++) {
                 Post post = new Post();
@@ -127,19 +130,13 @@ public class PostService {
                 post.setContent("테스트 데이터 내용 입니다.");
                 post.setCreateDate(LocalDateTime.now());
                 post.setCategory("자유게시판");
-                post.setAuthor(admin.getProfile());
+                post.setAuthor(authorProfile);
+                postRepository.save(post);
 
-                List<TagMap> tagMaps = new ArrayList<>();
                 TagMap etcTagMap = new TagMap();
                 etcTagMap.setPost(post);
                 etcTagMap.setTag(etcTag);
-                tagMaps.add(etcTagMap);
-
-                post.setTagMaps(tagMaps);
-
-                postRepository.save(post);
-
-
+                tagMapRepository.save(etcTagMap);
 
             }
         }

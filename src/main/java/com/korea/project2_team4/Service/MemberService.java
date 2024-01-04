@@ -11,10 +11,12 @@ import com.korea.project2_team4.Repository.ProfileRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Builder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,9 +34,9 @@ import java.util.*;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ProfileService profileService;
     private final ProfileRepository profileRepository;
     private final EmailService emailService;
+    private final ProfileService profileService;
 
 
     // 멤버 생성
@@ -53,7 +55,7 @@ public class MemberService {
         member.setPhoneNum(memberCreateForm.getPhoneNum());
 
         memberRepository.save(member);
-        member.setProfile(profileService.setDefaultProfile(member));
+//        member.setProfile(profileService.setDefaultProfile(member));
         return member;
     }
 

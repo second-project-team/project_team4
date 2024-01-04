@@ -18,6 +18,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.List;
@@ -110,17 +112,18 @@ public class ProfileController {
 
         profileService.updateprofile(sitemember.getProfile(), profileForm.getProfileName(), profileForm.getContent());
 
-
-        return "redirect:/profile/detail/" + sitemember.getProfile().getProfileName();
+        String encodedProfileName = URLEncoder.encode(sitemember.getProfile().getProfileName(), "UTF-8");
+        return "redirect:/profile/detail/" + encodedProfileName;
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/deleteProfileImage")
-    public String deleteProfileImage(@RequestParam("profileid") Long profileid) {// 일단안씀.
+    public String deleteProfileImage(@RequestParam("profileid") Long profileid)throws UnsupportedEncodingException {// 일단안씀.
         Profile profile = profileService.getProfileById(profileid);
         imageService.deleteProfileImage(profile);
 
-        return "redirect:/profile/detail/" + profile.getProfileName();
+        String encodedProfileName = URLEncoder.encode(profile.getProfileName(), "UTF-8");
+        return "redirect:/profile/detail/" + encodedProfileName;
     }
 
 
@@ -216,16 +219,19 @@ public class ProfileController {
         }
 
         profileService.setPetforprofile(sitemember.getProfile(), pet);
-
-        return "redirect:/profile/detail/" + sitemember.getProfile().getProfileName();
+        String encodedProfileName = URLEncoder.encode(sitemember.getProfile().getProfileName(), "UTF-8");
+        return "redirect:/profile/detail/" + encodedProfileName;
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/deletepet")
-    public String deletepet(@RequestParam("petid") Long petid) {
+    public String deletepet(@RequestParam("petid") Long petid, Principal principal)throws UnsupportedEncodingException {
+        Member sitemember = this.memberService.getMember(principal.getName());
         Pet pet = petService.getpetById(petid);
         petService.deletePet(pet);
-        return "redirect:/profile/detail";
+
+        String encodedProfileName = URLEncoder.encode(sitemember.getProfile().getProfileName(), "UTF-8");
+        return "redirect:/profile/detail/" + encodedProfileName;
     }
 
 
@@ -259,7 +265,7 @@ public class ProfileController {
 
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓팔로우 관리↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     @PostMapping("/addfollow")
-    public String addfollow(Model model, Principal principal, @RequestParam(value = "profileId") Long profileId) {
+    public String addfollow(Model model, Principal principal, @RequestParam(value = "profileId") Long profileId)throws UnsupportedEncodingException {
 //        플필아디 받고
 //                팔로잉맵에 추가 현재로그인 foller로 플필아디followee로
         Profile followee = profileService.getProfileById(profileId);
@@ -267,12 +273,13 @@ public class ProfileController {
         Profile follower = sitemember.getProfile();
         followingMapService.savefollowingMap(follower, followee);
 
-//        model.addAttribute("profile",followee);
-        return "redirect:/profile/detail/" + followee.getProfileName();
+
+        String encodedProfileName = URLEncoder.encode(followee.getProfileName(), "UTF-8");
+        return "redirect:/profile/detail/" + encodedProfileName;
     }
 
     @PostMapping("/unfollow")
-    public String unfollow(Model model, Principal principal, @RequestParam(value = "profileId") Long profileId) {
+    public String unfollow(Model model, Principal principal, @RequestParam(value = "profileId") Long profileId)throws UnsupportedEncodingException {
 //        플필아디 받고
 //                팔로잉맵에 추가 현재로그인 foller로 플필아디followee로
         Profile followee = profileService.getProfileById(profileId);
@@ -280,8 +287,8 @@ public class ProfileController {
         Profile follower = sitemember.getProfile();
         followingMapService.deletefollowingMap(follower, followee);
 
-//        model.addAttribute("profile",followee);
-        return "redirect:/profile/detail/" + followee.getProfileName();
+        String encodedProfileName = URLEncoder.encode(followee.getProfileName(), "UTF-8");
+        return "redirect:/profile/detail/" + encodedProfileName;
     }
 
 

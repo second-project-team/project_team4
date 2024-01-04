@@ -78,31 +78,21 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE )
     private List<Report> reports;
-    public List<String> getPostReportCategories() {
-        List<String> getReportCategories = new ArrayList<>();
-        for (Report report : reports) {
-            getReportCategories.addAll(report.getCategory());
-        }
-        return getReportCategories;
-    }
-
 //    public List<String> getPostReportCategories() {
-//        return reports.stream()
-//                .flatMap(report -> report.getCategory().stream())
-//                .collect(Collectors.toList());
+//        List<String> getReportCategories = new ArrayList<>();
+//        for (Report report : reports) {
+//            getReportCategories.addAll(report.getCategory());
+//        }
+//        return getReportCategories;
 //    }
-    public String getPostReportContent(){
-        String getPostReportContent = new String();
-        for (Report report : reports) {
-            getPostReportContent = report.getContent();
-        }
-        return getPostReportContent;
-    }
-//public String getPostReportContent() {
-//    return reports.stream()
-//            .map(Report::getContent)
-//            .collect(Collectors.joining(" "));
-//}
+//
+//    public String getPostReportContent() {
+//        String getPostReportContent = new String();
+//        for (Report report : reports) {
+//            getPostReportContent = report.getContent();
+//        }
+//        return getPostReportContent;
+//    }
 
 
 }

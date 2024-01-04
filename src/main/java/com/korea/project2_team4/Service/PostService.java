@@ -91,12 +91,12 @@ public class PostService {
 //        }
 //        return post.getReportMembers().contains(member);
 //    }
-
-    //테스트 데이터
-    @PostConstruct
-    public void init() {
-        saveTestPost();
-    }
+//
+//    //테스트 데이터
+//    @PostConstruct
+//    public void init() {
+//        saveTestPost();
+//    }
 
     //테스트 데이터
     @Transactional

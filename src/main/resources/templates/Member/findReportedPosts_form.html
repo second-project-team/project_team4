@@ -178,12 +178,12 @@
                                                 </div>
                                             </div>
                                         </div>
+<!--                                        onsubmit="return deletePost()"-->
                                         <div class="col-md-auto"
-                                             th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                                             th:if="${post.author?.id == loginedMember?.id or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
                                             <form th:action="@{|/post/deleteReportedPost/${post.id}|}" method="post"
-                                                  onsubmit="return deletePost()">
-                                                <button type="submit" class="btn btn-danger admin-btn"
-                                                        style="margin-right: 2rem">삭제
+                                                  onsubmit="return deletePost();">
+                                                <button type="submit" class="btn btn-danger admin-btn" style="margin-right: 2rem">삭제
                                                 </button>
                                             </form>
                                         </div>

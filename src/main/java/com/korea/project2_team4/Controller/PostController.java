@@ -315,6 +315,7 @@ public class PostController {
         try {
             encodedCategory = URLEncoder.encode(postService.getPost(id).getCategory(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
+
             // 예외 처리 필요
             encodedCategory = "";
         }
@@ -323,8 +324,14 @@ public class PostController {
         return String.format("redirect:/post/community/main?category=%s&sort=%s&TagName=%s", encodedCategory, "", "");
     }
     @PostMapping("/deleteReportedPost/{id}")
-    public String deleteReportedPost(@PathVariable Long id) {
-
+    public String deleteReportedPost(@PathVariable("id") Long id) {
+        String encodedCategory;
+        try {
+            encodedCategory = URLEncoder.encode(postService.getPost(id).getCategory(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            // 예외 처리 필요
+            encodedCategory = "";
+        }
         postService.deleteById(id);
 
         return "redirect:/report/posts";

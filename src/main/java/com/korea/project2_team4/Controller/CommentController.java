@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -180,6 +182,14 @@ public class CommentController {
         reportService.save(report);
 
         return "redirect:/post/detail/" + comment.getPost().getId() + "/1";
+    }
+    @PostMapping("/deleteReportedComment/{id}")
+    public String deleteReportedComment(@PathVariable Long id) {
+
+        commentService.deleteById(id);
+
+
+        return "redirect:/report/comments";
     }
 
 

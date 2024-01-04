@@ -41,7 +41,7 @@
 
                         <div >
                             <form th:action="@{|/profile/detail/${post.author.profileName}|}">
-                                <input type="hidden" name="postid" th:value="${post.id}">
+<!--                                <input type="hidden" name="postid" th:value="${post.id}">-->
                                 <button type="submit" class="btn btn-link" th:text="${post.author.profileName}"
                                         style="font-size: 18px; font-weight: bold; color: #333; text-decoration:none; color:inherit;"></button>
                             </form>
@@ -312,16 +312,16 @@
                                 </div>
                                 <div class="col-md-auto" style="font-size: 15px">
                                     <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                            th:data-bs-target="'#approveCommentModal'"
+                                            th:data-bs-target="'#reportCommentModal'"
                                             th:onclick="'reportCommentModal'">신고하기
                                     </button>
                                 </div>
-<!--                                댓글 수정 모달창-->
-                                <div class="modal fade" id="reportPostModal" tabindex="-1" role="dialog" aria-labelledby="reportPostModalLabel" aria-hidden="true">
+<!--                                댓글 신고 모달창-->
+                                <div class="modal fade" id="reportCommentModal" tabindex="-1" role="dialog" aria-labelledby="reportCommentModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="reportPostModalLabel">게시글 신고</h5>
+                                                <h5 class="modal-title" id="reportCommentModalLabel">게시글 신고</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close">
                                                     <span aria-hidden="true"></span>
@@ -329,7 +329,7 @@
                                             </div>
                                             <div class="modal-body">
                                                 <!-- Form for reporting post -->
-                                                <form th:action="@{|/post/report/${post.id}|}" method="post">
+                                                <form th:action="@{|/comment/report/${comment.id}|}" method="post">
                                                     <!-- Checkboxes for report reasons -->
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" name="reasons" value="부적절한 내용">
@@ -352,7 +352,7 @@
                                                     <!-- Textarea for additional comments -->
                                                     <div class="form-group">
                                                         <label for="additionalComments">추가적인 내용</label>
-                                                        <textarea class="form-control" id="additionalContents" name="reportCommentContent" rows="3"></textarea>
+                                                        <textarea class="form-control" id="reportComments" name="reportCommentContent" rows="3"></textarea>
                                                     </div>
 
                                                     <!-- Submit button -->
@@ -505,7 +505,7 @@
             $('#reportPostModal').modal('show');
         }
         function reportCommentModal() {
-            $('#approveCommentModal').modal('show');
+            $('#reportCommentModal').modal('show');
         }
     </script>
 </div>

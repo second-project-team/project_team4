@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
 import java.security.Principal;
+import java.time.Duration;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:8888")
@@ -371,6 +372,17 @@ public class MemberController {
         }
         return "redirect:/member/findPassword";
     }
+    @PostMapping("/block/{username}")
+    public ResponseEntity<String> blockMember(@PathVariable String username,
+                                              @RequestParam Duration blockDuration) {
+        memberService.blockMember(username, blockDuration);
+        return ResponseEntity.ok("User blocked successfully");
+    }
 
+    @PostMapping("/unblock/{username}")
+    public ResponseEntity<String> unblockUser(@PathVariable String username) {
+        memberService.unblockMember(username);
+        return ResponseEntity.ok("User unblocked successfully");
+    }
 
 }

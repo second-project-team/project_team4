@@ -179,7 +179,6 @@ public class ProfileController {
     public String memberDelete(Principal principal) {
         Member member = this.memberService.getMember(principal.getName());
         memberService.delete(member);
-
         session.invalidate();
         return "redirect:/";
     }

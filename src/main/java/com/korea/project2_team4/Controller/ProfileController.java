@@ -153,11 +153,6 @@ public class ProfileController {
         }
     }
 
-    @GetMapping("/posts")
-    public String posts(Model model) {
-        return "Profile/profile_posts";
-    }
-
 // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓마이페이지↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
     @PreAuthorize("isAuthenticated()")

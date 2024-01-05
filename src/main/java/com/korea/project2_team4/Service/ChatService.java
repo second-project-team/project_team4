@@ -1,6 +1,7 @@
 package com.korea.project2_team4.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.korea.project2_team4.Model.Dto.ChatDTO;
 import com.korea.project2_team4.Model.Dto.ChatRoom;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
@@ -26,10 +27,6 @@ public class ChatService {
 
     public List<ChatRoom> findAllRoom() {
         return new ArrayList<>(chatRooms.values());
-    }
-
-    public ChatRoom findRoomById(String roomId) {
-        return chatRooms.get(roomId);
     }
 
     public ChatRoom createRoom(String name) {

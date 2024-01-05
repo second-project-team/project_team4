@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
 <div layout:fragment="content" class="content-area d-flex justify-content-center align-items-center">
-<!--    <head>-->
-<!--        <meta charset="UTF-8">-->
-<!--        <title>Pet Planet!</title>-->
-<!--    </head>-->
-<!--    <body>-->
-    <div style="height:50%;">
-        <div class="container" style="margin-top:100px;">
+
+    <div >
+        <div class="container" style="margin-top:50px;">
             <div>
                 <div class="container">
                     <div class="row row-cols-3">
@@ -17,15 +13,13 @@
                             <a type="button" class="btn btn-outline-warning" th:href="@{/post/community/main(category=${category}, sort=${sort}, TagName='고양이')}" >고양이</a>
                             <a type="button" class="btn btn-outline-warning" th:href="@{/post/community/main(category=${category}, sort=${sort}, TagName='기타')}" >기타</a>
                         </div>
-                        <!--정렬 기능 버튼을 번갈아가면서 누르면 여러개의 태그, 카테고리, 분류 정보가 꼬여서 인식을 못 하는 것 같습니다. 임시로 본래 분류 기능만 사용하도록 수정해서 쓰겠습니다.-->
-                    </div>
 
-                    <!--정렬 기능 버튼을 번갈아가면서 누르면 여러개의 태그, 카테고리, 분류 정보가 꼬여서 인식을 못 하는 것 같습니다. 임시로 본래 분류 기능만 사용하도록 수정해서 쓰겠습니다.-->
-                </div>
-                <div class="btn-group">
-                    <a th:href="@{/post/community/main(TagName=${TagName}, sort='latest', category=${category})}" class="btn btn-primary">최신순</a>
-                    <a th:href="@{/post/community/main(TagName=${TagName}, sort='likeCount', category=${category})}" class="btn btn-primary">인기 많은순</a>
-                    <a th:href="@{/post/community/main(TagName=${TagName}, sort='commentCount', category=${category})}" class="btn btn-primary">댓글 많은순</a>
+                        <div class="btn-group">
+                            <a th:href="@{/post/community/main(TagName=${TagName}, sort='latest', category=${category})}" class="btn btn-primary">최신순</a>
+                            <a th:href="@{/post/community/main(TagName=${TagName}, sort='likeCount', category=${category})}" class="btn btn-primary">인기 많은순</a>
+                            <a th:href="@{/post/community/main(TagName=${TagName}, sort='commentCount', category=${category})}" class="btn btn-primary">댓글 많은순</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="row row-cols-1 align-items-center">
                     <div class="col">
@@ -39,7 +33,6 @@
                                     </div>
                                     <div th:unless="${post.postImages != null and not #lists.isEmpty(post.postImages)}">
                                         <img class="card-img-top" th:src="@{|/img/no_img.jpg|}" alt="default image" style="width: 14rem; height: 17rem; border-radius: 1rem; max-width: 100%; max-height: 100%">
-<!--                                        <img class="card-img-top" src="no_img.jpg" alt="default image" style="width: 14rem; height: 17rem; border-radius: 1rem; max-width: 100%; max-height: 100%">-->
                                     </div>
 
 
@@ -190,8 +183,7 @@
                             </ul>
                         </div>
                         <!-- 페이징처리 끝 -->
-                        <!--============================여기까지 each문으로 포스트 적용하면 됩니다.=====================================-->
-                        <!--============================아래부분 예시. 추후 삭제 예정 =====================================-->
+
                     </div>
                 </div>
             </div>
@@ -205,7 +197,7 @@
         $('#approveModal').modal('show');
         }
     </script>
-<!--    </body>-->
+
 </div>
 </html>
 

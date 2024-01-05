@@ -214,10 +214,14 @@ public class PostController {
                                 Model model) {
         Page<Post> pagingByTitle = postService.pagingByTitle(kw, page);
 
-        model.addAttribute("pagingByTitle", pagingByTitle);
+//        model.addAttribute("pagingByTitle", pagingByTitle);
+//        model.addAttribute("kw", kw);
+//
+//        return "Search/showMoreTitle_form";
+        model.addAttribute("searchfor", "제목 검색 결과 조회");
+        model.addAttribute("pagingBy", pagingByTitle);
         model.addAttribute("kw", kw);
-
-        return "Search/showMoreTitle_form";
+        return "Search/showMore";
     }
 
     @GetMapping("/showMoreContent")
@@ -226,10 +230,16 @@ public class PostController {
                                    Model model) {
         Page<Post> pagingByContent = postService.pagingByContent(kw, page);
 
-        model.addAttribute("pagingByContent", pagingByContent);
-        model.addAttribute("kw", kw);
 
-        return "Search/showMoreContent_form";
+//        model.addAttribute("pagingByContent", pagingByContent);
+//        model.addAttribute("kw", kw);
+//
+//        return "Search/showMoreContent_form";
+
+        model.addAttribute("searchfor", "내용 검색 결과 조회");
+        model.addAttribute("pagingBy", pagingByContent);
+        model.addAttribute("kw", kw);
+        return "Search/showMore";
     }
 
     @GetMapping("/showMoreProfileName")
@@ -238,10 +248,15 @@ public class PostController {
                                        Model model) {
         Page<Post> pagingByProfileName = postService.pagingByProfileName(kw, page);
 
-        model.addAttribute("pagingByProfileName", pagingByProfileName);
-        model.addAttribute("kw", kw);
+//        model.addAttribute("pagingByProfileName", pagingByProfileName);
+//        model.addAttribute("kw", kw);
+//
+//        return "Search/showMoreProfileName_form";
 
-        return "Search/showMoreProfileName_form";
+        model.addAttribute("searchfor", "이름 검색 결과 조회");
+        model.addAttribute("pagingBy", pagingByProfileName);
+        model.addAttribute("kw", kw);
+        return "Search/showMore";
     }
 
     @GetMapping("/showMoreComment")
@@ -250,10 +265,14 @@ public class PostController {
                                    Model model) {
         Page<Post> pagingByComment = postService.pagingByComment(kw, page);
 
-        model.addAttribute("pagingByComment", pagingByComment);
+//        model.addAttribute("pagingByComment", pagingByComment);
+//        model.addAttribute("kw", kw);
+//
+//        return "Search/showMoreComment_form";
+        model.addAttribute("searchfor", "댓글 검색 결과 조회");
+        model.addAttribute("pagingBy", pagingByComment);
         model.addAttribute("kw", kw);
-
-        return "Search/showMoreComment_form";
+        return "Search/showMore";
     }
 
     @GetMapping("/detail/{id}/{hit}")

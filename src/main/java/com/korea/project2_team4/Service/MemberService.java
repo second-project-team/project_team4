@@ -126,15 +126,11 @@ public class MemberService {
 
 //            imageService.saveDefaultImgsForProfile(profileRepository.findById(newProfile.getId()).get());
 
-
-
-
-
         }
     }
 
     @Transactional
-    public void saveDefaultUser() { // 테스트 유저 아이디 아이디: test1, 비밀 번호 test123!
+    public void saveDefaultUser() throws Exception { // 테스트 유저 아이디 아이디: test1, 비밀 번호 test123!
         for (int i = 1; i <= 5; i++) {
             String userName = "test" + i;
             if (memberRepository.findByUserName(userName).isEmpty()) {
@@ -144,25 +140,38 @@ public class MemberService {
                 member.setEmail(userName + "@gmail.com");
                 member.setPhoneNum("000-0000-0000");
                 member.setRole("ROLE_USER");
-                member.setRealName("테스트 유저" + i);
-                member.setNickName("테스트 유저" + i);
+                member.setRealName("테스트유저" + i);
+                member.setNickName("테스트유저" + i);
                 member.setCreateDate(LocalDateTime.now());
-
                 memberRepository.save(member);
 
-                final int finalI = i;
+                Profile newProfile = new Profile();
+                newProfile.setProfileName("테스트유저"+ i);
+                newProfile.setMember(member);
+                profileRepository.save(newProfile);
 
-                Profile adminProfile = profileRepository.findByProfileName("테스트 유저" + finalI)
-                        .orElseGet(() -> {
-                            Profile newProfile = new Profile();
-                            newProfile.setProfileName("테스트 유저" + finalI);
-                            return newProfile;
-                        });
+                Member profile = memberRepository.findById(member.getId()).get();
+                profile.setProfile(newProfile);
+                memberRepository.save(profile);
+                profileRepository.save(newProfile);
 
-                // Set the member for the profile
-                adminProfile.setMember(member);
+                Profile saveImage = profileRepository.findById(newProfile.getId()).get();
+                imageService.saveDefaultImgsForProfile(saveImage);
+                profileRepository.save(saveImage);
 
-                profileRepository.save(adminProfile);
+//                final int finalI = i;
+//
+//                Profile adminProfile = profileRepository.findByProfileName("테스트 유저" + finalI)
+//                        .orElseGet(() -> {
+//                            Profile newProfile = new Profile();
+//                            newProfile.setProfileName("테스트 유저" + finalI);
+//                            return newProfile;
+//                        });
+//
+//                // Set the member for the profile
+//                adminProfile.setMember(member);
+//
+//                profileRepository.save(adminProfile);
 
 
             }

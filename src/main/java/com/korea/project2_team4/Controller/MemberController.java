@@ -232,7 +232,7 @@ public class MemberController {
     }
 
     @GetMapping("/member1")
-    public String saveDefaultUser() {
+    public String saveDefaultUser() throws Exception {
         memberService.saveDefaultUser();
 
         return "redirect:/";

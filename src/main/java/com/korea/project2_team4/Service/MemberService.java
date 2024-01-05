@@ -179,6 +179,7 @@ public class MemberService {
     }
 
     public void delete(Member member) {
+//        profileService.delete(member.getProfile());
         memberRepository.delete(member);
     }
 

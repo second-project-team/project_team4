@@ -31,6 +31,7 @@ public class Profile {
     private String profileName;
     private String content;
 
+    private LocalDateTime modifyDate;
 
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE )
@@ -52,5 +53,19 @@ public class Profile {
 
 
 
-    private LocalDateTime modifyDate;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE )
+    private List<Message> myMessages;
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.REMOVE )
+    private List<Message> receivedMessages;
+
+    @OneToOne(mappedBy = "me", cascade = CascadeType.REMOVE)
+    private DmPage myDm;
+
+
+
+
+
+
 }

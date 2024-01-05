@@ -23,7 +23,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     }
 
     //OAuth 로그인 생성자
-    public PrincipalDetails(Member member, Map<String, Object> attributes ) {
+    public PrincipalDetails(Member member, Map<String, Object> attributes) {
         this.member = member;
         this.attributes = attributes;
     }
@@ -48,11 +48,11 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                if(member.getRole().equals("ROLE_ADMIN"))
-                {
+                if (member.getRole().equals("ROLE_ADMIN")) {
                     return String.valueOf(UserRole.ADMIN.getValue());
-                }
-                else {
+                } else if (member.getRole().equals("ROLE_MANAGER")) {
+                    return String.valueOf(UserRole.MANAGER.getValue());
+                } else {
                     return String.valueOf(UserRole.USER.getValue());
                 }
             }

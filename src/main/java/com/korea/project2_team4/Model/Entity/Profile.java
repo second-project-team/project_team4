@@ -4,6 +4,7 @@ import com.korea.project2_team4.Repository.ProfileRepository;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;

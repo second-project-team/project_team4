@@ -133,6 +133,10 @@
                                 <input type="hidden" name="profileId" th:value="${profile.id}">
                                 <button type="submit" class="btn btn-primary">팔로우취소</button>
                             </form>
+                            <form th:action="@{|/profile/dmTo/${profile.profileName}|}">
+<!--                                <input type="hidden" name="profileId" th:value="${profile.id}">-->
+                                <button type="submit" class="btn btn-info">DM</button>
+                            </form>
 
                         </div>
                     </ul>

@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
 import java.security.Principal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -231,5 +233,23 @@ public class MemberService {
 
         memberRepository.save(member);
 
+    }
+    //유저 차단
+    public void blockMember(String username, Duration blockDuration) {
+        Member member = memberRepository.findByUserName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        member.setBlocked(true);
+        member.setUnblockDate(LocalDateTime.now().plus(blockDuration));
+        memberRepository.save(member);
+    }
+    //유저 차단 해제
+    public void unblockMember(String username) {
+        Member member = memberRepository.findByUserName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        member.setBlocked(false);
+        member.setUnblockDate(null);
+        memberRepository.save(member);
     }
 }

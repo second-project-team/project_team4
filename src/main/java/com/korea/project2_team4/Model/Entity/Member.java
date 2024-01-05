@@ -57,4 +57,8 @@ public class  Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL )
     private Set<Report> reports;
+    //차단 여부 확인
+    private boolean isBlocked;
+    //차단 해제 날짜
+    private LocalDateTime unblockDate;
 }

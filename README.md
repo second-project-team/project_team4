@@ -27,6 +27,7 @@ build.gradle 에 implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialec
 지금까지 만들었던 기능 버그,에러 다 완벽하게 수정하기.+ 템플릿도.
 ✍ 01/09
  - 검색결과에 태그검색도 추가하기
+ - 태그 사용자입력하면, db 에서 tagmap에 저장왜안되는지? 수정하기 
 
 ----
 관리자 페이지

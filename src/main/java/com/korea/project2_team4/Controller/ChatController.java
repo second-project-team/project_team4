@@ -23,35 +23,34 @@ import java.util.ArrayList;
 @Controller
 @Slf4j
 @Builder
-@RequestMapping("/chat")
 public class ChatController {
     private final SimpMessageSendingOperations template;
 
     private final ChatService chatService;
 
     //MessageMapping 을 통해 WebSocket 으로 들어오는 메시지를 발신 처리한다.
-    // 이때 클라이언트에서는 /put/chat/message 로 요청하게 되고 이것을 controller 가 받아서 처리한다.
+    // 이때 클라이언트에서는 /pub/chat/message 로 요청하게 되고 이것을 controller 가 받아서 처리한다.
     // 처리가 완료되면 /sub/chat/room/roomId 로 메시지가 전송된다.
-    @MessageMapping("/enterUser")
+    @MessageMapping("/chat/enterUser")
     public void enterUser(@Payload ChatDTO chat, SimpMessageHeaderAccessor headerAccessor) {
         chatService.plusUserCnt(chat.getRoomId());
-
         String userUUID = chatService.addUser(chat.getRoomId(), chat.getSender());
 
         headerAccessor.getSessionAttributes().put("userUUID", userUUID);
         headerAccessor.getSessionAttributes().put("roomId", chat.getRoomId());
 
         chat.setMessage(chat.getSender() + "님이 입장하였습니다");
-        template.convertAndSend("/sub/chat/room" + chat.getRoomId(), chat);
+        template.convertAndSend("/sub/chat/room?roomId=" + chat.getRoomId(), chat);
 
     }
 
-    @MessageMapping("/sendMessage")
+    @MessageMapping("/chat/sendMessage")
     public void sendMessage(@Payload ChatDTO chat) {
         log.info("Chat {}", chat);
+
         chat.setMessage(chat.getMessage());
 
-        template.convertAndSend("/sub/chat/room" + chat.getRoomId(), chat);
+        template.convertAndSend("/sub/chat/room?roomId=" + chat.getRoomId(), chat);
 
     }
 
@@ -83,7 +82,7 @@ public class ChatController {
                     .message(userName + "님이 퇴장하였습니다.")
                     .build();
 
-            template.convertAndSend("/sub/chat/room" + roomId, chat);
+            template.convertAndSend("/sub/chat/room?roomId=" + roomId, chat);
         }
 
     }

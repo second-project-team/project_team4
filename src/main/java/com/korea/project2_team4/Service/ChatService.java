@@ -18,6 +18,7 @@ import java.util.*;
 @Service
 public class ChatService {
     private Map<String, ChatRoom> chatRoomMap;
+    private final MemberService memberService;
 
     @PostConstruct
     private void init() {

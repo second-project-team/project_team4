@@ -1,7 +1,7 @@
 package com.korea.project2_team4.Service;
 
+import com.korea.project2_team4.Config.PrincipalDetails;
 import com.korea.project2_team4.Config.UserRole;
-import com.korea.project2_team4.Model.Entity.Image;
 import com.korea.project2_team4.Model.Entity.Member;
 import com.korea.project2_team4.Model.Entity.Profile;
 import com.korea.project2_team4.Model.Form.EditPasswordForm;
@@ -12,20 +12,17 @@ import com.korea.project2_team4.Repository.ProfileRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Builder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.RepositoryDefinition;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
 
 import java.security.Principal;
 import java.time.Duration;
@@ -252,4 +249,14 @@ public class MemberService {
         member.setUnblockDate(null);
         memberRepository.save(member);
     }
+
+    public Member getMemberFromSecurityContext() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof PrincipalDetails) {
+            return ((PrincipalDetails) authentication.getPrincipal()).getMember();
+        }
+        return null;
+    }
+
+
 }

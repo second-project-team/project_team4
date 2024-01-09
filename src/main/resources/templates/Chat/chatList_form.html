@@ -10,8 +10,9 @@
                         <h2 class="pt-2 mt-5 mb-5">채팅방 목록</h2>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <form th:action="@{/chatList/createRoom}" method="post">
+                        <form th:action="@{/chat/createRoom}" method="post">
                             <label for="name">채팅방 이름:</label>
+                            <div th:text="${username}"></div>
                             <input type="text" id="name" name="name" required>
                             <button class="btn btn-primary" type="submit">채팅방 생성</button>
                         </form>
